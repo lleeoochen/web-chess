@@ -3,8 +3,7 @@ var canvas = document.getElementById("canvas");
 var board = document.getElementById("board");
 var context = canvas.getContext("2d");
 var pieces = [[],[],[],[],[],[],[],[]];
-var selectedX = -1;
-var selectedY = -1;
+var oldGrid = null;
 
 canvas.addEventListener("click", onClick, false);
 draw();
@@ -22,8 +21,8 @@ function drawBoard(){
 	for (var x = 0; x < BOARD_SIZE; x++) {
 	    for (var y = 0; y < BOARD_SIZE; y++) {
 			color = (y % 2 == 0 && x % 2 == 0 || y % 2 != 0 && x % 2 != 0)? COLOR_BOARD_DARK : COLOR_BOARD_LIGHT;
-			fillGrid(x, y, color);
 			pieces[x][y] = new Grid(x, y, null, color);
+			fillGrid(pieces[x][y], color);
 	    }
 	}
 }
@@ -66,32 +65,48 @@ function drawEachChess(x, y, image_file) {
 
 
 function onClick(event) {
-	var x = parseInt((event.pageX - OFFSET_X_P) / GRID_SIZE_P);
-	var y = parseInt((event.pageY - OFFSET_Y_P) / GRID_SIZE_P);
 
-	if (x >= BOARD_SIZE || y >= BOARD_SIZE)
+	//Check boundary and initialize newGrid
+	let x = parseInt((event.pageX - OFFSET_X_P) / GRID_SIZE_P);
+	let y = parseInt((event.pageY - OFFSET_Y_P) / GRID_SIZE_P);
+	if (x >= BOARD_SIZE || y >= BOARD_SIZE) { return; }
+	let newGrid = pieces[x][y];
+
+	//Cancel selection when clicking the same grid
+	if (newGrid == oldGrid) {
+		fillGrid(oldGrid, oldGrid.color);
+		oldGrid = null;
 		return;
-
-	if (selectedX >= 0 && selectedY >= 0) {
-		fillGrid(selectedX, selectedY, pieces[selectedX][selectedY].color);
-
-		if (pieces[selectedX][selectedY].image != null) {
-			let tmpImage = pieces[selectedX][selectedY].image;
-			pieces[selectedX][selectedY].image = null;
-			pieces[x][y].image = tmpImage;
-			pieces[x][y].image.setAttribute("class", "x" + x + " y" + y);
-
-			fillGrid(x, y, pieces[x][y].color);
-			selectedX = -1;
-			selectedY = -1;
-			return;
-		}
 	}
 
-	fillGrid(x, y, COLOR_HIGHLIGHT);
-	selectedX = x;
-	selectedY = y;
-	console.log(pieces[selectedX][selectedY]);
+	//Move selection highlights from old to new grid
+	if (oldGrid != null)
+		fillGrid(oldGrid, oldGrid.color);
+	fillGrid(newGrid, COLOR_HIGHLIGHT);
+
+	//Move chess piece
+	let moved = false;
+	if (oldGrid != null && oldGrid.image != null)
+		moved = moveChess(oldGrid, newGrid)
+
+	//Deselect grid if a move is successful
+	if (moved) {
+		fillGrid(newGrid, newGrid.color);
+		oldGrid = null;
+		return;
+	}
+
+	//Save current grid as the old grid
+	oldGrid = newGrid;
+	console.log(oldGrid);
+}
+
+function moveChess(oldGrid, newGrid) {
+	newGrid.image = oldGrid.image;
+	newGrid.image.setAttribute("class", "x" + newGrid.x + " y" + newGrid.y);
+	oldGrid.image = null;
+	oldGrid = null;
+	return false;
 }
 
 
@@ -101,7 +116,7 @@ function repaint() {
 }
 
 
-function fillGrid(x, y, color) {
+function fillGrid(grid, color) {
 	context.fillStyle = color;
-	context.fillRect(x * GRID_SIZE_P, y * GRID_SIZE_P, GRID_SIZE_P, GRID_SIZE_P);
+	context.fillRect(grid.x * GRID_SIZE_P, grid.y * GRID_SIZE_P, GRID_SIZE_P, GRID_SIZE_P);
 }
