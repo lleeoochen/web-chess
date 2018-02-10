@@ -1,4 +1,6 @@
-const PIECES =  { EMPTY : 0, WPawn : 1, WKnight : 2, WBishop : 3, WRook : 4, WQueen : 5, WKing : 6, BPawn : 7, BKnight : 8, BBishop : 9, BRook : 10, BQueen : 11, BKing : 12};
+const CHESS = {BBishop: "BBishop", BKing: "BKing", BKnight: "BKnight", BPawn: "BPawn", BQueen: "BQueen", BRook: "BRook", 
+				WBishop: "WBishop", WKing: "WKing", WKnight: "WKnight", WPawn: "WPawn", WQueen: "WQueen", WRook: "WRook"};
+const TEAM = {B: "B", W: "W"}
 
 const BOARD_SIZE = 8;
 const GRID_SIZE_P = 60;

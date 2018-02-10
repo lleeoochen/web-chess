@@ -1,8 +1,8 @@
-function Grid(x, y, image, color) {
+function Grid(x, y, color, piece) {
 	this.x = x;
 	this.y = y;
-	this.image = image;
 	this.color = color;
+	this.piece = piece;
 }
 
 Grid.prototype.inBound = function(pixel_x, pixel_y) {
