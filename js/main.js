@@ -81,10 +81,14 @@ function onClick(event) {
 	fillGrid(newGrid, COLOR_HIGHLIGHT);
 
 	//Deselect grid if a move is successful or if clicking on same grid
-	if (moved || newGrid == oldGrid)
+	if (moved || newGrid == oldGrid) {
 		deselect(newGrid);
-	else
-		oldGrid = newGrid
+	}
+	else {
+		var moves = getPossibleMoves(newGrid);
+		console.log(moves);
+		oldGrid = newGrid;
+	}
 }
 
 
