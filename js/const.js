@@ -1,5 +1,4 @@
-const CHESS = {BBishop: "BBishop", BKing: "BKing", BKnight: "BKnight", BPawn: "BPawn", BQueen: "BQueen", BRook: "BRook", 
-				WBishop: "WBishop", WKing: "WKing", WKnight: "WKnight", WPawn: "WPawn", WQueen: "WQueen", WRook: "WRook"};
+const CHESS = {Bishop: "Bishop", King: "King", Knight: "Knight", Pawn: "Pawn", Queen: "Queen", Rook: "Rook"};
 const TEAM = {B: "B", W: "W"}
 
 const BOARD_SIZE = 8;

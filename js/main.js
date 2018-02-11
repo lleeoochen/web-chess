@@ -29,38 +29,38 @@ function initBoard(){
 
 
 function initPieces() {
-	initEachPiece(0, 0, CHESS.BRook);
-	initEachPiece(7, 0, CHESS.BRook);
-	initEachPiece(1, 0, CHESS.BKnight);
-	initEachPiece(6, 0, CHESS.BKnight);
-	initEachPiece(2, 0, CHESS.BBishop);
-	initEachPiece(5, 0, CHESS.BBishop);
-	initEachPiece(3, 0, CHESS.BQueen);
-	initEachPiece(4, 0, CHESS.BKing);
+	initEachPiece(0, 0, TEAM.B, CHESS.Rook);
+	initEachPiece(7, 0, TEAM.B, CHESS.Rook);
+	initEachPiece(1, 0, TEAM.B, CHESS.Knight);
+	initEachPiece(6, 0, TEAM.B, CHESS.Knight);
+	initEachPiece(2, 0, TEAM.B, CHESS.Bishop);
+	initEachPiece(5, 0, TEAM.B, CHESS.Bishop);
+	initEachPiece(3, 0, TEAM.B, CHESS.Queen);
+	initEachPiece(4, 0, TEAM.B, CHESS.King);
 
-	initEachPiece(0, 7, CHESS.WRook);
-	initEachPiece(7, 7, CHESS.WRook);
-	initEachPiece(1, 7, CHESS.WKnight);
-	initEachPiece(6, 7, CHESS.WKnight);
-	initEachPiece(2, 7, CHESS.WBishop);
-	initEachPiece(5, 7, CHESS.WBishop);
-	initEachPiece(3, 7, CHESS.WQueen);
-	initEachPiece(4, 7, CHESS.WKing);
+	initEachPiece(0, 7, TEAM.W, CHESS.Rook);
+	initEachPiece(7, 7, TEAM.W, CHESS.Rook);
+	initEachPiece(1, 7, TEAM.W, CHESS.Knight);
+	initEachPiece(6, 7, TEAM.W, CHESS.Knight);
+	initEachPiece(2, 7, TEAM.W, CHESS.Bishop);
+	initEachPiece(5, 7, TEAM.W, CHESS.Bishop);
+	initEachPiece(3, 7, TEAM.W, CHESS.Queen);
+	initEachPiece(4, 7, TEAM.W, CHESS.King);
 
 	for (var x = 0; x < BOARD_SIZE; x++) {
-		initEachPiece(x, 1, CHESS.BPawn);
-		initEachPiece(x, 6, CHESS.WPawn);
+		initEachPiece(x, 1, TEAM.B, CHESS.Pawn);
+		initEachPiece(x, 6, TEAM.W, CHESS.Pawn);
 	}
 }
 
 
-function initEachPiece(x, y, type) {
+function initEachPiece(x, y, team, type) {
 	let imageHTML = document.createElement("img");
-	imageHTML.setAttribute("src", "assets/" + type + ".svg");
+	imageHTML.setAttribute("src", "assets/" + team + type + ".svg");
 	imageHTML.setAttribute("class", "x" + x + " y" + y);
 	imageHTML.setAttribute("onClick", "onClick(event)");
 	actionLayer.append(imageHTML);
-	chessboard[x][y].piece = new Piece(type, imageHTML);
+	chessboard[x][y].piece = new Piece(team, type, imageHTML);
 }
 
 

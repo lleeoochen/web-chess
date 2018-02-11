@@ -1,5 +1,5 @@
-function Piece(type, image) {
+function Piece(team, type, image) {
+	this.team = team;
 	this.type = type;
 	this.image = image;
-	this.team = type.charAt(0);
 }
