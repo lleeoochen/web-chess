@@ -3,6 +3,8 @@ var actionLayer = document.getElementById("actionLayer");
 var context = canvasLayer.getContext("2d");
 var chessboard = [[],[],[],[],[],[],[],[]];
 var oldGrid = null;
+var moves = [];
+var shown = false;
 
 canvasLayer.addEventListener("click", onClick, false);
 main();
@@ -19,11 +21,11 @@ function initBoard(){
 	context.fillRect(0, 0, BOARD_SIZE * GRID_SIZE_P, BOARD_SIZE * GRID_SIZE_P); //Draw board outline
 
 	for (var x = 0; x < BOARD_SIZE; x++) {
-	    for (var y = 0; y < BOARD_SIZE; y++) {
+		for (var y = 0; y < BOARD_SIZE; y++) {
 			color = (y % 2 == 0 && x % 2 == 0 || y % 2 != 0 && x % 2 != 0)? COLOR_BOARD_DARK : COLOR_BOARD_LIGHT;
 			chessboard[x][y] = new Grid(x, y, color, null);
 			fillGrid(chessboard[x][y], color);
-	    }
+		}
 	}
 }
 
@@ -73,22 +75,25 @@ function onClick(event) {
 	let newGrid = chessboard[x][y];
 
 	//Move chess piece
-	let moved = moveChess(oldGrid, newGrid);
+	let isMoved = moveChess(oldGrid, newGrid);
 
-	//Move selection highlights from old to new grid
-	if (oldGrid != null)
-		fillGrid(oldGrid, oldGrid.color);
-	fillGrid(newGrid, COLOR_HIGHLIGHT);
-
-	//Deselect grid if a move is successful or if clicking on same grid
-	if (moved || newGrid == oldGrid) {
-		deselect(newGrid);
+	//Highlight possible moves.
+	if (!isMoved && oldGrid != newGrid) {
+		clearMoves();
+		showsMoves(newGrid);
 	}
 	else {
-		var moves = getPossibleMoves(newGrid);
-		console.log(moves);
-		oldGrid = newGrid;
+		if (shown)
+			clearMoves();
+		else
+			showsMoves(newGrid);
 	}
+
+	//Deselect grid if a move is successful or if clicking on same grid
+	if (isMoved || newGrid == oldGrid)
+		deselect(newGrid);
+	else
+		oldGrid = newGrid;
 }
 
 
@@ -97,6 +102,13 @@ function moveChess(oldGrid, newGrid) {
 	//No chess piece to move. Exit.
 	if (oldGrid == null || oldGrid.piece == null)
 		return false;
+
+	//Check legal move of chess piece
+	let legalMove = false;
+	for (let i = 0; i < moves.length && !legalMove; i++)
+		if (newGrid.x == moves[i].x && newGrid.y == moves[i].y)
+			legalMove = true;
+	if (!legalMove) return false;
 
 	//Handle chess pieces from last grid and current grid. 
 	if (newGrid.piece != null) {
@@ -118,6 +130,29 @@ function moveChess(oldGrid, newGrid) {
 	return true;
 }
 
+
+function showsMoves(grid) {
+	moves = getPossibleMoves(grid);
+	setMovesColor(COLOR_HIGHLIGHT);
+	shown = true;
+}
+
+
+function clearMoves() {
+	setMovesColor(COLOR_ORIGINAL);
+	moves = [];
+	shown = false;
+}
+
+
+function setMovesColor(color) {
+	for (var i = 0; i < moves.length; i++) {
+		if (color == COLOR_ORIGINAL)
+			fillGrid(moves[i], chessboard[moves[i].x][moves[i].y].color);
+		else
+			fillGrid(moves[i], color);
+	}
+}
 
 function fillGrid(grid, color) {
 	context.fillStyle = color;
