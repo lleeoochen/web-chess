@@ -5,6 +5,7 @@ var chessboard = [[],[],[],[],[],[],[],[]];
 var oldGrid = null;
 var moves = [];
 var shown = false;
+var turn = TEAM.B;
 
 canvasLayer.addEventListener("click", onClick, false);
 main();
@@ -71,14 +72,21 @@ function onClick(event) {
 	//Check boundary and initialize newGrid selection
 	let x = parseInt((event.pageX - OFFSET_X_P) / GRID_SIZE_P);
 	let y = parseInt((event.pageY - OFFSET_Y_P) / GRID_SIZE_P);
-	if (x >= BOARD_SIZE || y >= BOARD_SIZE) { return; }
-	let newGrid = chessboard[x][y];
+	if (x >= BOARD_SIZE || y >= BOARD_SIZE)
+		return;
 
-	//Move chess piece
-	let isMoved = moveChess(oldGrid, newGrid);
+	//Cancel move if 1) the old grid has nothing, and 2) the new grid is opposite team.
+	let newGrid = chessboard[x][y];
+	if ((oldGrid == null || oldGrid.piece == null) && newGrid.piece != null && newGrid.piece.team != turn)
+		return;
+
+	//Move chess piece. Switch turn if the move is successful.
+	let successMove = moveChess(oldGrid, newGrid);
+	if (successMove)
+		turn = (turn == TEAM.B) ? TEAM.W : TEAM.B;
 
 	//Highlight possible moves.
-	if (!isMoved && oldGrid != newGrid) {
+	if (!successMove && oldGrid != newGrid) {
 		clearMoves();
 		showsMoves(newGrid);
 	}
@@ -90,7 +98,7 @@ function onClick(event) {
 	}
 
 	//Deselect grid if a move is successful or if clicking on same grid
-	if (isMoved || newGrid == oldGrid)
+	if (successMove || newGrid == oldGrid)
 		deselect(newGrid);
 	else
 		oldGrid = newGrid;
@@ -108,7 +116,10 @@ function moveChess(oldGrid, newGrid) {
 	for (let i = 0; i < moves.length && !legalMove; i++)
 		if (newGrid.x == moves[i].x && newGrid.y == moves[i].y)
 			legalMove = true;
-	if (!legalMove) return false;
+
+	//Exit if it's not a legal move
+	if (!legalMove)
+		return false;
 
 	//Handle chess pieces from last grid and current grid. 
 	if (newGrid.piece != null) {
