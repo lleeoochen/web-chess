@@ -132,7 +132,7 @@ function moveChess(oldGrid, newGrid) {
 
 
 function showsMoves(grid) {
-	moves = getPossibleMoves(grid);
+	moves = getPossibleMoves(chessboard, grid);
 	setMovesColor(COLOR_HIGHLIGHT);
 	shown = true;
 }
