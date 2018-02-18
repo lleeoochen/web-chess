@@ -3,8 +3,8 @@ const TEAM = {B: "B", W: "W"}
 
 const BOARD_SIZE = 8;
 const GRID_SIZE_P = 60;
-const OFFSET_X_P = 18;
-const OFFSET_Y_P = 70;
+const OFFSET_X_P = document.getElementById("canvasLayer").getBoundingClientRect().left;
+const OFFSET_Y_P = document.getElementById("canvasLayer").getBoundingClientRect().top;
 const HIGHLIGHT_P = 3;
 
 const COLOR_ORIGINAL = "ORIGINAL";
