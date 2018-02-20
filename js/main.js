@@ -1,22 +1,21 @@
+//Intialize global variables
 var canvasLayer = document.getElementById("canvasLayer");
 var actionLayer = document.getElementById("actionLayer");
 var context = canvasLayer.getContext("2d");
 var chessboard = [[],[],[],[],[],[],[],[]];
 var oldGrid = null;
 var moves = [];
-var shown = false;
 var turn = TEAM.B;
 
+//---------------------------------------------------
+//--------------Main for the Web Chess---------------
+//---------------------------------------------------
 canvasLayer.addEventListener("click", onClick, false);
-main();
+initBoard();
+initPieces();
 
 
-function main() {
-	initBoard();
-	initPieces();
-}
-
-
+//Intialize chessboard background
 function initBoard(){
 	context.fillStyle = COLOR_BOARD_LIGHT;
 	context.fillRect(0, 0, BOARD_SIZE * GRID_SIZE_P, BOARD_SIZE * GRID_SIZE_P); //Draw board outline
@@ -31,6 +30,7 @@ function initBoard(){
 }
 
 
+//Intialize all chess pieces
 function initPieces() {
 	initEachPiece(0, 0, TEAM.B, CHESS.Rook);
 	initEachPiece(7, 0, TEAM.B, CHESS.Rook);
@@ -57,6 +57,7 @@ function initPieces() {
 }
 
 
+//Intialize each chess piece
 function initEachPiece(x, y, team, type) {
 	let imageHTML = document.createElement("img");
 	imageHTML.setAttribute("src", "assets/" + team + type + ".svg");
@@ -67,6 +68,7 @@ function initEachPiece(x, y, team, type) {
 }
 
 
+//Handle all chessboard click events
 function onClick(event) {
 
 	//Check boundary and initialize newGrid selection
@@ -75,87 +77,63 @@ function onClick(event) {
 	if (x >= BOARD_SIZE || y >= BOARD_SIZE)
 		return;
 
-	//Cancel move if 1) the old grid has nothing, and 2) the new grid is opposite team.
+	//Initalize important variables
 	let newGrid = chessboard[x][y];
-	if ((oldGrid == null || oldGrid.piece == null) && newGrid.piece != null && newGrid.piece.team != turn)
-		return;
+	let isLegal = isLegalMove(newGrid);
 
-	//Move chess piece. Switch turn if the move is successful.
-	let successMove = moveChess(oldGrid, newGrid);
-	if (successMove)
-		turn = (turn == TEAM.B) ? TEAM.W : TEAM.B;
 
-	//Highlight possible moves.
-	if (!successMove && oldGrid != newGrid) {
+	//Action1 - Deselect Piece by clicking on illegal grid
+	if (oldGrid != null && !isLegal) {
 		clearMoves();
-		showsMoves(newGrid);
-	}
-	else {
-		if (shown)
-			clearMoves();
-		else
-			showsMoves(newGrid);
+		oldGrid = null;
 	}
 
-	//Deselect grid if a move is successful or if clicking on same grid
-	if (successMove || newGrid == oldGrid)
-		deselect(newGrid);
-	else
+	//Action2 - Select Piece by clicking on grid with active team.
+	else if (newGrid.piece != null && newGrid.piece.team == turn) {
+		updateMoves(newGrid);
 		oldGrid = newGrid;
+	}
+
+	//Action3 - Move Piece by clicking on empty grid or eat enemy by clicking on legal grid. Switch turn.
+	else if (oldGrid != null && oldGrid.piece != null && isLegal) {
+		moveChess(oldGrid, newGrid);
+		clearMoves();
+		switchTurn();
+		oldGrid = null;
+	}
 }
 
 
+//Move chess from oldGrid to newGrid
 function moveChess(oldGrid, newGrid) {
 
-	//No chess piece to move. Exit.
-	if (oldGrid == null || oldGrid.piece == null)
-		return false;
-
-	//Check legal move of chess piece
-	let legalMove = false;
-	for (let i = 0; i < moves.length && !legalMove; i++)
-		if (newGrid.x == moves[i].x && newGrid.y == moves[i].y)
-			legalMove = true;
-
-	//Exit if it's not a legal move
-	if (!legalMove)
-		return false;
-
-	//Handle chess pieces from last grid and current grid. 
-	if (newGrid.piece != null) {
-
-		//If same team, exit. If opposite team, erase opponent piece.
-		if (oldGrid.piece.team == newGrid.piece.team) {
-			return false;
-		}
-		else {
-			actionLayer.removeChild(newGrid.piece.image);
-		}
-	}
+	//Remove chess piece being eaten 
+	if (newGrid.piece != null)
+		actionLayer.removeChild(newGrid.piece.image);
 
 	//Move chess piece from old grid to current grid.
 	newGrid.piece = oldGrid.piece;
 	newGrid.piece.image.setAttribute("class", "x" + newGrid.x + " y" + newGrid.y);
 	oldGrid.piece = null;
 	oldGrid = null;
-	return true;
 }
 
 
-function showsMoves(grid) {
+//Update and show all possible moves based on a specific grid
+function updateMoves(grid) {
 	moves = getPossibleMoves(chessboard, grid);
 	setMovesColor(COLOR_HIGHLIGHT);
-	shown = true;
 }
 
 
+//Clear and hide all possible moves
 function clearMoves() {
 	setMovesColor(COLOR_ORIGINAL);
 	moves = [];
-	shown = false;
 }
 
 
+//Set grid color for all possible moves
 function setMovesColor(color) {
 	for (var i = 0; i < moves.length; i++) {
 		if (color == COLOR_ORIGINAL)
@@ -165,13 +143,25 @@ function setMovesColor(color) {
 	}
 }
 
+
+//Set grid color
 function fillGrid(grid, color) {
 	context.fillStyle = color;
 	context.fillRect(grid.x * GRID_SIZE_P, grid.y * GRID_SIZE_P, GRID_SIZE_P, GRID_SIZE_P);
 }
 
 
-function deselect(grid) {
-	fillGrid(grid, grid.color);
-	oldGrid = null;
+//Check legal move of chess piece
+function isLegalMove(grid) {
+	let legalMove = false;
+	for (let i = 0; i < moves.length && !legalMove; i++)
+		if (grid.x == moves[i].x && grid.y == moves[i].y)
+			legalMove = true;
+	return legalMove;
+}
+
+
+//Switch active team turn
+function switchTurn() {
+	turn = (turn == TEAM.B) ? TEAM.W : TEAM.B;
 }

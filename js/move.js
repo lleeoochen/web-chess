@@ -6,7 +6,6 @@ function getPossibleMoves(chessboard, grid) {
 	if (grid.piece == null)
 		return moves;
 
-	moves.push({x:grid.x, y:grid.y});
 	switch(grid.piece.type) {
 
 		case CHESS.Bishop:
