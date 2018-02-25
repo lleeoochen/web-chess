@@ -5,7 +5,7 @@ var context = canvasLayer.getContext("2d");
 var chessboard = [[],[],[],[],[],[],[],[]];
 var oldGrid = null;
 var moves = [];
-var turn = TEAM.B;
+var turn = TEAM.W;
 
 //---------------------------------------------------
 //--------------Main for the Web Chess---------------
@@ -32,39 +32,39 @@ function initBoard(){
 
 //Intialize all chess pieces
 function initPieces() {
-	initEachPiece(0, 0, TEAM.B, CHESS.Rook);
-	initEachPiece(7, 0, TEAM.B, CHESS.Rook);
-	initEachPiece(1, 0, TEAM.B, CHESS.Knight);
-	initEachPiece(6, 0, TEAM.B, CHESS.Knight);
-	initEachPiece(2, 0, TEAM.B, CHESS.Bishop);
-	initEachPiece(5, 0, TEAM.B, CHESS.Bishop);
-	initEachPiece(3, 0, TEAM.B, CHESS.Queen);
-	initEachPiece(4, 0, TEAM.B, CHESS.King);
+	initEachPiece(0, 0, TEAM.B, VALUE.Rook, CHESS.Rook);
+	initEachPiece(7, 0, TEAM.B, VALUE.Rook, CHESS.Rook);
+	initEachPiece(1, 0, TEAM.B, VALUE.Knight, CHESS.Knight);
+	initEachPiece(6, 0, TEAM.B, VALUE.Knight, CHESS.Knight);
+	initEachPiece(2, 0, TEAM.B, VALUE.Bishop, CHESS.Bishop);
+	initEachPiece(5, 0, TEAM.B, VALUE.Bishop, CHESS.Bishop);
+	initEachPiece(3, 0, TEAM.B, VALUE.Queen, CHESS.Queen);
+	initEachPiece(4, 0, TEAM.B, VALUE.King, CHESS.King);
 
-	initEachPiece(0, 7, TEAM.W, CHESS.Rook);
-	initEachPiece(7, 7, TEAM.W, CHESS.Rook);
-	initEachPiece(1, 7, TEAM.W, CHESS.Knight);
-	initEachPiece(6, 7, TEAM.W, CHESS.Knight);
-	initEachPiece(2, 7, TEAM.W, CHESS.Bishop);
-	initEachPiece(5, 7, TEAM.W, CHESS.Bishop);
-	initEachPiece(3, 7, TEAM.W, CHESS.Queen);
-	initEachPiece(4, 7, TEAM.W, CHESS.King);
+	initEachPiece(0, 7, TEAM.W, VALUE.Rook, CHESS.Rook);
+	initEachPiece(7, 7, TEAM.W, VALUE.Rook, CHESS.Rook);
+	initEachPiece(1, 7, TEAM.W, VALUE.Knight, CHESS.Knight);
+	initEachPiece(6, 7, TEAM.W, VALUE.Knight, CHESS.Knight);
+	initEachPiece(2, 7, TEAM.W, VALUE.Bishop, CHESS.Bishop);
+	initEachPiece(5, 7, TEAM.W, VALUE.Bishop, CHESS.Bishop);
+	initEachPiece(3, 7, TEAM.W, VALUE.Queen, CHESS.Queen);
+	initEachPiece(4, 7, TEAM.W, VALUE.King, CHESS.King);
 
 	for (var x = 0; x < BOARD_SIZE; x++) {
-		initEachPiece(x, 1, TEAM.B, CHESS.Pawn);
-		initEachPiece(x, 6, TEAM.W, CHESS.Pawn);
+		initEachPiece(x, 1, TEAM.B, VALUE.Pawn, CHESS.Pawn);
+		initEachPiece(x, 6, TEAM.W, VALUE.Pawn, CHESS.Pawn);
 	}
 }
 
 
 //Intialize each chess piece
-function initEachPiece(x, y, team, type) {
+function initEachPiece(x, y, team, value, type) {
 	let imageHTML = document.createElement("img");
 	imageHTML.setAttribute("src", "assets/" + team + type + ".svg");
 	imageHTML.setAttribute("class", "x" + x + " y" + y);
 	imageHTML.setAttribute("onClick", "onClick(event)");
 	actionLayer.append(imageHTML);
-	chessboard[x][y].piece = new Piece(team, type, imageHTML);
+	chessboard[x][y].piece = new Piece(team, type, value, imageHTML);
 }
 
 
@@ -77,6 +77,14 @@ function onClick(event) {
 	if (x >= BOARD_SIZE || y >= BOARD_SIZE)
 		return;
 
+	//Handle chess event with (x, y) click coordinate
+	handleChessEvent(x, y);
+}
+
+
+//Handle chess event with (x, y) click coordinate
+function handleChessEvent(x, y) {
+
 	//Initalize important variables
 	let newGrid = chessboard[x][y];
 	let isLegal = isLegalMove(newGrid);
@@ -84,24 +92,171 @@ function onClick(event) {
 
 	//Action1 - Deselect Piece by clicking on illegal grid
 	if (oldGrid != null && !isLegal) {
+		fillGrid(oldGrid, COLOR_ORIGINAL);
 		clearMoves();
 		oldGrid = null;
 	}
 
 	//Action2 - Select Piece by clicking on grid with active team.
 	else if (newGrid.piece != null && newGrid.piece.team == turn) {
+		fillGrid(newGrid, COLOR_HIGHLIGHT);
 		updateMoves(newGrid);
 		oldGrid = newGrid;
 	}
 
 	//Action3 - Move Piece by clicking on empty grid or eat enemy by clicking on legal grid. Switch turn.
 	else if (oldGrid != null && oldGrid.piece != null && isLegal) {
+		fillGrid(oldGrid, COLOR_ORIGINAL);
 		moveChess(oldGrid, newGrid);
 		clearMoves();
 		switchTurn();
 		oldGrid = null;
+
+		//Thinking...
+		canvasLayer.removeAttribute("onclick");
+		setTimeout(function(){
+			moveChessAI();
+			canvasLayer.addEventListener("click", onClick, false);
+		},500);
 	}
 }
+
+//Move chess from oldGrid to newGrid
+function moveChessAI() {
+
+	let moved = false;
+	let bestGrids = [];
+	let bestMoves = [];
+	for (let i = 0; i < chessboard.length; i++) {
+		for (let j = 0; j < chessboard.length; j++) {
+
+			let grid = chessboard[i][j];
+			if (grid.piece != null && grid.piece.team == turn) {
+
+				let moves = getPossibleMoves(chessboard, grid);
+				let tempBoard = copyBoard(chessboard);
+
+				let chosenMove = getBestMoves(tempBoard, grid, moves, 0, turn);
+				if (chosenMove.move == null && moves.length != 0)
+					chosenMove.move = moves[0];
+				console.log(grid, chosenMove);
+
+				if (chosenMove.move != null) {
+					if (bestMoves.length == 0 || chosenMove.value > bestMoves[0].value) {
+						bestGrids = [grid];
+						bestMoves = [chosenMove];
+					}
+					else if (chosenMove.value == bestMoves[0].value) {
+						bestGrids.push(grid);
+						bestMoves.push(chosenMove);
+					}
+				}
+			}
+		}
+	}
+
+	console.log(bestMoves);
+	let randomIndex = Math.floor(Math.random() * bestMoves.length);
+	let bestGrid = bestGrids[randomIndex];
+	let bestMove = bestMoves[randomIndex];
+	if (bestMove.move != null) {
+		moveChess(bestGrid, chessboard[bestMove.move.x][bestMove.move.y]);
+	}
+	
+	switchTurn();
+	return;
+}
+
+
+function getBestMoves(board, curGrid, moves, depth, team) {
+	let enemyTeam = (team == TEAM.W) ? TEAM.B : TEAM.W;
+	let valueFlag = (team == turn) ? 1 : -1;
+
+	//If no move, return 0.
+	if (depth > 3 || moves.length == 0) {
+		return [0, null];
+	}
+
+	//Initialize
+	depth ++;
+	let bestMove = null;
+	let bestValue = -300;
+
+	//Loop through each move
+	for (let i = 0; i < moves.length; i++) {
+
+		//Copy new board
+		let tempBoard = copyBoard(board);
+		let baseValue = (tempBoard[moves[i].x][moves[i].y].piece != null) ? valueFlag * tempBoard[moves[i].x][moves[i].y].piece.value : 0;
+
+		//Move to each move
+		tempBoard[moves[i].x][moves[i].y].piece = curGrid.piece;
+		tempBoard[curGrid.x][curGrid.y].piece = null;
+
+		//Get all possible enemies
+		let enemies = getEnemies(tempBoard, tempBoard[moves[i].x][moves[i].y]);
+
+		//Get each enemy's best moves
+		let value = baseValue + getBestMoves(tempBoard, moves[i], enemies, depth + 1, enemyTeam).value;
+
+		//Get highest value of each move
+		if (value > bestValue) {
+			bestValue = value;
+			bestMove = moves[i];
+		}
+
+	}
+
+	//Return best move and best value
+	return {value:bestValue, move:bestMove};
+}
+
+
+function getEnemies(board, targetGrid) {
+	let enemies = []
+
+	if (targetGrid.piece == null)
+		return enemies;
+
+	for (let i = 0; i < board.length; i++) {
+		for (let j = 0; j < board[0].length; j++) {
+
+			let enemyGrid = board[i][j];
+			if (enemyGrid.piece != null && enemyGrid.piece.team != targetGrid.piece.team) {
+				let enemyMoves = getPossibleMoves(board, enemyGrid);
+
+				let found = false;
+				for (let k = 0; k < enemyMoves.length && !found; k++)
+					if (enemyMoves[k].x == targetGrid.x && enemyMoves[k].y == targetGrid.y)
+						found = true;
+
+				if (found)
+					enemies.push(enemyGrid);
+			}
+
+		}
+	}
+
+	return enemies;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 //Move chess from oldGrid to newGrid
@@ -135,17 +290,19 @@ function clearMoves() {
 
 //Set grid color for all possible moves
 function setMovesColor(color) {
-	for (var i = 0; i < moves.length; i++) {
-		if (color == COLOR_ORIGINAL)
-			fillGrid(moves[i], chessboard[moves[i].x][moves[i].y].color);
-		else
-			fillGrid(moves[i], color);
-	}
+	for (var i = 0; i < moves.length; i++)
+		fillGrid(chessboard[moves[i].x][moves[i].y], color);
 }
 
 
 //Set grid color
 function fillGrid(grid, color) {
+	if (grid == null)
+		return;
+
+	if (color == COLOR_ORIGINAL)
+		color = grid.color;
+
 	context.fillStyle = color;
 	context.fillRect(grid.x * GRID_SIZE_P, grid.y * GRID_SIZE_P, GRID_SIZE_P, GRID_SIZE_P);
 }
@@ -164,4 +321,13 @@ function isLegalMove(grid) {
 //Switch active team turn
 function switchTurn() {
 	turn = (turn == TEAM.B) ? TEAM.W : TEAM.B;
+}
+
+
+function copyBoard(board) {
+	let newBoard = [[],[],[],[],[],[],[],[]];
+	for (let i = 0; i < board.length; i++)
+		for (let j = 0; j < board.length; j++)
+    		newBoard[i][j] = Object.assign({}, board[i][j]);
+    return newBoard;
 }
