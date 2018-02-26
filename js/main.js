@@ -206,47 +206,67 @@ function getBestMoves(board, curGrid, moves, team) {
 		if (keyGrid.piece != null) 
 			curValue = keyGrid.piece.value;
 		
-		let keyTeam = TEAM.SPECIAL;
+		let keyTeam = null;
 		if (keyGrid.piece != null) {
 			keyTeam = keyGrid.piece.team;
 			keyGrid.piece.team = TEAM.SPECIAL;
 		}
 
-		let validPieces = getValidPieces(tempBoard, keyGrid, curGrid, team);
+		let validPieces = getValidPieces(tempBoard, keyGrid, team);
 		let validFriends = validPieces.friends;
 		let validEnemies = validPieces.enemies;
-		let combinationEnemies = permutator(validEnemies);
-		let combinationFriends = permutator(validFriends);
+		// let combinationEnemies = permutator(validEnemies);
+		// let combinationFriends = permutator(validFriends);
 		
-		let eatenGrid = new Grid(0, 0, null, new Piece(TEAM.SPECIAL, 0, curGridValue, null));
-		
+		// let eatenGrid = new Grid(0, 0, null, new Piece(TEAM.SPECIAL, 0, curGridValue, null));
+		console.log("????????????", moves[count], curValue, validEnemies, validFriends);
 
-		// console.log("[", curValue, keyGrid.piece);
+		if (validFriends.length > validEnemies.length) {
+			validFriends = validFriends.splice(0, validEnemies.length);
+		}
+		else if (validFriends.length < validEnemies.length) {
+			validEnemies = validEnemies.splice(0, validFriends.length + 1);
+		}
 
-
-		for (let i = 0; i < combinationEnemies.length; i++) {
-			for (let j = 0; j < combinationFriends.length; j++) {
-				
-				let enemies = combinationEnemies[i];
-				let friends = combinationFriends[j];
-
-				if (friends.length > enemies.length)
-					friends = friends.splice(0, enemies.length);
-
-				else if (friends.length < enemies.length)
-					enemies = enemies.splice(0, friends.length + 1);
-
-				for (let ii = 0; ii < enemies.length; ii++) {
-					curValue = curValue - eatenGrid.piece.value;
-					if (ii < friends.length) {
-						curValue = curValue + enemies[ii].piece.value;
-						eatenGrid = friends[ii];
-					}
-				}
-				console.log("............", curValue, keyGrid, enemies, friends);
-
+		let eatenGrid = validFriends[0];
+		validFriends = validFriends.splice(0, validFriends.length - 1);
+		for (let ii = 0; ii < validEnemies.length; ii++) {
+			curValue = curValue - eatenGrid.piece.value;
+			if (ii < validFriends.length) {
+				curValue = curValue + validEnemies[ii].piece.value;
+				eatenGrid = validFriends[ii];
 			}
 		}
+
+		console.log(">>>>", curValue, bestValue);
+
+
+		// for (let i = 0; i < combinationEnemies.length; i++) {
+		// 	for (let j = 0; j < combinationFriends.length; j++) {
+				
+		// 		let enemies = combinationEnemies[i];
+		// 		let friends = combinationFriends[j];
+		// 		console.log("-------------", enemies, friends);
+
+		// 		if (friends.length > enemies.length)
+		// 			friends = friends.splice(0, enemies.length);
+
+		// 		else if (friends.length < enemies.length)
+		// 			enemies = enemies.splice(0, friends.length + 1);
+
+		// 		console.log("----------111", enemies, friends);
+
+		// 		for (let ii = 0; ii < enemies.length; ii++) {
+		// 			curValue = curValue - eatenGrid.piece.value;
+		// 			if (ii < friends.length) {
+		// 				curValue = curValue + enemies[ii].piece.value;
+		// 				eatenGrid = friends[ii];
+		// 			}
+		// 		}
+		// 		console.log("............", curValue, keyGrid);
+
+		// 	}
+		// }
 		// console.log("]", curValue);
 
 		if (bestValue == undefined || curValue > bestValue) {
@@ -254,7 +274,7 @@ function getBestMoves(board, curGrid, moves, team) {
 			bestMove = moves[count];
 		}
 
-		if (keyGrid.piece != null)
+		if (keyGrid.piece != null && keyTeam != null)
 			keyGrid.piece.team = keyTeam;
 	}
 
@@ -267,14 +287,14 @@ function getBestMoves(board, curGrid, moves, team) {
 
 
 
-function getValidPieces(board, keyGrid, curGrid, team) {
+function getValidPieces(board, keyGrid, team) {
 	let friends = [];
 	let enemies = [];
 
 	for (let i = 0; i < board.length; i++) {
 		for (let j = 0; j < board.length; j++) {
 		
-			if (board[i][j].piece != null && i != curGrid.x && j != curGrid.y) {
+			if (board[i][j].piece != null) {
 				let validMoves = getPossibleMoves(board, board[i][j]);
 
 				let found = false;
