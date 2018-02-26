@@ -1,6 +1,6 @@
 const CHESS = {King: "King", Queen: "Queen", Rook: "Rook", Bishop: "Bishop", Knight: "Knight", Pawn: "Pawn"};
 const VALUE = {King: 200, Queen: 9, Rook: 5, Bishop: 3, Knight: 3, Pawn: 1};
-const TEAM = {B: "B", W: "W"}
+const TEAM = {B: "B", W: "W", SPECIAL:"S"}
 
 const BOARD_SIZE = 8;
 const GRID_SIZE_P = 60;
