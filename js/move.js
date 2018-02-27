@@ -116,7 +116,9 @@ function getPossibleMoves(chessboard, grid) {
 		case CHESS.Pawn:
 			let dir = (grid.piece.team == TEAM.W)? -1 : 1;
 
-			if (grid.y == 1 || grid.y == 6)
+			if ((grid.y == 1 && dir == 1 || grid.y == 6 && dir == -1)
+				&& chessboard[grid.x][grid.y + dir].piece == null
+				&& chessboard[grid.x][grid.y + dir * 2].piece == null)
 				possibleWays.push({x:grid.x, y:grid.y + dir * 2});
 
 			if (inBound(grid.y + dir) && inBound(grid.x + 1) && chessboard[grid.x + 1][grid.y + dir].piece != null)
