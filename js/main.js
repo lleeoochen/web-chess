@@ -98,47 +98,47 @@ function onClick(event) {
 //Handle chess event with (x, y) click coordinate
 function handleChessEvent(x, y) {
 
-	//Thinking...
-	canvasLayer.removeAttribute("onclick");
-	setTimeout(function(){
-		moveChessAI();
-		canvasLayer.addEventListener("click", onClick, false);
-	},500);
+	// //Thinking...
+	// canvasLayer.removeAttribute("onclick");
+	// setTimeout(function(){
+	// 	moveChessAI();
+	// 	canvasLayer.addEventListener("click", onClick, false);
+	// },500);
 
-	// //Initalize important variables
-	// let newGrid = chessboard[x][y];
-	// let isLegal = isLegalMove(newGrid);
+	//Initalize important variables
+	let newGrid = chessboard[x][y];
+	let isLegal = isLegalMove(newGrid);
 
 
-	// //Action1 - Deselect Piece by clicking on illegal grid
-	// if (oldGrid != null && !isLegal) {
-	// 	fillGrid(oldGrid, COLOR_ORIGINAL);
-	// 	clearMoves();
-	// 	oldGrid = null;
-	// }
+	//Action1 - Deselect Piece by clicking on illegal grid
+	if (oldGrid != null && !isLegal) {
+		fillGrid(oldGrid, COLOR_ORIGINAL);
+		clearMoves();
+		oldGrid = null;
+	}
 
-	// //Action2 - Select Piece by clicking on grid with active team.
-	// else if (newGrid.piece != null && newGrid.piece.team == turn) {
-	// 	fillGrid(newGrid, COLOR_HIGHLIGHT);
-	// 	updateMoves(newGrid);
-	// 	oldGrid = newGrid;
-	// }
+	//Action2 - Select Piece by clicking on grid with active team.
+	else if (newGrid.piece != null && newGrid.piece.team == turn) {
+		fillGrid(newGrid, COLOR_HIGHLIGHT);
+		updateMoves(newGrid);
+		oldGrid = newGrid;
+	}
 
-	// //Action3 - Move Piece by clicking on empty grid or eat enemy by clicking on legal grid. Switch turn.
-	// else if (oldGrid != null && oldGrid.piece != null && isLegal) {
-	// 	fillGrid(oldGrid, COLOR_ORIGINAL);
-	// 	moveChess(oldGrid, newGrid);
-	// 	clearMoves();
-	// 	switchTurn();
-	// 	oldGrid = null;
+	//Action3 - Move Piece by clicking on empty grid or eat enemy by clicking on legal grid. Switch turn.
+	else if (oldGrid != null && oldGrid.piece != null && isLegal) {
+		fillGrid(oldGrid, COLOR_ORIGINAL);
+		moveChess(oldGrid, newGrid);
+		clearMoves();
+		switchTurn();
+		oldGrid = null;
 
-	// 	//Thinking...
-	// 	canvasLayer.removeAttribute("onclick");
-	// 	setTimeout(function(){
-	// 		moveChessAI();
-	// 		canvasLayer.addEventListener("click", onClick, false);
-	// 	},500);
-	// }
+		//Thinking...
+		canvasLayer.removeAttribute("onclick");
+		setTimeout(function(){
+			moveChessAI();
+			canvasLayer.addEventListener("click", onClick, false);
+		},500);
+	}
 }
 
 //Move chess from oldGrid to newGrid
@@ -188,10 +188,13 @@ function moveChessAI() {
 }
 
 
+//Get best moves
 function getBestMoves(board, curGrid, moves, team) {
 
 	let bestValue = undefined;
 	let bestMove = null;
+	let worstValue = undefined;
+	let worstMove = null;
 
 	for (let count = 0; count < moves.length; count++) {
 
@@ -203,30 +206,21 @@ function getBestMoves(board, curGrid, moves, team) {
 			curGridValue = curGrid.piece.value;
 
 		let curValue = 0;
-		if (keyGrid.piece != null) 
-			curValue = keyGrid.piece.value;
-		
 		let keyTeam = null;
 		if (keyGrid.piece != null) {
+			curValue = keyGrid.piece.value;
 			keyTeam = keyGrid.piece.team;
 			keyGrid.piece.team = TEAM.SPECIAL;
 		}
 
 		let validPieces = getValidPieces(tempBoard, keyGrid, team);
-		let validFriends = validPieces.friends;
-		let validEnemies = validPieces.enemies;
-		// let combinationEnemies = permutator(validEnemies);
-		// let combinationFriends = permutator(validFriends);
-		
-		// let eatenGrid = new Grid(0, 0, null, new Piece(TEAM.SPECIAL, 0, curGridValue, null));
-		console.log("????????????", moves[count], curValue, validEnemies, validFriends);
+		let validFriends = validPieces.friends.sort(gridSort);
+		let validEnemies = validPieces.enemies.sort(gridSortReverse);
 
-		if (validFriends.length > validEnemies.length) {
+		if (validFriends.length > validEnemies.length)
 			validFriends = validFriends.splice(0, validEnemies.length);
-		}
-		else if (validFriends.length < validEnemies.length) {
+		else if (validFriends.length < validEnemies.length)
 			validEnemies = validEnemies.splice(0, validFriends.length + 1);
-		}
 
 		let eatenGrid = validFriends[0];
 		validFriends = validFriends.splice(0, validFriends.length - 1);
@@ -238,40 +232,16 @@ function getBestMoves(board, curGrid, moves, team) {
 			}
 		}
 
-		console.log(">>>>", curValue, bestValue);
-
-
-		// for (let i = 0; i < combinationEnemies.length; i++) {
-		// 	for (let j = 0; j < combinationFriends.length; j++) {
-				
-		// 		let enemies = combinationEnemies[i];
-		// 		let friends = combinationFriends[j];
-		// 		console.log("-------------", enemies, friends);
-
-		// 		if (friends.length > enemies.length)
-		// 			friends = friends.splice(0, enemies.length);
-
-		// 		else if (friends.length < enemies.length)
-		// 			enemies = enemies.splice(0, friends.length + 1);
-
-		// 		console.log("----------111", enemies, friends);
-
-		// 		for (let ii = 0; ii < enemies.length; ii++) {
-		// 			curValue = curValue - eatenGrid.piece.value;
-		// 			if (ii < friends.length) {
-		// 				curValue = curValue + enemies[ii].piece.value;
-		// 				eatenGrid = friends[ii];
-		// 			}
-		// 		}
-		// 		console.log("............", curValue, keyGrid);
-
-		// 	}
-		// }
-		// console.log("]", curValue);
+		// console.log("????????????", moves[count], curValue, validFriends, validEnemies);
 
 		if (bestValue == undefined || curValue > bestValue) {
 			bestValue = curValue;
 			bestMove = moves[count];
+		}
+
+		if (worstValue == undefined || curValue < worstValue) {
+			worstValue = curValue;
+			worstMove = moves[count];
 		}
 
 		if (keyGrid.piece != null && keyTeam != null)
@@ -281,12 +251,12 @@ function getBestMoves(board, curGrid, moves, team) {
 	if (bestValue == undefined)
 		bestValue = 0;
 
-	return {value:bestValue, move:bestMove};
+	let average = bestValue + worstValue;
+	return {value:average, move:bestMove};
 }
 
 
-
-
+//Get all valid friends and enemies that can eat keyGrid
 function getValidPieces(board, keyGrid, team) {
 	let friends = [];
 	let enemies = [];
@@ -315,146 +285,6 @@ function getValidPieces(board, keyGrid, team) {
 
 	return {friends: friends, enemies: enemies};
 }
-
-
-function permutator(inputArr) {
-	var results = [];
-
-	function permute(arr, memo) {
-		var cur, memo = memo || [];
-
-		for (var i = 0; i < arr.length; i++) {
-			cur = arr.splice(i, 1);
-			if (arr.length === 0) {
-				results.push(memo.concat(cur));
-			}
-			permute(arr.slice(), memo.concat(cur));
-			arr.splice(i, 0, cur[0]);
-		}
-
-		return results;
-	}
-
-	return permute(inputArr);
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// function getBestMoves(board, curGrid, moves, depth, team) {
-// 	// console.log(board, depth, team);
-// 	let enemyTeam = (team == TEAM.W) ? TEAM.B : TEAM.W;
-// 	let valueFlag = (team == turn) ? 1 : -1;
-
-// 	//If no move, return 0.
-// 	if (depth > 4 || moves.length == 0) {
-// 		return {value:0, move:null};
-// 	}
-
-// 	//Initialize
-// 	let bestMove = null;
-// 	let bestValue = -300;
-
-// 	//Loop through each move
-// 	for (let i = 0; i < moves.length; i++) {
-
-// 		//Copy new board
-// 		let tempBoard = copyBoard(board);
-// 		let baseValue = (tempBoard[moves[i].x][moves[i].y].piece != null) ? valueFlag * tempBoard[moves[i].x][moves[i].y].piece.value : 0;
-
-// 		//Move to each move
-// 		tempBoard[moves[i].x][moves[i].y].piece = curGrid.piece;
-// 		tempBoard[curGrid.x][curGrid.y].piece = null;
-
-// 		//Get all possible enemies
-// 		let enemies = getEnemies(tempBoard, tempBoard[moves[i].x][moves[i].y]);
-
-// 		//Get each enemy's best moves
-// 		let value = baseValue + getBestMoves(tempBoard, moves[i], enemies, depth + 1, enemyTeam).value;
-
-// 		if (team == TEAM.W && curGrid.piece != undefined && curGrid.piece.type == CHESS.Knight)
-// 			console.log(tempBoard[moves[i].x][moves[i].y], baseValue, team, enemies);
-
-// 		if (team == TEAM.B)
-// 			console.log(tempBoard[moves[i].x][moves[i].y], value, team, enemies, tempBoard);
-
-// 		//Get highest value of each move
-// 		if (value > bestValue) {
-// 			bestValue = value;
-// 			bestMove = moves[i];
-// 		}
-
-// 	}
-
-// 	//Return best move and best value
-// 	return {value:bestValue, move:bestMove};
-// }
-
-
-// function getEnemies(board, targetGrid) {
-// 	let enemies = []
-
-// 	if (targetGrid.piece == null)
-// 		return enemies;
-
-// 	for (let i = 0; i < board.length; i++) {
-// 		for (let j = 0; j < board[0].length; j++) {
-
-// 			let enemyGrid = board[i][j];
-// 			if (enemyGrid.piece != null && enemyGrid.piece.team != targetGrid.piece.team) {
-// 				let enemyMoves = getPossibleMoves(board, enemyGrid);
-
-// 				let found = false;
-// 				for (let k = 0; k < enemyMoves.length && !found; k++)
-// 					if (enemyMoves[k].x == targetGrid.x && enemyMoves[k].y == targetGrid.y)
-// 						found = true;
-
-// 				if (found)
-// 					enemies.push(enemyGrid);
-// 			}
-
-// 		}
-// 	}
-
-// 	return enemies;
-// }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 //Move chess from oldGrid to newGrid
@@ -533,4 +363,13 @@ function copyBoard(board) {
 		}
 	}
 	return newBoard;
+}
+
+
+function gridSort(a, b) {
+	return a.piece.value - b.piece.value;
+}
+
+function gridSortReverse(a, b) {
+	return b.piece.value - a.piece.value;
 }
