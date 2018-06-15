@@ -144,8 +144,8 @@ function handleChessEvent(x, y) {
 //Move chess from oldGrid to newGrid
 function moveChessAI() {
 	let moved = false;
-	let bestGrids = [];
 	let bestMoves = [];
+
 	for (let i = 0; i < chessboard.length; i++) {
 		for (let j = 0; j < chessboard.length; j++) {
 
@@ -156,17 +156,13 @@ function moveChessAI() {
 				let tempBoard = copyBoard(chessboard);
 
 				let chosenMove = getBestMoves(tempBoard, grid, moves, turn);
-				if (chosenMove.move == null && moves.length != 0)
-					chosenMove.move = moves[0];
 				console.log(grid, chosenMove);
 
-				if (chosenMove.move != null) {
-					if (bestMoves.length == 0 || chosenMove.value > bestMoves[0].value) {
-						bestGrids = [grid];
+				if (chosenMove.bestMove != null) {
+					if (bestMoves.length == 0 || chosenMove.bestValue > bestMoves[0].bestValue) {
 						bestMoves = [chosenMove];
 					}
-					else if (chosenMove.value == bestMoves[0].value) {
-						bestGrids.push(grid);
+					else if (chosenMove.bestValue == bestMoves[0].bestValue) {
 						bestMoves.push(chosenMove);
 					}
 				}
@@ -174,13 +170,23 @@ function moveChessAI() {
 		}
 	}
 
-	console.log(bestGrids);
-	console.log(bestMoves);
-	let randomIndex = Math.floor(Math.random() * bestMoves.length);
-	let bestGrid = bestGrids[randomIndex];
+	bestMoves = bestMoves.sort(bestMoveSort);
+	let lastBestIndex = bestMoves.length;
+	for (var i = 0; i < bestMoves.length; i++)
+		if (bestMoves[i].worstValue < bestMoves[0].worstValue)
+			lastBestIndex = i;
+
+
+	let randomIndex = Math.floor(Math.random() * lastBestIndex);
 	let bestMove = bestMoves[randomIndex];
-	if (bestMove != undefined && bestMove.move != null) {
-		moveChess(bestGrid, chessboard[bestMove.move.x][bestMove.move.y]);
+
+	console.log(bestMove.bestValue);
+	console.log(bestMove.worstValue);
+	console.log(bestMove.grid);
+	console.log(bestMove.bestMove);
+
+	if (bestMove != undefined && bestMove.bestMove != null) {
+		moveChess(bestMove.grid, chessboard[bestMove.bestMove.x][bestMove.bestMove.y]);
 	}
 	
 	switchTurn();
@@ -191,48 +197,27 @@ function moveChessAI() {
 //Get best moves
 function getBestMoves(board, curGrid, moves, team) {
 
+	let enemyTeam;
+	if (team == TEAM.B)
+		enemyTeam = TEAM.W;
+	else
+		enemyTeam = TEAM.B;
+
+	let stayingCost = getMoveValue(board, curGrid, enemyTeam);
 	let bestValue = undefined;
 	let bestMove = null;
 	let worstValue = undefined;
 	let worstMove = null;
 
+	console.log(stayingCost);
+
 	for (let count = 0; count < moves.length; count++) {
 
 		let tempBoard = copyBoard(board);
 		let keyGrid = tempBoard[moves[count].x][moves[count].y];
-		
-		let curGridValue = 0;
-		if (curGrid.piece != null)
-			curGridValue = curGrid.piece.value;
+		let curValue = getMoveValue(tempBoard, keyGrid, team);
 
-		let curValue = 0;
-		let keyTeam = null;
-		if (keyGrid.piece != null) {
-			curValue = keyGrid.piece.value;
-			keyTeam = keyGrid.piece.team;
-			keyGrid.piece.team = TEAM.SPECIAL;
-		}
-
-		let validPieces = getValidPieces(tempBoard, keyGrid, team);
-		let validFriends = validPieces.friends.sort(gridSort);
-		let validEnemies = validPieces.enemies.sort(gridSortReverse);
-
-		if (validFriends.length > validEnemies.length)
-			validFriends = validFriends.splice(0, validEnemies.length);
-		else if (validFriends.length < validEnemies.length)
-			validEnemies = validEnemies.splice(0, validFriends.length + 1);
-
-		let eatenGrid = validFriends[0];
-		validFriends = validFriends.splice(0, validFriends.length - 1);
-		for (let ii = 0; ii < validEnemies.length; ii++) {
-			curValue = curValue - eatenGrid.piece.value;
-			if (ii < validFriends.length) {
-				curValue = curValue + validEnemies[ii].piece.value;
-				eatenGrid = validFriends[ii];
-			}
-		}
-
-		// console.log("????????????", moves[count], curValue, validFriends, validEnemies);
+		console.log(moves[count], curValue);
 
 		if (bestValue == undefined || curValue > bestValue) {
 			bestValue = curValue;
@@ -243,16 +228,69 @@ function getBestMoves(board, curGrid, moves, team) {
 			worstValue = curValue;
 			worstMove = moves[count];
 		}
-
-		if (keyGrid.piece != null && keyTeam != null)
-			keyGrid.piece.team = keyTeam;
 	}
 
 	if (bestValue == undefined)
 		bestValue = 0;
 
-	let average = bestValue + worstValue;
-	return {value:average, move:bestMove};
+	if (worstValue == undefined)
+		worstValue = bestValue;
+
+	if (stayingCost - bestValue >= 2)
+		bestMove = null;
+
+	worstValue += bestValue;
+	return {worstValue:worstValue, bestValue: bestValue, bestMove:bestMove, grid:curGrid};
+}
+
+
+//Get value on a specific move to grid
+function getMoveValue(board, grid, team) {
+
+	let value = 0;
+	let gridTeam = null;
+
+	if (grid.piece != null) {
+		value = grid.piece.value;
+		gridTeam = grid.piece.team;
+		grid.piece.team = TEAM.SPECIAL;
+	}
+	else {
+		grid.piece = new Piece(TEAM.SPECIAL, 0, 0, null);
+	}
+
+	let validPieces = getValidPieces(board, grid, team);
+	let validFriends = validPieces.friends.sort(gridSort);
+	let validEnemies = validPieces.enemies.sort(gridSortReverse);
+
+	console.log(value);
+	console.log(validFriends);
+	console.log(validEnemies);
+
+	if (validFriends.length > validEnemies.length)
+		validFriends = validFriends.splice(0, validEnemies.length);
+	else if (validFriends.length < validEnemies.length)
+		validEnemies = validEnemies.splice(0, validFriends.length + 1);
+
+	if (validFriends.length != 0) {
+		let eatenGrid = validFriends[0];
+		validFriends = validFriends.splice(0, validFriends.length - 1);
+
+		for (let ii = 0; ii < validEnemies.length; ii++) {
+			value = value - eatenGrid.piece.value;
+			if (ii < validFriends.length) {
+				value = value + validEnemies[ii].piece.value;
+				eatenGrid = validFriends[ii];
+			}
+		}
+	}
+
+	if (grid.piece != null && gridTeam != null)
+		grid.piece.team = gridTeam;
+	else
+		grid.piece = null;
+
+	return value;
 }
 
 
@@ -291,8 +329,15 @@ function getValidPieces(board, keyGrid, team) {
 function moveChess(oldGrid, newGrid) {
 
 	//Remove chess piece being eaten 
-	if (newGrid.piece != null)
+	if (newGrid.piece != null) {
 		actionLayer.removeChild(newGrid.piece.image);
+		if (newGrid.piece.type == CHESS.King) {
+			if (newGrid.piece.team == TEAM.B)
+				alert("Hello! White Team Wins!");
+			else
+				alert("Hello! Black Team Wins!");
+		}
+	}
 
 	//Move chess piece from old grid to current grid.
 	newGrid.piece = oldGrid.piece;
@@ -372,4 +417,8 @@ function gridSort(a, b) {
 
 function gridSortReverse(a, b) {
 	return b.piece.value - a.piece.value;
+}
+
+function bestMoveSort(a, b) {
+	return b.worstValue - a.worstValue;
 }
