@@ -1,25 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 	<meta charset="utf-8">
 	<title>WebChess</title>
 	<link href="style.css" rel="stylesheet" type="text/css">
-	<link rel='shortcut icon' type='image/x-icon' href='favicon.ico' />
-	<script type="text/javascript"> if(!window.console) console = {log:function() {}}; 
-	</script>
+	<link rel="shortcut icon" type="image/x-icon" href="favicon.ico" />
 </head>
-<body>
-	<header><h3>Web Chess</h3></header>
-	<div id="actionLayer" width="500px" height="500px" style="background: #fff; margin:10px;"></div>
-	<canvas id="canvasLayer" width="500px" height="500px" style="background: #fff; margin:10px"></canvas>
+
+<body id="body">
+
+	<h1 id="title">Web Chess</h1>
+	<div id="layerWrap">
+		<div id="actionLayer" width="500px" height="500px">
+			<canvas id="canvasLayer" width="500px" height="500px"/>
+		</div>
+	</div>
+
 	<script src="js/jquery.js"></script>
 	<script src="js/const.js"></script>
 	<script src="js/piece.js"></script>
 	<script src="js/grid.js"></script>
 	<script src="js/move.js"></script>
 	<script src="js/main.js"></script>
+
 </body>
-
-
-
 </html>

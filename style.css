@@ -1,17 +1,55 @@
-.x0 { position: absolute; left: 28px; }
-.x1 { position: absolute; left: 88px; }
-.x2 { position: absolute; left: 148px; }
-.x3 { position: absolute; left: 208px; }
-.x4 { position: absolute; left: 268px; }
-.x5 { position: absolute; left: 328px; }
-.x6 { position: absolute; left: 388px; }
-.x7 { position: absolute; left: 448px; }
+:root {
+	--cell-size: 60px;
+	--margin-size: 28px;
+}
 
-.y0 { position: absolute; top: 80px; }
-.y1 { position: absolute; top: 140px; }
-.y2 { position: absolute; top: 200px; }
-.y3 { position: absolute; top: 260px; }
-.y4 { position: absolute; top: 320px; }
-.y5 { position: absolute; top: 380px; }
-.y6 { position: absolute; top: 440px; }
-.y7 { position: absolute; top: 500px; }
+.x0 { position: absolute; left: calc(var(--margin-size) + (0 * var(--cell-size))); }
+.x1 { position: absolute; left: calc(var(--margin-size) + (1 * var(--cell-size))); }
+.x2 { position: absolute; left: calc(var(--margin-size) + (2 * var(--cell-size))); }
+.x3 { position: absolute; left: calc(var(--margin-size) + (3 * var(--cell-size))); }
+.x4 { position: absolute; left: calc(var(--margin-size) + (4 * var(--cell-size))); }
+.x5 { position: absolute; left: calc(var(--margin-size) + (5 * var(--cell-size))); }
+.x6 { position: absolute; left: calc(var(--margin-size) + (6 * var(--cell-size))); }
+.x7 { position: absolute; left: calc(var(--margin-size) + (7 * var(--cell-size))); }
+
+.y0 { position: absolute; top: calc(var(--margin-size) + (0 * var(--cell-size))); }
+.y1 { position: absolute; top: calc(var(--margin-size) + (1 * var(--cell-size))); }
+.y2 { position: absolute; top: calc(var(--margin-size) + (2 * var(--cell-size))); }
+.y3 { position: absolute; top: calc(var(--margin-size) + (3 * var(--cell-size))); }
+.y4 { position: absolute; top: calc(var(--margin-size) + (4 * var(--cell-size))); }
+.y5 { position: absolute; top: calc(var(--margin-size) + (5 * var(--cell-size))); }
+.y6 { position: absolute; top: calc(var(--margin-size) + (6 * var(--cell-size))); }
+.y7 { position: absolute; top: calc(var(--margin-size) + (7 * var(--cell-size))); }
+
+#body {
+	text-align: center;
+	background-image: url("assets/background.jpg");
+	background-size: 100% 150%;
+	background-repeat: no-repeat;
+}
+
+#title {
+	color: white;
+}
+
+#layerWrap {
+	float: left;
+	position: relative;
+	left: 50%;
+}
+
+#canvasLayer {
+	float: left;
+	position: relative;
+	padding-top: 18px;
+	padding-left: 18px;
+	background: #rgb(0,0,0,0.1);
+	border: 1px solid white;
+}
+
+#actionLayer {
+	float: left;
+	position: relative;
+	left: -50%;
+	background: #rgb(0,0,0,0.1);
+}
