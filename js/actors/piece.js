@@ -11,15 +11,4 @@ class Piece {
 		this.value = value;
 		this.image = image;
 	}
-
-	checkPosition(pos) {
-		if (pos != null && this.inBound(pos.x) && this.inBound(pos.y))
-			return pos;
-		else
-			return null;
-	}
-
-	inBound(i) {
-		return i >= 0 && i < BOARD_SIZE;
-	}
 }

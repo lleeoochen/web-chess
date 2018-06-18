@@ -22,7 +22,7 @@ class King extends Piece {
 
 		for (let j = 0; j < possibleWays.length; j++) {
 
-			let move = this.checkPosition(possibleWays[j]);
+			let move = Util.checkPosition(possibleWays[j]);
 			if (move != null) {
 
 				let target = chessboard[move.x][move.y];

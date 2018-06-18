@@ -41,7 +41,7 @@ class Rook extends Piece {
 					}
 				}
 
-				let move = this.checkPosition(possibleWays[j]);
+				let move = Util.checkPosition(possibleWays[j]);
 				if (move != null) {
 
 					let target = chessboard[move.x][move.y];

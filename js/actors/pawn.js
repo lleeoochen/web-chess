@@ -18,18 +18,18 @@ class Pawn extends Piece {
 			&& chessboard[grid.x][grid.y + dir * 2].piece == null)
 			possibleWays.push({x:grid.x, y:grid.y + dir * 2});
 
-		if (this.inBound(grid.y + dir) && this.inBound(grid.x + 1) && chessboard[grid.x + 1][grid.y + dir].piece != null)
+		if (Util.inBound(grid.y + dir) && Util.inBound(grid.x + 1) && chessboard[grid.x + 1][grid.y + dir].piece != null)
 			possibleWays.push({x:grid.x + 1, y:grid.y + dir});
 
-		if (this.inBound(grid.y + dir) && this.inBound(grid.x - 1) && chessboard[grid.x - 1][grid.y + dir].piece != null)
+		if (Util.inBound(grid.y + dir) && Util.inBound(grid.x - 1) && chessboard[grid.x - 1][grid.y + dir].piece != null)
 			possibleWays.push({x:grid.x - 1, y:grid.y + dir});
 
-		if (this.inBound(grid.y + dir) && this.inBound(grid.x) && chessboard[grid.x][grid.y + dir].piece == null)
+		if (Util.inBound(grid.y + dir) && Util.inBound(grid.x) && chessboard[grid.x][grid.y + dir].piece == null)
 			possibleWays.push({x:grid.x, y:grid.y + dir});
 
 		for (let j = 0; j < possibleWays.length; j++) {
 
-			let move = this.checkPosition(possibleWays[j]);
+			let move = Util.checkPosition(possibleWays[j]);
 			if (move != null) {
 
 				let target = chessboard[move.x][move.y];
