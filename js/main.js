@@ -37,47 +37,39 @@ function initBoard(){
 
 //Intialize all chess pieces
 function initPieces() {
-	// initEachPiece(0, 0, TEAM.B, VALUE.Knight, CHESS.Knight);
-	// initEachPiece(3, 3, TEAM.W, VALUE.Knight, CHESS.Knight);
-	// initEachPiece(1, 2, TEAM.B, VALUE.Pawn, CHESS.Pawn);
-	// initEachPiece(2, 3, TEAM.W, VALUE.Pawn, CHESS.Pawn);
-	// initEachPiece(3, 2, TEAM.W, VALUE.Pawn, CHESS.Pawn);
-	// initEachPiece(2, 1, TEAM.B, VALUE.Bishop, CHESS.Bishop);
-	// initEachPiece(3, 0, TEAM.B, VALUE.Bishop, CHESS.Bishop);
+	initEachPiece(0, 0, TEAM.B, CHESS.Rook);
+	initEachPiece(7, 0, TEAM.B, CHESS.Rook);
+	initEachPiece(1, 0, TEAM.B, CHESS.Knight);
+	initEachPiece(6, 0, TEAM.B, CHESS.Knight);
+	initEachPiece(2, 0, TEAM.B, CHESS.Bishop);
+	initEachPiece(5, 0, TEAM.B, CHESS.Bishop);
+	initEachPiece(3, 0, TEAM.B, CHESS.Queen);
+	initEachPiece(4, 0, TEAM.B, CHESS.King);
 
-	initEachPiece(0, 0, TEAM.B, VALUE.Rook, CHESS.Rook);
-	initEachPiece(7, 0, TEAM.B, VALUE.Rook, CHESS.Rook);
-	initEachPiece(1, 0, TEAM.B, VALUE.Knight, CHESS.Knight);
-	initEachPiece(6, 0, TEAM.B, VALUE.Knight, CHESS.Knight);
-	initEachPiece(2, 0, TEAM.B, VALUE.Bishop, CHESS.Bishop);
-	initEachPiece(5, 0, TEAM.B, VALUE.Bishop, CHESS.Bishop);
-	initEachPiece(3, 0, TEAM.B, VALUE.Queen, CHESS.Queen);
-	initEachPiece(4, 0, TEAM.B, VALUE.King, CHESS.King);
-
-	initEachPiece(0, 7, TEAM.W, VALUE.Rook, CHESS.Rook);
-	initEachPiece(7, 7, TEAM.W, VALUE.Rook, CHESS.Rook);
-	initEachPiece(1, 7, TEAM.W, VALUE.Knight, CHESS.Knight);
-	initEachPiece(6, 7, TEAM.W, VALUE.Knight, CHESS.Knight);
-	initEachPiece(2, 7, TEAM.W, VALUE.Bishop, CHESS.Bishop);
-	initEachPiece(5, 7, TEAM.W, VALUE.Bishop, CHESS.Bishop);
-	initEachPiece(3, 7, TEAM.W, VALUE.Queen, CHESS.Queen);
-	initEachPiece(4, 7, TEAM.W, VALUE.King, CHESS.King);
+	initEachPiece(0, 7, TEAM.W, CHESS.Rook);
+	initEachPiece(7, 7, TEAM.W, CHESS.Rook);
+	initEachPiece(1, 7, TEAM.W, CHESS.Knight);
+	initEachPiece(6, 7, TEAM.W, CHESS.Knight);
+	initEachPiece(2, 7, TEAM.W, CHESS.Bishop);
+	initEachPiece(5, 7, TEAM.W, CHESS.Bishop);
+	initEachPiece(3, 7, TEAM.W, CHESS.Queen);
+	initEachPiece(4, 7, TEAM.W, CHESS.King);
 
 	for (var x = 0; x < BOARD_SIZE; x++) {
-		initEachPiece(x, 1, TEAM.B, VALUE.Pawn, CHESS.Pawn);
-		initEachPiece(x, 6, TEAM.W, VALUE.Pawn, CHESS.Pawn);
+		initEachPiece(x, 1, TEAM.B, CHESS.Pawn);
+		initEachPiece(x, 6, TEAM.W, CHESS.Pawn);
 	}
 }
 
 
 //Intialize each chess piece
-function initEachPiece(x, y, team, value, type) {
+function initEachPiece(x, y, team, type) {
 	let imageHTML = document.createElement("img");
 	imageHTML.setAttribute("src", "assets/" + team + type + ".svg");
 	imageHTML.setAttribute("class", "x" + x + " y" + y);
 	imageHTML.setAttribute("onClick", "onClick(event)");
 	actionLayer.append(imageHTML);
-	chessboard[x][y].piece = new Piece(team, type, value, imageHTML);
+	chessboard[x][y].piece = PieceFactory.createPiece(team, type, imageHTML);
 }
 
 
@@ -152,11 +144,11 @@ function moveChessAI() {
 			let grid = chessboard[i][j];
 			if (grid.piece != null && grid.piece.team == turn) {
 
-				let moves = getPossibleMoves(chessboard, grid);
+				let moves = grid.piece.getPossibleMoves(chessboard, grid);
 				let tempBoard = copyBoard(chessboard);
 
 				let chosenMove = getBestMoves(tempBoard, grid, moves, turn);
-				console.log(grid, chosenMove);
+				// console.log(grid, chosenMove);
 
 				if (chosenMove.bestMove != null) {
 					if (bestMoves.length == 0 || chosenMove.bestValue > bestMoves[0].bestValue) {
@@ -180,10 +172,10 @@ function moveChessAI() {
 	let randomIndex = Math.floor(Math.random() * lastBestIndex);
 	let bestMove = bestMoves[randomIndex];
 
-	console.log(bestMove.bestValue);
-	console.log(bestMove.worstValue);
-	console.log(bestMove.grid);
-	console.log(bestMove.bestMove);
+	// console.log(bestMove.bestValue);
+	// console.log(bestMove.worstValue);
+	// console.log(bestMove.grid);
+	// console.log(bestMove.bestMove);
 
 	if (bestMove != undefined && bestMove.bestMove != null) {
 		moveChess(bestMove.grid, chessboard[bestMove.bestMove.x][bestMove.bestMove.y]);
@@ -209,7 +201,7 @@ function getBestMoves(board, curGrid, moves, team) {
 	let worstValue = undefined;
 	let worstMove = null;
 
-	console.log(stayingCost);
+	// console.log(stayingCost);
 
 	for (let count = 0; count < moves.length; count++) {
 
@@ -217,7 +209,7 @@ function getBestMoves(board, curGrid, moves, team) {
 		let keyGrid = tempBoard[moves[count].x][moves[count].y];
 		let curValue = getMoveValue(tempBoard, keyGrid, team);
 
-		console.log(moves[count], curValue);
+		// console.log(moves[count], curValue);
 
 		if (bestValue == undefined || curValue > bestValue) {
 			bestValue = curValue;
@@ -256,16 +248,16 @@ function getMoveValue(board, grid, team) {
 		grid.piece.team = TEAM.SPECIAL;
 	}
 	else {
-		grid.piece = new Piece(TEAM.SPECIAL, 0, 0, null);
+		grid.piece = PieceFactory.createPiece(TEAM.None, CHESS.None, null);
 	}
 
 	let validPieces = getValidPieces(board, grid, team);
 	let validFriends = validPieces.friends.sort(gridSort);
 	let validEnemies = validPieces.enemies.sort(gridSortReverse);
 
-	console.log(value);
-	console.log(validFriends);
-	console.log(validEnemies);
+	// console.log(value);
+	// console.log(validFriends);
+	// console.log(validEnemies);
 
 	if (validFriends.length > validEnemies.length)
 		validFriends = validFriends.splice(0, validEnemies.length);
@@ -301,9 +293,9 @@ function getValidPieces(board, keyGrid, team) {
 
 	for (let i = 0; i < board.length; i++) {
 		for (let j = 0; j < board.length; j++) {
-		
-			if (board[i][j].piece != null) {
-				let validMoves = getPossibleMoves(board, board[i][j]);
+			let grid = board[i][j];
+			if (grid.piece != null) {
+				let validMoves = grid.piece.getPossibleMoves(board, grid);
 
 				let found = false;
 				for (let k = 0; k < validMoves.length && !found; k++)
@@ -311,10 +303,10 @@ function getValidPieces(board, keyGrid, team) {
 						found = true;
 
 				if (found) {
-					if (board[i][j].piece.team == team)
-						friends.push(board[i][j]);
+					if (grid.piece.team == team)
+						friends.push(grid);
 					else
-						enemies.push(board[i][j]);
+						enemies.push(grid);
 				}
 
 			}
@@ -349,7 +341,7 @@ function moveChess(oldGrid, newGrid) {
 
 //Update and show all possible moves based on a specific grid
 function updateMoves(grid) {
-	moves = getPossibleMoves(chessboard, grid);
+	moves = grid.piece.getPossibleMoves(chessboard, grid);
 	setMovesColor(COLOR_HIGHLIGHT);
 }
 
