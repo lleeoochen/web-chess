@@ -137,6 +137,7 @@ function handleChessEvent(x, y) {
 function moveChessAI() {
 	let moved = false;
 	let bestMoves = [];
+	let worstCost = [];
 
 	for (let i = 0; i < chessboard.length; i++) {
 		for (let j = 0; j < chessboard.length; j++) {
@@ -146,40 +147,40 @@ function moveChessAI() {
 
 				let moves = grid.piece.getPossibleMoves(chessboard, grid);
 				let tempBoard = copyBoard(chessboard);
-
 				let chosenMove = getBestMoves(tempBoard, grid, moves, turn);
-				// console.log(grid, chosenMove);
 
 				if (chosenMove.bestMove != null) {
-					if (bestMoves.length == 0 || chosenMove.bestValue > bestMoves[0].bestValue) {
+					if (bestMoves.length == 0 || chosenMove.bestValue > bestMoves[0].bestValue)
 						bestMoves = [chosenMove];
-					}
-					else if (chosenMove.bestValue == bestMoves[0].bestValue) {
+					else if (chosenMove.bestValue == bestMoves[0].bestValue)
 						bestMoves.push(chosenMove);
-					}
 				}
+
+				if (chosenMove.worstMove != null) {
+					if (worstCost.length == 0 || chosenMove.worstValue < worstCost[0].worstValue)
+						worstCost = [chosenMove];
+					else if (chosenMove.worstValue == worstCost[0].worstValue)
+						worstCost.push(chosenMove);
+				}
+
 			}
 		}
 	}
 
-	bestMoves = bestMoves.sort(bestMoveSort);
-	let lastBestIndex = bestMoves.length;
-	for (var i = 0; i < bestMoves.length; i++)
-		if (bestMoves[i].worstValue < bestMoves[0].worstValue)
-			lastBestIndex = i;
+	bestMoves = bestMoves.sort(worseValueSortReverse);
+	worstCost = worstCost.sort(worseValueSortReverse);
+	let chosenMoves = (bestMoves.length > 0 && worstCost.length > 0 && worstCost[0].worstValue > bestMoves[0].worstValue) ? worstCost : bestMoves;
+	let lastBestIndex = 0;
 
+	for (; lastBestIndex < chosenMoves.length; lastBestIndex++)
+		if (chosenMoves[lastBestIndex].worstValue < chosenMoves[0].worstValue)
+			break;
 
 	let randomIndex = Math.floor(Math.random() * lastBestIndex);
 	let bestMove = bestMoves[randomIndex];
 
-	// console.log(bestMove.bestValue);
-	// console.log(bestMove.worstValue);
-	// console.log(bestMove.grid);
-	// console.log(bestMove.bestMove);
-
-	if (bestMove != undefined && bestMove.bestMove != null) {
+	if (bestMove != undefined && bestMove.bestMove != null)
 		moveChess(bestMove.grid, chessboard[bestMove.bestMove.x][bestMove.bestMove.y]);
-	}
 	
 	switchTurn();
 	return;
@@ -189,27 +190,29 @@ function moveChessAI() {
 //Get best moves
 function getBestMoves(board, curGrid, moves, team) {
 
-	let enemyTeam;
-	if (team == TEAM.B)
-		enemyTeam = TEAM.W;
-	else
-		enemyTeam = TEAM.B;
-
-	let stayingCost = getMoveValue(board, curGrid, enemyTeam);
+	let enemyTeam = team == TEAM.B ? TEAM.W : TEAM.B;
+	let stayingCost = getMoveScore(board, curGrid, team, 2);
 	let bestValue = undefined;
 	let bestMove = null;
 	let worstValue = undefined;
 	let worstMove = null;
 
-	// console.log(stayingCost);
-
 	for (let count = 0; count < moves.length; count++) {
 
 		let tempBoard = copyBoard(board);
-		let keyGrid = tempBoard[moves[count].x][moves[count].y];
-		let curValue = getMoveValue(tempBoard, keyGrid, team);
+		let keyGrid = board[moves[count].x][moves[count].y];
 
-		// console.log(moves[count], curValue);
+		// Simulate a test move
+		tempBoard[keyGrid.x][keyGrid.y].piece = curGrid.piece;
+		tempBoard[curGrid.x][curGrid.y].piece = keyGrid.piece;
+
+		// Calculate move score up to next 3 steps. The multiplier makes AI more aggressive.
+		let steps = 3;
+		let curValue = getMoveScore(tempBoard, tempBoard[keyGrid.x][keyGrid.y], team, steps) + (keyGrid.piece ? keyGrid.piece.value : 0) * Math.pow(2, steps);
+
+		// Revert back the test move
+		tempBoard[keyGrid.x][keyGrid.y].piece = keyGrid.piece;
+		tempBoard[curGrid.x][curGrid.y].piece = curGrid.piece;
 
 		if (bestValue == undefined || curValue > bestValue) {
 			bestValue = curValue;
@@ -235,62 +238,47 @@ function getBestMoves(board, curGrid, moves, team) {
 	return {worstValue:worstValue, bestValue: bestValue, bestMove:bestMove, grid:curGrid};
 }
 
+// Get overall score after a move is made
+function getMoveScore(board, grid, team, steps) {
+	let enemies = getValidPieces(board, grid, team).enemies.sort(gridSortReverse);
 
-//Get value on a specific move to grid
-function getMoveValue(board, grid, team) {
+	// Base case: if opponent team has no enemy left or recursive steps reaches 0
+	if (steps <= 0 || enemies.length <= 0) return 0;
 
-	let value = 0;
-	let gridTeam = null;
+	// Make a board copy for move simulation
+	let tempBoard = copyBoard(board);
+	let bestScore = -9999;
 
-	if (grid.piece != null) {
-		value = grid.piece.value;
-		gridTeam = grid.piece.team;
-		grid.piece.team = TEAM.SPECIAL;
-	}
-	else {
-		grid.piece = PieceFactory.createPiece(TEAM.None, CHESS.None, null);
-	}
+	// Calculate the best score when enemies eat you at @grid
+	for (let i in enemies) {
+		let enemy = enemies[i];
+		let baseValue = grid.piece ? grid.piece.value : 0;
 
-	let validPieces = getValidPieces(board, grid, team);
-	let validFriends = validPieces.friends.sort(gridSort);
-	let validEnemies = validPieces.enemies.sort(gridSortReverse);
+		// Simulate enemy move to eat you
+		tempBoard[grid.x][grid.y].piece = enemy.piece;
+		tempBoard[enemy.x][enemy.y].piece = null;
 
-	// console.log(value);
-	// console.log(validFriends);
-	// console.log(validEnemies);
+		// Base value: the score enemy earns by eating your current piece
+		// Recursion:  the score enemy gets in consequence of eating you
+		// Minue one:  penalizes simulation that goes too deep into the future (less likely to be adopted)
+		let score = - baseValue - getMoveScore(tempBoard, tempBoard[grid.x][grid.y], enemy.piece.team, steps - 1) - 1;
+		if (score > bestScore) bestScore = score;
 
-	if (validFriends.length > validEnemies.length)
-		validFriends = validFriends.splice(0, validEnemies.length);
-	else if (validFriends.length < validEnemies.length)
-		validEnemies = validEnemies.splice(0, validFriends.length + 1);
-
-	if (validFriends.length != 0) {
-		let eatenGrid = validFriends[0];
-		validFriends = validFriends.splice(0, validFriends.length - 1);
-
-		for (let ii = 0; ii < validEnemies.length; ii++) {
-			value = value - eatenGrid.piece.value;
-			if (ii < validFriends.length) {
-				value = value + validEnemies[ii].piece.value;
-				eatenGrid = validFriends[ii];
-			}
-		}
+		// Revert back move simulation
+		tempBoard[enemy.x][enemy.y].piece = enemy.piece;
+		tempBoard[grid.x][grid.y].piece = grid.piece;
 	}
 
-	if (grid.piece != null && gridTeam != null)
-		grid.piece.team = gridTeam;
-	else
-		grid.piece = null;
-
-	return value;
+	return bestScore;
 }
-
 
 //Get all valid friends and enemies that can eat keyGrid
 function getValidPieces(board, keyGrid, team) {
 	let friends = [];
 	let enemies = [];
 
+	let keyPiece = keyGrid.piece;
+	keyGrid.piece = PieceFactory.createPiece(team, CHESS.None, null);
 	for (let i = 0; i < board.length; i++) {
 		for (let j = 0; j < board.length; j++) {
 			let grid = board[i][j];
@@ -313,6 +301,7 @@ function getValidPieces(board, keyGrid, team) {
 		}
 	}
 
+	keyGrid.piece = keyPiece;
 	return {friends: friends, enemies: enemies};
 }
 
@@ -411,6 +400,28 @@ function gridSortReverse(a, b) {
 	return b.piece.value - a.piece.value;
 }
 
-function bestMoveSort(a, b) {
+function worseValueSort(a, b) {
+	return a.worstValue - b.worstValue;
+}
+
+function worseValueSortReverse(a, b) {
 	return b.worstValue - a.worstValue;
+}
+
+function gridListToString(list) {
+	let result = "";
+	for (let i in list)
+		result += gridToString(list[i]) + "\n";
+	return result;
+}
+
+function gridToString(grid) {
+	let result = "";
+	for (let key in grid) {
+		if (typeof grid[key] == 'object')
+			for (let objKey in grid[key])
+				result += key + "[" + objKey + "]-" + grid[key][objKey] + "; ";
+		result += key + "-" + grid[key] + "; ";
+	}
+	return result;
 }
