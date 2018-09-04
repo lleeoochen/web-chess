@@ -30,6 +30,13 @@
 
 #title {
 	color: white;
+	margin-bottom: 0px;
+}
+
+#subtitle {
+	color: white;
+	margin-top: 2px;
+	margin-bottom: 10px;
 }
 
 #layerWrap {
@@ -52,4 +59,12 @@
 	position: relative;
 	left: -50%;
 	background: #rgb(0,0,0,0.1);
+}
+
+img{
+    -khtml-user-select: none;
+    -o-user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
 }

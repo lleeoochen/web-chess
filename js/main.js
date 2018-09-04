@@ -22,12 +22,7 @@ function initBoard(){
 
 	for (var x = 0; x < BOARD_SIZE; x++) {
 		for (var y = 0; y < BOARD_SIZE; y++) {
-
-			if (y % 2 == 0 && x % 2 == 0 || y % 2 != 0 && x % 2 != 0)
-				color = COLOR_BOARD_DARK;
-			else
-				color = COLOR_BOARD_LIGHT;
-
+			color = (y % 2 != 0) ^ (x % 2 == 0) ? COLOR_BOARD_DARK : COLOR_BOARD_LIGHT;
 			chessboard[x][y] = new Grid(x, y, color, null);
 			fillGrid(chessboard[x][y], color);
 		}
@@ -68,6 +63,7 @@ function initEachPiece(x, y, team, type) {
 	imageHTML.setAttribute("src", "assets/" + team + type + ".svg");
 	imageHTML.setAttribute("class", "x" + x + " y" + y);
 	imageHTML.setAttribute("onClick", "onClick(event)");
+	imageHTML.setAttribute("draggable", "false");
 	actionLayer.append(imageHTML);
 	chessboard[x][y].piece = PieceFactory.createPiece(team, type, imageHTML);
 }
@@ -149,6 +145,7 @@ function moveChessAI() {
 				let tempBoard = copyBoard(chessboard);
 				let chosenMove = getBestMoves(tempBoard, grid, moves, turn);
 
+				// Keeps track of best move(s)
 				if (chosenMove.bestMove != null) {
 					if (bestMoves.length == 0 || chosenMove.bestValue > bestMoves[0].bestValue)
 						bestMoves = [chosenMove];
@@ -156,6 +153,7 @@ function moveChessAI() {
 						bestMoves.push(chosenMove);
 				}
 
+				// Keeps track of worst opportunity cost move(s)
 				if (chosenMove.worstMove != null) {
 					if (worstCost.length == 0 || chosenMove.worstValue < worstCost[0].worstValue)
 						worstCost = [chosenMove];
@@ -167,20 +165,27 @@ function moveChessAI() {
 		}
 	}
 
-	bestMoves = bestMoves.sort(worseValueSortReverse);
-	worstCost = worstCost.sort(worseValueSortReverse);
-	let chosenMoves = (bestMoves.length > 0 && worstCost.length > 0 && worstCost[0].worstValue > bestMoves[0].worstValue) ? worstCost : bestMoves;
-	let lastBestIndex = 0;
+	// Chose moves from worst cost list if the cost is larger than best mvoe list
+	// bestMoves = bestMoves.sort(worseValueSortReverse);
+	// worstCost = worstCost.sort(worseValueSortReverse);
+	// let chosenMoves = (bestMoves.length > 0 && worstCost.length > 0 && -worstCost[0].worstValue > bestMoves[0].bestValue) ? worstCost : bestMoves;
 
+	// Select best moves that have the lowest worst value
+	let chosenMoves = bestMoves.sort(worseValueSort);
+	let lastBestIndex = 0;
 	for (; lastBestIndex < chosenMoves.length; lastBestIndex++)
-		if (chosenMoves[lastBestIndex].worstValue < chosenMoves[0].worstValue)
+		if (chosenMoves[lastBestIndex].worstValue > chosenMoves[0].worstValue)
 			break;
 
+	// Select a random move from an equally good move
 	let randomIndex = Math.floor(Math.random() * lastBestIndex);
 	let bestMove = bestMoves[randomIndex];
 
+	// Start a move or throw an error
 	if (bestMove != undefined && bestMove.bestMove != null)
 		moveChess(bestMove.grid, chessboard[bestMove.bestMove.x][bestMove.bestMove.y]);
+	else
+		swal("Stalemate. No body wins.");
 	
 	switchTurn();
 	return;
@@ -312,12 +317,12 @@ function moveChess(oldGrid, newGrid) {
 	//Remove chess piece being eaten 
 	if (newGrid.piece != null) {
 		actionLayer.removeChild(newGrid.piece.image);
-		if (newGrid.piece.type == CHESS.King) {
-			if (newGrid.piece.team == TEAM.B)
-				alert("Hello! White Team Wins!");
-			else
-				alert("Hello! Black Team Wins!");
-		}
+		if (newGrid.piece.type == CHESS.King)
+			swal({
+				title: `Checkmate. ${ newGrid.piece.team == TEAM.B ? "White" : "Black" } Team Wins!`
+			}, () => {
+				window.location.reload();
+			});
 	}
 
 	//Move chess piece from old grid to current grid.
