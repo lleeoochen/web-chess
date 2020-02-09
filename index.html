@@ -7,20 +7,50 @@
 	<link href="style.css" rel="stylesheet" type="text/css">
 	<link rel="shortcut icon" type="image/x-icon" href="favicon.ico" />
 	<link rel="stylesheet" href="plugins/css/sweetalert.css">
+	<link type="text/css" rel="stylesheet" href="https://www.gstatic.com/firebasejs/ui/4.4.0/firebase-ui-auth.css" />
+
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap-theme.min.css" integrity="sha384-6pzBo3FDv/PJ8r2KRkGHifhEocL+1X2rVCTTkUfGk7/0pbek5mMa1upzvWbrUbOZ" crossorigin="anonymous">
 </head>
 
 <body id="body">
 
+	<!-- Authentication Popup Window -->
+	<div id="modal" class="modal" tabindex="-1" role="dialog">
+	  <div class="modal-dialog" role="document">
+	    <div class="modal-content">
+	      <div class="modal-body">
+    		<div id="firebaseui-auth-container"></div>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+
 	<h1 id="title">Web Chess </h1>
-	<h4 id="subtitle">(By Wei Tung Chen)</h4>
+	<div id="chess-toolbar">
+		<div id="signout-btn" class="btn btn-primary">Logout</div>
+		<div id="new-match-btn" class="btn btn-primary">New Match</div>
+	</div>
+	<br/>
+
 	<div id="layerWrap">
 		<div id="actionLayer" width="500px" height="500px">
 			<canvas id="canvasLayer" width="500px" height="500px"/>
 		</div>
 	</div>
 
+	<!-- Javascript + Bootstrap Libraries -->
 	<script src="plugins/js/sweetalert.js"></script>
 	<script src="plugins/js/jquery.js"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd" crossorigin="anonymous"></script>
+
+	<!-- Firebase Libraries -->
+	<script src="https://www.gstatic.com/firebasejs/7.8.0/firebase-app.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/7.8.0/firebase-firestore.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/7.8.0/firebase-auth.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/ui/4.4.0/firebase-ui-auth.js"></script>
+
+	<!-- My Libraries -->
 	<script src="js/const.js"></script>
 	<script src="js/utility.js"></script>
 	<script src="js/actors/piece.js"></script>
@@ -33,6 +63,7 @@
 	<script src="js/actors/knight.js"></script>
 	<script src="js/actors/piecefactory.js"></script>
 	<script src="js/actors/grid.js"></script>
+	<script src="js/game.js"></script>
 	<script src="js/main.js"></script>
 
 </body>

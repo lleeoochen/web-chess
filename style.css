@@ -39,6 +39,11 @@
 	margin-bottom: 10px;
 }
 
+#chess-toolbar {
+	margin-top: 2px;
+	margin-bottom: 10px;
+}
+
 #layerWrap {
 	float: left;
 	position: relative;
@@ -67,4 +72,24 @@ img{
     -moz-user-select: none;
     -webkit-user-select: none;
     user-select: none;
+}
+
+
+.modal {
+  text-align: center;
+}
+
+@media screen and (min-width: 768px) { 
+  .modal:before {
+    display: inline-block;
+    vertical-align: middle;
+    content: " ";
+    height: 100%;
+  }
+}
+
+.modal-dialog {
+  display: inline-block;
+  text-align: left;
+  vertical-align: middle;
 }
