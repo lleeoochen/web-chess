@@ -24,7 +24,7 @@
 #body {
 	text-align: center;
 	background-image: url("assets/background.jpg");
-	background-size: 100% 150%;
+	background-size: cover;
 	background-repeat: no-repeat;
 }
 
