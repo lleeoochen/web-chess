@@ -363,7 +363,6 @@ function moveChess(oldGrid, newGrid) {
 	newGrid.piece = oldGrid.piece;
 	newGrid.get_piece().image.setAttribute("class", "x" + newGrid.x + " y" + newGrid.y);
 	oldGrid.piece = -1;
-	// oldGrid = null;
 	switchTurn();
 }
 

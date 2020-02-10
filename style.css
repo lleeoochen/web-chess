@@ -3,23 +3,23 @@
 	--margin-size: 28px;
 }
 
-.x0 { position: absolute; left: calc(var(--margin-size) + (0 * var(--cell-size))); }
-.x1 { position: absolute; left: calc(var(--margin-size) + (1 * var(--cell-size))); }
-.x2 { position: absolute; left: calc(var(--margin-size) + (2 * var(--cell-size))); }
-.x3 { position: absolute; left: calc(var(--margin-size) + (3 * var(--cell-size))); }
-.x4 { position: absolute; left: calc(var(--margin-size) + (4 * var(--cell-size))); }
-.x5 { position: absolute; left: calc(var(--margin-size) + (5 * var(--cell-size))); }
-.x6 { position: absolute; left: calc(var(--margin-size) + (6 * var(--cell-size))); }
-.x7 { position: absolute; left: calc(var(--margin-size) + (7 * var(--cell-size))); }
+.x0 { position: absolute; left: calc(var(--margin-size) + (0 * var(--cell-size))); transition: .4s all ease; }
+.x1 { position: absolute; left: calc(var(--margin-size) + (1 * var(--cell-size))); transition: .4s all ease; }
+.x2 { position: absolute; left: calc(var(--margin-size) + (2 * var(--cell-size))); transition: .4s all ease; }
+.x3 { position: absolute; left: calc(var(--margin-size) + (3 * var(--cell-size))); transition: .4s all ease; }
+.x4 { position: absolute; left: calc(var(--margin-size) + (4 * var(--cell-size))); transition: .4s all ease; }
+.x5 { position: absolute; left: calc(var(--margin-size) + (5 * var(--cell-size))); transition: .4s all ease; }
+.x6 { position: absolute; left: calc(var(--margin-size) + (6 * var(--cell-size))); transition: .4s all ease; }
+.x7 { position: absolute; left: calc(var(--margin-size) + (7 * var(--cell-size))); transition: .4s all ease; }
 
-.y0 { position: absolute; top: calc(var(--margin-size) + (0 * var(--cell-size))); }
-.y1 { position: absolute; top: calc(var(--margin-size) + (1 * var(--cell-size))); }
-.y2 { position: absolute; top: calc(var(--margin-size) + (2 * var(--cell-size))); }
-.y3 { position: absolute; top: calc(var(--margin-size) + (3 * var(--cell-size))); }
-.y4 { position: absolute; top: calc(var(--margin-size) + (4 * var(--cell-size))); }
-.y5 { position: absolute; top: calc(var(--margin-size) + (5 * var(--cell-size))); }
-.y6 { position: absolute; top: calc(var(--margin-size) + (6 * var(--cell-size))); }
-.y7 { position: absolute; top: calc(var(--margin-size) + (7 * var(--cell-size))); }
+.y0 { position: absolute; top: calc(var(--margin-size) + (0 * var(--cell-size))); transition: .4s all ease; }
+.y1 { position: absolute; top: calc(var(--margin-size) + (1 * var(--cell-size))); transition: .4s all ease; }
+.y2 { position: absolute; top: calc(var(--margin-size) + (2 * var(--cell-size))); transition: .4s all ease; }
+.y3 { position: absolute; top: calc(var(--margin-size) + (3 * var(--cell-size))); transition: .4s all ease; }
+.y4 { position: absolute; top: calc(var(--margin-size) + (4 * var(--cell-size))); transition: .4s all ease; }
+.y5 { position: absolute; top: calc(var(--margin-size) + (5 * var(--cell-size))); transition: .4s all ease; }
+.y6 { position: absolute; top: calc(var(--margin-size) + (6 * var(--cell-size))); transition: .4s all ease; }
+.y7 { position: absolute; top: calc(var(--margin-size) + (7 * var(--cell-size))); transition: .4s all ease; }
 
 #body {
 	text-align: center;
