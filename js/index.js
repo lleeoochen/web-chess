@@ -1,6 +1,6 @@
 var user = null
-// const CHESS_URL = "/web-chess"
-const CHESS_URL = ""
+const CHESS_URL = "/web-chess"
+// const CHESS_URL = ""
 
 Firebase.authenticate((auth_user) => {
 	initToolbar();
