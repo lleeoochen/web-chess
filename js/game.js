@@ -22,6 +22,7 @@ Firebase.authenticate((auth_user) => {
 		}
 
 		my_team = (auth_user.uid == match.black) ? TEAM.B : TEAM.W;
+		turn = match_data.turn;
 
 		if (match && match.oldGrid && match.newGrid) {
 			var oldg = JSON.parse(match.oldGrid);
@@ -146,13 +147,13 @@ function handleChessEvent(x, y) {
 
 	//Action3 - Move Piece by clicking on empty grid or eat enemy by clicking on legal grid. Switch turn.
 	else if (oldGrid != null && oldGrid.get_piece() != null && isLegal) {
-		Firebase.updateChessboard(match_id, oldGrid, newGrid);
 		fillGrid(oldGrid, COLOR_ORIGINAL);
 		moveChess(oldGrid, newGrid);
 		clearMoves();
+		Firebase.updateChessboard(match_id, oldGrid, newGrid, turn);
+
 		oldGrid = null;
 
-		console.log(match);
 		//Thinking...
 		// canvasLayer.removeAttribute("onclick");
 		// setTimeout(function(){

@@ -5,8 +5,10 @@ const TEAM = {B: "B", W: "W", None:"N"}
 const BOARD_SIZE = 8;
 const GRID_SIZE_P = 60;
 const OFFSET_MARGIN = 18;
-const OFFSET_X_P = document.getElementById("canvasLayer").getBoundingClientRect().left + OFFSET_MARGIN;
-const OFFSET_Y_P = document.getElementById("canvasLayer").getBoundingClientRect().top + OFFSET_MARGIN;
+
+const OFFSET_X_P = document.getElementById("canvasLayer") ? document.getElementById("canvasLayer").getBoundingClientRect().left + OFFSET_MARGIN : 0;
+const OFFSET_Y_P = document.getElementById("canvasLayer") ? document.getElementById("canvasLayer").getBoundingClientRect().top + OFFSET_MARGIN : 0;
+
 const HIGHLIGHT_P = 3;
 
 const COLOR_ORIGINAL = "ORIGINAL";

@@ -69,7 +69,8 @@ class Firebase {
 		    black: auth_user.uid,
 		    white: null,
 		    oldGrid: null,
-		    newGrid: null
+		    newGrid: null,
+		    turn: TEAM.W
 		})
 		.then(function(ref) {
 			let matches = (user && user.matches) ? user.matches : [];
@@ -81,10 +82,11 @@ class Firebase {
 		})
 	}
 
-	static updateChessboard(match_id, oldGrid, newGrid) {
+	static updateChessboard(match_id, oldGrid, newGrid, turn) {
 		db.collection(MATCHES_TABLE).doc(match_id).set({
 		    oldGrid: JSON.stringify(oldGrid),
-		    newGrid: JSON.stringify(newGrid)
+		    newGrid: JSON.stringify(newGrid),
+		    turn: turn
 		}, { merge: true });
 	}
 
