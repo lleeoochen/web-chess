@@ -3,7 +3,7 @@
 
 <head>
 	<meta charset="utf-8">
-	<title>Home - Web Chess</title>
+	<title>Match - Web Chess</title>
 	<link href="style.css" rel="stylesheet" type="text/css">
 	<link rel="shortcut icon" type="image/x-icon" href="favicon.ico" />
 	<link rel="stylesheet" href="plugins/css/sweetalert.css">
@@ -26,20 +26,12 @@
 	  </div>
 	</div>
 
-	<h1 id="title">Web Chess </h1>
-	<div id="chess-toolbar" hidden>
-		<div id="signout-btn" class="btn btn-primary">Logout</div>
-		<div id="new-match-btn" class="btn btn-primary">New Match</div>
-	</div>
+	<h1 id="title"> Chess Match </h1>
 	<br/>
 
 	<div id="layerWrap">
 		<div id="actionLayer" width="500px" height="500px">
-			<div id="matches-display"> 
-				<h3> Active Matches </h3>
-				<div id="matches-list">
-				</div>
-			</div>
+			<canvas id="canvasLayer" width="500px" height="500px"/>
 		</div>
 	</div>
 
@@ -55,8 +47,19 @@
 	<script src="https://www.gstatic.com/firebasejs/ui/4.4.0/firebase-ui-auth.js"></script>
 
 	<!-- My Libraries -->
+	<script src="js/const.js"></script>
 	<script src="js/utility.js"></script>
+	<script src="js/actors/piece.js"></script>
+	<script src="js/actors/none.js"></script>
+	<script src="js/actors/king.js"></script>
+	<script src="js/actors/queen.js"></script>
+	<script src="js/actors/rook.js"></script>
+	<script src="js/actors/bishop.js"></script>
+	<script src="js/actors/pawn.js"></script>
+	<script src="js/actors/knight.js"></script>
+	<script src="js/actors/piecefactory.js"></script>
+	<script src="js/actors/grid.js"></script>
 	<script src="js/firebase.js"></script>
-	<script src="js/index.js"></script>
+	<script src="js/game.js"></script>
 </body>
 </html>

@@ -7,14 +7,14 @@ var oldGrid = null;
 var moves = [];
 var turn = TEAM.W;
 
-canvasLayer.addEventListener("click", onClick, false);
 
-class Game {
-	constructor() {
-		initBoard();
-		initPieces();
-	}
+//Game
+function initGame() {
+	canvasLayer.addEventListener("click", onClick, false);
+	initBoard();
+	initPieces();
 }
+
 
 //Intialize chessboard background
 function initBoard(){

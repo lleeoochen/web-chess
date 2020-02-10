@@ -23,9 +23,8 @@
 
 #body {
 	text-align: center;
-	background-image: url("assets/background.jpg");
+	background: url("assets/background.jpg") no-repeat center center fixed;
 	background-size: cover;
-	background-repeat: no-repeat;
 }
 
 #title {
@@ -64,6 +63,10 @@
 	position: relative;
 	left: -50%;
 	background: #rgb(0,0,0,0.1);
+}
+
+#matches-display {
+	color: white;
 }
 
 img{
