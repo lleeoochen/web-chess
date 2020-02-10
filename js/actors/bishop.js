@@ -8,7 +8,7 @@ class Bishop extends Piece {
 		let moves = [];
 		let possibleWays = [];
 
-		if (grid.piece == null)
+		if (grid.get_piece() == null)
 			return moves;
 
 		possibleWays.push({x:grid.x, y:grid.y});
@@ -45,11 +45,11 @@ class Bishop extends Piece {
 				if (move != null) {
 
 					let target = chessboard[move.x][move.y];
-					if (target.piece == null)
+					if (target.get_piece() == null)
 						moves.push(Object.assign({}, move));
 
 					else {
-						if (target.piece.team != grid.piece.team)
+						if (target.get_piece().team != grid.get_piece().team)
 							moves.push(Object.assign({}, move));
 						possibleWays[j] = null;
 					}

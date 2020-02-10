@@ -38,9 +38,10 @@ class Firebase {
 
 	static authenticate(callback) {
 		firebase.auth().onAuthStateChanged(function(auth_user_1) {
-			console.log (auth_user_1)
 			if (auth_user_1) {
 				auth_user = auth_user_1;
+				
+				db.collection(USERS_TABLE).doc(auth_user.uid).set({}, { merge: true });
 				callback(auth_user);
 			}
 			else {
@@ -65,12 +66,12 @@ class Firebase {
 
 	static createMatch(user) {
 		db.collection(MATCHES_TABLE).add({
-		    first: "Cool",
-		    last: "Cool",
-		    born: 1815
+		    black: auth_user.uid,
+		    white: null,
+		    oldGrid: null,
+		    newGrid: null
 		})
 		.then(function(ref) {
-			console.log(user)
 			let matches = (user && user.matches) ? user.matches : [];
 			matches.push(ref.id);
 
@@ -78,6 +79,29 @@ class Firebase {
 				matches: matches
 			}, { merge: true });
 		})
+	}
+
+	static updateChessboard(match_id, oldGrid, newGrid) {
+		db.collection(MATCHES_TABLE).doc(match_id).set({
+		    oldGrid: JSON.stringify(oldGrid),
+		    newGrid: JSON.stringify(newGrid)
+		}, { merge: true });
+	}
+
+	static registerOpponent(match_id, user_id) {
+		db.collection(MATCHES_TABLE).doc(match_id).set({
+		    white: user_id,
+		}, { merge: true });
+
+		db.collection(USERS_TABLE).doc(user_id).get().then(doc => {
+			let user = doc.data();
+			let matches = (user && user.matches) ? user.matches : [];
+			matches.push(match_id);
+
+			db.collection(USERS_TABLE).doc(user_id).set({
+				matches: matches
+			}, { merge: true });
+		});
 	}
 }
 

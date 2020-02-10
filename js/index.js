@@ -1,4 +1,6 @@
 var user = null
+// const CHESS_URL = "/web-chess"
+const CHESS_URL = ""
 
 Firebase.authenticate((auth_user) => {
 	initToolbar();
@@ -13,7 +15,7 @@ function showMatches() {
 	if (!user || !user.matches) return
 	var elements = $();
 	for (let i = 0; i < user.matches.length; i++)
-		elements = elements.add(`<a class="btn btn-warning">${ user.matches[i] }</a><br/><br/>`)
+		elements = elements.add(`<a class="btn btn-warning match-link" href="${ CHESS_URL }/game.html?match=${ user.matches[i] }">${ user.matches[i] }</a><br/><br/>`)
 	$('#matches-list').empty()
 	$('#matches-list').append(elements)
 }
@@ -22,6 +24,7 @@ function initToolbar() {
 	// Signout button
 	$('#signout-btn').on('click', (e) => {
 		firebase.auth().signOut();
+		location.reload();
 	});
 
 	// New match button
