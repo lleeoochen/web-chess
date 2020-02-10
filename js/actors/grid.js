@@ -11,4 +11,3 @@ class Grid {
 		return pieces[this.piece];
 	}
 }
-

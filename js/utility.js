@@ -24,4 +24,18 @@ class Util {
 	        }
 	    }
 	}
+
+	static pack(oldGrid, newGrid, turn) {
+		return oldGrid.x * 10000 + oldGrid.y * 1000 + newGrid.x * 100 + newGrid.y * 10 + (turn == TEAM.W ? 1 : 0);
+	}
+
+	static unpack(data) {
+		return {
+			old_x: Math.floor(data / 10000),
+			old_y: Math.floor((data % 10000) / 1000),
+			new_x: Math.floor((data % 1000) / 100),
+			new_y: Math.floor((data % 100) / 10),
+			turn: (Math.floor((data % 10) / 1) == 1) ? TEAM.W : TEAM.B
+		};
+	}
 }

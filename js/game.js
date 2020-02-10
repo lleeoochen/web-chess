@@ -17,18 +17,19 @@ Firebase.authenticate((auth_user) => {
 	Firebase.listenMatch(match_id, (match_data) => {
 		match = match_data;
 
+		// Register second user if not exists
 		if (!match.white && auth_user.uid != match.black) {
 			Firebase.registerOpponent(match_id, auth_user.uid);
 		}
 
 		my_team = (auth_user.uid == match.black) ? TEAM.B : TEAM.W;
-		turn = match_data.turn;
 
-		if (match && match.oldGrid && match.newGrid) {
-			var oldg = JSON.parse(match.oldGrid);
-			var newg = JSON.parse(match.newGrid);
-			moveChess(chessboard[oldg.x][oldg.y], chessboard[newg.x][newg.y]);
+		if (match && match.move) {
+			let move = Util.unpack(match.move);
+			moveChess(chessboard[move.old_x][move.old_y], chessboard[move.new_x][move.new_y]);
+			turn = move.turn;
 		}
+
 	})
 });
 
@@ -139,7 +140,7 @@ function handleChessEvent(x, y) {
 	}
 
 	//Action2 - Select Piece by clicking on grid with active team.
-	else if (newGrid.get_piece() != null && newGrid.get_piece().team == turn) {
+	if (newGrid.get_piece() != null && newGrid.get_piece().team == turn) {
 		fillGrid(newGrid, COLOR_HIGHLIGHT);
 		updateMoves(newGrid);
 		oldGrid = newGrid;
