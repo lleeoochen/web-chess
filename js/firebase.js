@@ -68,7 +68,7 @@ class Firebase {
 		db.collection(MATCHES_TABLE).add({
 		    black: auth_user.uid,
 		    white: null,
-		    move: null
+		    moves: []
 		})
 		.then(function(ref) {
 			let matches = (user && user.matches) ? user.matches : [];
@@ -80,9 +80,12 @@ class Firebase {
 		})
 	}
 
-	static updateChessboard(match_id, oldGrid, newGrid, turn) {
+	static updateChessboard(match_id, match, oldGrid, newGrid, turn) {
+		let moves = (match && match.moves) ? match.moves : [];
+		moves.push(Util.pack(oldGrid, newGrid, turn));
+
 		db.collection(MATCHES_TABLE).doc(match_id).set({
-		    move: Util.pack(oldGrid, newGrid, turn),
+		    moves: moves,
 		}, { merge: true });
 	}
 

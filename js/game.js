@@ -9,6 +9,7 @@ var turn = TEAM.W;
 var match = null;
 var match_id = Util.getParam("match");
 var my_team = null;
+var moves_applied = 0;
 
 
 Firebase.authenticate((auth_user) => {
@@ -24,13 +25,15 @@ Firebase.authenticate((auth_user) => {
 
 		my_team = (auth_user.uid == match.black) ? TEAM.B : TEAM.W;
 
-		if (match && match.move) {
-			let move = Util.unpack(match.move);
-			moveChess(chessboard[move.old_x][move.old_y], chessboard[move.new_x][move.new_y]);
-			turn = move.turn;
+		if (match && match.moves) {
+			for (; match.moves.length != moves_applied;) {
+				let move = Util.unpack(match.moves[moves_applied]);
+				moveChess(chessboard[move.old_x][move.old_y], chessboard[move.new_x][move.new_y]);
+				turn = move.turn;
+			}
 		}
 
-	})
+	});
 });
 
 
@@ -151,7 +154,7 @@ function handleChessEvent(x, y) {
 		fillGrid(oldGrid, COLOR_ORIGINAL);
 		moveChess(oldGrid, newGrid);
 		clearMoves();
-		Firebase.updateChessboard(match_id, oldGrid, newGrid, turn);
+		Firebase.updateChessboard(match_id, match, oldGrid, newGrid, turn);
 
 		oldGrid = null;
 
@@ -366,6 +369,7 @@ function moveChess(oldGrid, newGrid) {
 	newGrid.get_piece().image.setAttribute("class", "x" + newGrid.x + " y" + newGrid.y);
 	oldGrid.piece = -1;
 	switchTurn();
+	moves_applied += 1;
 }
 
 
