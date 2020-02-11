@@ -10,6 +10,7 @@ var match = null;
 var match_id = Util.getParam("match");
 var my_team = null;
 var moves_applied = 0;
+var king_grid = null;
 
 
 Firebase.authenticate((auth_user) => {
@@ -34,6 +35,13 @@ Firebase.authenticate((auth_user) => {
 
 	Firebase.listenMatch(match_id, (match_data) => {
 		match = match_data;
+
+		if (auth_user.uid == match.black) {
+			my_team = TEAM.B;
+		}
+		else if (auth_user.uid == match.white) {
+			my_team = TEAM.W;
+		}
 
 		if (match && match.moves) {
 			for (; match.moves.length != moves_applied;) {
@@ -125,6 +133,9 @@ function initEachPiece(id, x, y, team, type) {
 	actionLayer.append(imageHTML);
 	chessboard[x][y].piece = id;
 	pieces[id] = PieceFactory.createPiece(team, type, imageHTML);
+
+	if (my_team == team && type == CHESS.King)
+		king_grid = chessboard[x][y];
 }
 
 
@@ -144,7 +155,6 @@ function onClick(event) {
 
 //Handle chess event with (x, y) click coordinate
 function handleChessEvent(x, y) {
-
 	if (my_team != turn)
 		return;
 
@@ -158,9 +168,7 @@ function handleChessEvent(x, y) {
 	//Initalize important variables
 	let newGrid = chessboard[x][y];
 	let isLegal = isLegalMove(newGrid);
-
-	console.log(newGrid)
-
+	isLegal = isLegal && isKingSafe(oldGrid, newGrid);
 
 	//Action1 - Deselect Piece by clicking on illegal grid
 	if (oldGrid != null && !isLegal) {
@@ -342,38 +350,40 @@ function handleChessEvent(x, y) {
 // 	return bestScore;
 // }
 
-// //Get all valid friends and enemies that can eat keyGrid
-// function getValidPieces(board, keyGrid, team) {
-// 	let friends = [];
-// 	let enemies = [];
+//Get all valid friends and enemies that can eat keyGrid
+function getValidPieces(board, keyGrid, team) {
+	let friends = [];
+	let enemies = [];
 
-// 	let keyPiece = keyGrid.piece;
-// 	keyGrid.piece = PieceFactory.createPiece(team, CHESS.None, null);
-// 	for (let i = 0; i < board.length; i++) {
-// 		for (let j = 0; j < board.length; j++) {
-// 			let grid = board[i][j];
-// 			if (grid.piece != null) {
-// 				let validMoves = grid.piece.getPossibleMoves(board, grid);
+	let keyPiece = keyGrid.piece;
+	keyGrid.piece = 100;
+	pieces[100] = PieceFactory.createPiece(team, CHESS.None, null);
 
-// 				let found = false;
-// 				for (let k = 0; k < validMoves.length && !found; k++)
-// 					if (validMoves[k].x == keyGrid.x && validMoves[k].y == keyGrid.y)
-// 						found = true;
+	for (let i = 0; i < board.length; i++) {
+		for (let j = 0; j < board.length; j++) {
+			let grid = board[i][j];
+			if (grid.get_piece() != null) {
+				let downward = grid.get_piece().team != my_team;
+				let validMoves = grid.get_piece().getPossibleMoves(board, grid, downward);
+				let found = false;
+				for (let k = 0; k < validMoves.length && !found; k++)
+					if (validMoves[k].x == keyGrid.x && validMoves[k].y == keyGrid.y)
+						found = true;
 
-// 				if (found) {
-// 					if (grid.piece.team == team)
-// 						friends.push(grid);
-// 					else
-// 						enemies.push(grid);
-// 				}
+				if (found) {
+					if (grid.get_piece().team == team)
+						friends.push(grid);
+					else
+						enemies.push(grid);
+				}
 
-// 			}
-// 		}
-// 	}
+			}
+		}
+	}
 
-// 	keyGrid.piece = keyPiece;
-// 	return {friends: friends, enemies: enemies};
-// }
+	keyGrid.piece = keyPiece;
+	return {friends: friends, enemies: enemies};
+}
 
 
 //Move chess from oldGrid to newGrid
@@ -402,12 +412,18 @@ function moveChess(oldGrid, newGrid) {
 		}
 	}
 
+
 	//Move chess piece from old grid to current grid.
 	newGrid.piece = oldGrid.piece;
 	newGrid.get_piece().image.setAttribute("class", "x" + newGrid.x + " y" + newGrid.y);
+
+	if (oldGrid == king_grid)
+		king_grid = newGrid;
+
 	oldGrid.piece = -1;
-	switchTurn();
 	moves_applied += 1;
+	switchTurn();
+
 }
 
 
@@ -454,6 +470,25 @@ function isLegalMove(grid) {
 	return legalMove;
 }
 
+//Check legal move of chess piece
+function isKingSafe(oldGrid, newGrid) {
+	let isKingSafe = true;
+
+	let board = copyBoard(chessboard);
+	board[newGrid.x][newGrid.y].piece = board[oldGrid.x][oldGrid.y].piece;
+	board[oldGrid.x][oldGrid.y].piece = -1;
+
+	let target_grid = king_grid;
+	if (oldGrid == king_grid)
+		target_grid = newGrid;
+
+	let stats = getValidPieces(board, target_grid, my_team)
+	let enemies = stats.enemies;
+	let friends = stats.friends;
+
+	return enemies.length == 0;
+}
+
 
 //Switch active team turn
 function switchTurn() {
@@ -468,7 +503,7 @@ function copyBoard(board) {
 	let newBoard = [[],[],[],[],[],[],[],[]];
 	for (let i = 0; i < board.length; i++) {
 		for (let j = 0; j < board.length; j++) {
-			newBoard[i][j] = jQuery.extend(true, {}, board[i][j]);
+			newBoard[i][j] = new Grid(i, j, board[i][j].piece);
 		}
 	}
 	return newBoard;

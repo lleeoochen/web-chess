@@ -4,14 +4,14 @@ class Pawn extends Piece {
 		super(team, CHESS.Pawn, VALUE.Pawn, image);
 	}
 
-	getPossibleMoves(chessboard, grid) {
+	getPossibleMoves(chessboard, grid, downward) {
 		let moves = [];
 		let possibleWays = [];
 
 		if (grid.get_piece() == null)
 			return moves;
 
-		let dir = -1;
+		let dir = downward ? 1 : -1;
 
 		if ((grid.y == 1 && dir == 1 || grid.y == 6 && dir == -1)
 			&& chessboard[grid.x][grid.y + dir].get_piece() == null
