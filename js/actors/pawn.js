@@ -11,7 +11,7 @@ class Pawn extends Piece {
 		if (grid.get_piece() == null)
 			return moves;
 
-		let dir = 1;
+		let dir = -1;
 
 		if ((grid.y == 1 && dir == 1 || grid.y == 6 && dir == -1)
 			&& chessboard[grid.x][grid.y + dir].get_piece() == null

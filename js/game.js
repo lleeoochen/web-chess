@@ -382,16 +382,25 @@ function moveChess(oldGrid, newGrid) {
 
 	//Remove chess piece being eaten 
 	if (newGrid.get_piece() != null) {
-		actionLayer.removeChild(newGrid.get_piece().image);
-		if (newGrid.get_piece().type == CHESS.King)
+
+		var old_img = oldGrid.get_piece().image
+		var new_img = newGrid.get_piece().image;
+
+		//Eating animation delay.
+		old_img.style.zIndex = "1000";
+		setTimeout(() => {
+			actionLayer.removeChild(new_img);
+			old_img.style.zIndex = "0";
+		}, 300);
+
+		if (newGrid.get_piece().type == CHESS.King) {
 			swal({
 				title: `Checkmate. ${ newGrid.get_piece().team == TEAM.B ? "White" : "Black" } Team Wins!`
 			}, () => {
 				window.location.reload();
 			});
+		}
 	}
-
-
 
 	//Move chess piece from old grid to current grid.
 	newGrid.piece = oldGrid.piece;
