@@ -21,6 +21,7 @@ Firebase.authenticate((auth_user) => {
 		// Register second user if not exists
 		if (!match.white && auth_user.uid != match.black) {
 			Firebase.registerOpponent(match_id, auth_user.uid);
+			my_team = TEAM.W;
 		}
 
 		if (auth_user.uid == match.black) {
@@ -45,8 +46,13 @@ Firebase.authenticate((auth_user) => {
 
 		if (match && match.moves) {
 			for (; match.moves.length != moves_applied;) {
-				let move = Util.unpack(match.moves[moves_applied]);
+				if (match.moves[moves_applied] / 10 < 10) {
+					swal({title: `Checkmate. ${ match.moves[moves_applied] == 0 ? "White" : "Black" } Team Wins!`});
+					return;
+				}
 
+				let move = Util.unpack(match.moves[moves_applied]);
+				console.log(match.moves)
 				if (turn != my_team) {
 					move.old_y = BOARD_SIZE - move.old_y - 1;
 					move.new_y = BOARD_SIZE - move.new_y - 1;
@@ -54,6 +60,9 @@ Firebase.authenticate((auth_user) => {
 
 				moveChess(chessboard[move.old_x][move.old_y], chessboard[move.new_x][move.new_y]);
 				turn = move.turn;
+			}
+			if (isCheckmate()) {
+				Firebase.checkmate(match_id, match, my_team == TEAM.W ? TEAM.B : TEAM.W);
 			}
 		}
 	});
@@ -168,7 +177,9 @@ function handleChessEvent(x, y) {
 	//Initalize important variables
 	let newGrid = chessboard[x][y];
 	let isLegal = isLegalMove(newGrid);
-	isLegal = isLegal && isKingSafe(oldGrid, newGrid);
+
+	let board = copyBoard(chessboard);
+	isLegal = isLegal && isKingSafe(board, oldGrid, newGrid);
 
 	//Action1 - Deselect Piece by clicking on illegal grid
 	if (oldGrid != null && !isLegal) {
@@ -366,6 +377,7 @@ function getValidPieces(board, keyGrid, team) {
 				let downward = grid.get_piece().team != my_team;
 				let validMoves = grid.get_piece().getPossibleMoves(board, grid, downward);
 				let found = false;
+
 				for (let k = 0; k < validMoves.length && !found; k++)
 					if (validMoves[k].x == keyGrid.x && validMoves[k].y == keyGrid.y)
 						found = true;
@@ -383,6 +395,25 @@ function getValidPieces(board, keyGrid, team) {
 
 	keyGrid.piece = keyPiece;
 	return {friends: friends, enemies: enemies};
+}
+
+function isCheckmate() {
+	for (let i = 0; i < chessboard.length; i++) {
+		for (let j = 0; j < chessboard.length; j++) {
+			let grid = chessboard[i][j];
+			if (grid.get_piece() != null && grid.get_piece().team == my_team) {
+				let validMoves = grid.get_piece().getPossibleMoves(chessboard, grid);
+
+				for (let k = 0; k < validMoves.length; k++) {
+					let board = copyBoard(chessboard);
+					if (isKingSafe(board, grid, chessboard[validMoves[k].x][validMoves[k].y])) {
+						return false;
+					}
+				}
+			}
+		}
+	}
+	return true;
 }
 
 
@@ -403,13 +434,13 @@ function moveChess(oldGrid, newGrid) {
 			old_img.style.zIndex = "0";
 		}, 300);
 
-		if (newGrid.get_piece().type == CHESS.King) {
-			swal({
-				title: `Checkmate. ${ newGrid.get_piece().team == TEAM.B ? "White" : "Black" } Team Wins!`
-			}, () => {
-				window.location.reload();
-			});
-		}
+		// if (newGrid.get_piece().type == CHESS.King) {
+		// 	swal({
+		// 		title: `Checkmate. ${ newGrid.get_piece().team == TEAM.B ? "White" : "Black" } Team Wins!`
+		// 	}, () => {
+		// 		window.location.reload();
+		// 	});
+		// }
 	}
 
 
@@ -471,10 +502,9 @@ function isLegalMove(grid) {
 }
 
 //Check legal move of chess piece
-function isKingSafe(oldGrid, newGrid) {
+function isKingSafe(board, oldGrid, newGrid) {
 	let isKingSafe = true;
 
-	let board = copyBoard(chessboard);
 	board[newGrid.x][newGrid.y].piece = board[oldGrid.x][oldGrid.y].piece;
 	board[oldGrid.x][oldGrid.y].piece = -1;
 

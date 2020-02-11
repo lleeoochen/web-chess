@@ -96,6 +96,15 @@ class Firebase {
 		}, { merge: true });
 	}
 
+	static checkmate(match_id, match, winning_team) {
+		let moves = (match && match.moves) ? match.moves : [];
+		moves.push(winning_team == TEAM.W ? 0 : 1); // checkmate
+
+		db.collection(MATCHES_TABLE).doc(match_id).set({
+		    moves: moves,
+		}, { merge: true });
+	}
+
 	static registerOpponent(match_id, user_id) {
 		db.collection(MATCHES_TABLE).doc(match_id).set({
 		    white: user_id,
