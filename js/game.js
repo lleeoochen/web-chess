@@ -13,9 +13,8 @@ var moves_applied = 0;
 
 
 Firebase.authenticate((auth_user) => {
-	initGame();
 
-	Firebase.listenMatch(match_id, (match_data) => {
+	Firebase.getMatch(match_id, (match_data) => {
 		match = match_data;
 
 		// Register second user if not exists
@@ -23,16 +22,32 @@ Firebase.authenticate((auth_user) => {
 			Firebase.registerOpponent(match_id, auth_user.uid);
 		}
 
-		my_team = (auth_user.uid == match.black) ? TEAM.B : TEAM.W;
+		if (auth_user.uid == match.black) {
+			my_team = TEAM.B;
+		}
+		else if (auth_user.uid == match.white) {
+			my_team = TEAM.W;
+		}
+
+		initGame();
+	});
+
+	Firebase.listenMatch(match_id, (match_data) => {
+		match = match_data;
 
 		if (match && match.moves) {
 			for (; match.moves.length != moves_applied;) {
 				let move = Util.unpack(match.moves[moves_applied]);
+
+				if (turn != my_team) {
+					move.old_y = BOARD_SIZE - move.old_y - 1;
+					move.new_y = BOARD_SIZE - move.new_y - 1;
+				}
+
 				moveChess(chessboard[move.old_x][move.old_y], chessboard[move.new_x][move.new_y]);
 				turn = move.turn;
 			}
 		}
-
 	});
 });
 
@@ -62,28 +77,40 @@ function initBoard(){
 
 //Intialize all chess pieces
 function initPieces() {
-	let id = 0;
-	initEachPiece(id++, 0, 0, TEAM.B, CHESS.Rook);
-	initEachPiece(id++, 7, 0, TEAM.B, CHESS.Rook);
-	initEachPiece(id++, 1, 0, TEAM.B, CHESS.Knight);
-	initEachPiece(id++, 6, 0, TEAM.B, CHESS.Knight);
-	initEachPiece(id++, 2, 0, TEAM.B, CHESS.Bishop);
-	initEachPiece(id++, 5, 0, TEAM.B, CHESS.Bishop);
-	initEachPiece(id++, 4, 0, TEAM.B, CHESS.Queen);
-	initEachPiece(id++, 3, 0, TEAM.B, CHESS.King);
+	let black_pos = 0;
+	let black_pawn_pos = 1;
+	let white_pos = 7;
+	let white_pawn_pos = 6;
 
-	initEachPiece(id++, 0, 7, TEAM.W, CHESS.Rook);
-	initEachPiece(id++, 7, 7, TEAM.W, CHESS.Rook);
-	initEachPiece(id++, 1, 7, TEAM.W, CHESS.Knight);
-	initEachPiece(id++, 6, 7, TEAM.W, CHESS.Knight);
-	initEachPiece(id++, 2, 7, TEAM.W, CHESS.Bishop);
-	initEachPiece(id++, 5, 7, TEAM.W, CHESS.Bishop);
-	initEachPiece(id++, 4, 7, TEAM.W, CHESS.Queen);
-	initEachPiece(id++, 3, 7, TEAM.W, CHESS.King);
+	if (my_team == TEAM.B) {
+		black_pos = 7;
+		black_pawn_pos = 6;
+		white_pos = 0;
+		white_pawn_pos = 1;
+	}
+
+	let id = 0;
+	initEachPiece(id++, 0, black_pos, TEAM.B, CHESS.Rook);
+	initEachPiece(id++, 7, black_pos, TEAM.B, CHESS.Rook);
+	initEachPiece(id++, 1, black_pos, TEAM.B, CHESS.Knight);
+	initEachPiece(id++, 6, black_pos, TEAM.B, CHESS.Knight);
+	initEachPiece(id++, 2, black_pos, TEAM.B, CHESS.Bishop);
+	initEachPiece(id++, 5, black_pos, TEAM.B, CHESS.Bishop);
+	initEachPiece(id++, 4, black_pos, TEAM.B, CHESS.Queen);
+	initEachPiece(id++, 3, black_pos, TEAM.B, CHESS.King);
+
+	initEachPiece(id++, 0, white_pos, TEAM.W, CHESS.Rook);
+	initEachPiece(id++, 7, white_pos, TEAM.W, CHESS.Rook);
+	initEachPiece(id++, 1, white_pos, TEAM.W, CHESS.Knight);
+	initEachPiece(id++, 6, white_pos, TEAM.W, CHESS.Knight);
+	initEachPiece(id++, 2, white_pos, TEAM.W, CHESS.Bishop);
+	initEachPiece(id++, 5, white_pos, TEAM.W, CHESS.Bishop);
+	initEachPiece(id++, 4, white_pos, TEAM.W, CHESS.Queen);
+	initEachPiece(id++, 3, white_pos, TEAM.W, CHESS.King);
 
 	for (var x = 0; x < BOARD_SIZE; x++) {
-		initEachPiece(id++, x, 1, TEAM.B, CHESS.Pawn);
-		initEachPiece(id++, x, 6, TEAM.W, CHESS.Pawn);
+		initEachPiece(id++, x, black_pawn_pos, TEAM.B, CHESS.Pawn);
+		initEachPiece(id++, x, white_pawn_pos, TEAM.W, CHESS.Pawn);
 	}
 }
 
@@ -363,6 +390,8 @@ function moveChess(oldGrid, newGrid) {
 				window.location.reload();
 			});
 	}
+
+
 
 	//Move chess piece from old grid to current grid.
 	newGrid.piece = oldGrid.piece;

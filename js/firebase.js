@@ -50,6 +50,13 @@ class Firebase {
 		});
 	}
 
+	static getMatch(id, callback) {
+		db.collection(MATCHES_TABLE).doc(id).get().then(doc => {
+			console.log("Match get: ", doc.data());
+			callback(doc.data());
+		});
+	}
+
 	static listenMatch(id, callback) {
 		db.collection(MATCHES_TABLE).doc(id).onSnapshot(function(doc) {
 			console.log("Match updated: ", doc.data());
