@@ -25,6 +25,11 @@ class Util {
 	    }
 	}
 
+	static vw2px(px) {
+		let f = document.documentElement.clientWidth / 100
+		return px * f;
+	}
+
 	static pack(oldGrid, newGrid, turn) {
 		return oldGrid.x * 10000 + oldGrid.y * 1000 + newGrid.x * 100 + newGrid.y * 10 + (turn == TEAM.W ? 1 : 0);
 	}

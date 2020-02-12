@@ -52,7 +52,6 @@ Firebase.authenticate((auth_user) => {
 				}
 
 				let move = Util.unpack(match.moves[moves_applied]);
-				console.log(match.moves)
 				if (turn != my_team) {
 					move.old_y = BOARD_SIZE - move.old_y - 1;
 					move.new_y = BOARD_SIZE - move.new_y - 1;
@@ -82,11 +81,21 @@ function initBoard(){
 	context.fillStyle = COLOR_BOARD_LIGHT;
 	context.fillRect(0, 0, BOARD_SIZE * GRID_SIZE_P, BOARD_SIZE * GRID_SIZE_P); //Draw board outline
 
+	let color1 = my_team == TEAM.W ? COLOR_BOARD_DARK : COLOR_BOARD_LIGHT;
+	let color2 = my_team == TEAM.W ? COLOR_BOARD_LIGHT : COLOR_BOARD_DARK;
+
 	for (var x = 0; x < BOARD_SIZE; x++) {
 		for (var y = 0; y < BOARD_SIZE; y++) {
-			color = (y % 2 != 0) ^ (x % 2 == 0) ? COLOR_BOARD_DARK : COLOR_BOARD_LIGHT;
+			color = (y % 2 != 0) ^ (x % 2 == 0) ? color1 : color2;
 			chessboard[x][y] = new Grid(x, y, -1);
 			fillGrid(chessboard[x][y], color);
+
+			//Grid Listener for onclick event
+			let gridListener = document.createElement("div");
+			gridListener.setAttribute("class", "piece x" + x + " y" + y);
+			gridListener.setAttribute("style", `z-index: 10;`)
+			gridListener.setAttribute("onClick", `onClick(event, ${x}, ${y})`);
+			actionLayer.append(gridListener);
 		}
 	}
 }
@@ -134,12 +143,15 @@ function initPieces() {
 
 //Intialize each chess piece
 function initEachPiece(id, x, y, team, type) {
+
 	let imageHTML = document.createElement("img");
+	imageHTML.setAttribute("class", "piece x" + x + " y" + y);
 	imageHTML.setAttribute("src", "assets/" + team + type + ".svg");
-	imageHTML.setAttribute("class", "x" + x + " y" + y);
-	imageHTML.setAttribute("onClick", "onClick(event)");
+	// imageHTML.setAttribute("style", `height: 80%; width: 80%; margin-top: 10%;`)
 	imageHTML.setAttribute("draggable", "false");
+
 	actionLayer.append(imageHTML);
+
 	chessboard[x][y].piece = id;
 	pieces[id] = PieceFactory.createPiece(team, type, imageHTML);
 
@@ -149,14 +161,7 @@ function initEachPiece(id, x, y, team, type) {
 
 
 //Handle all chessboard click events
-function onClick(event) {
-
-	//Check boundary and initialize newGrid selection
-	let x = parseInt((event.pageX - OFFSET_X_P) / GRID_SIZE_P);
-	let y = parseInt((event.pageY - OFFSET_Y_P) / GRID_SIZE_P);
-	if (x >= BOARD_SIZE || y >= BOARD_SIZE)
-		return;
-
+function onClick(event, x, y) {
 	//Handle chess event with (x, y) click coordinate
 	handleChessEvent(x, y);
 }
@@ -446,7 +451,7 @@ function moveChess(oldGrid, newGrid) {
 
 	//Move chess piece from old grid to current grid.
 	newGrid.piece = oldGrid.piece;
-	newGrid.get_piece().image.setAttribute("class", "x" + newGrid.x + " y" + newGrid.y);
+	newGrid.get_piece().image.setAttribute("class", "piece x" + newGrid.x + " y" + newGrid.y);
 
 	if (oldGrid == king_grid)
 		king_grid = newGrid;

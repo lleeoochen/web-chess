@@ -1,25 +1,33 @@
 :root {
-	--cell-size: 60px;
-	--margin-size: 28px;
+	--cell-size: 8vw;
+	--margin-size: 2vw;
+	--piece-size: 8vw;
 }
 
-.x0 { position: absolute; left: calc(var(--margin-size) + (0 * var(--cell-size))); transition: .4s all ease; }
-.x1 { position: absolute; left: calc(var(--margin-size) + (1 * var(--cell-size))); transition: .4s all ease; }
-.x2 { position: absolute; left: calc(var(--margin-size) + (2 * var(--cell-size))); transition: .4s all ease; }
-.x3 { position: absolute; left: calc(var(--margin-size) + (3 * var(--cell-size))); transition: .4s all ease; }
-.x4 { position: absolute; left: calc(var(--margin-size) + (4 * var(--cell-size))); transition: .4s all ease; }
-.x5 { position: absolute; left: calc(var(--margin-size) + (5 * var(--cell-size))); transition: .4s all ease; }
-.x6 { position: absolute; left: calc(var(--margin-size) + (6 * var(--cell-size))); transition: .4s all ease; }
-.x7 { position: absolute; left: calc(var(--margin-size) + (7 * var(--cell-size))); transition: .4s all ease; }
+.piece {
+	width: var(--piece-size);
+	height: var(--piece-size);
+	transition: .4s all ease;
+	position: absolute;
+}
 
-.y0 { position: absolute; top: calc(var(--margin-size) + (0 * var(--cell-size))); transition: .4s all ease; }
-.y1 { position: absolute; top: calc(var(--margin-size) + (1 * var(--cell-size))); transition: .4s all ease; }
-.y2 { position: absolute; top: calc(var(--margin-size) + (2 * var(--cell-size))); transition: .4s all ease; }
-.y3 { position: absolute; top: calc(var(--margin-size) + (3 * var(--cell-size))); transition: .4s all ease; }
-.y4 { position: absolute; top: calc(var(--margin-size) + (4 * var(--cell-size))); transition: .4s all ease; }
-.y5 { position: absolute; top: calc(var(--margin-size) + (5 * var(--cell-size))); transition: .4s all ease; }
-.y6 { position: absolute; top: calc(var(--margin-size) + (6 * var(--cell-size))); transition: .4s all ease; }
-.y7 { position: absolute; top: calc(var(--margin-size) + (7 * var(--cell-size))); transition: .4s all ease; }
+.x0 { left: calc(var(--margin-size) + (0 * var(--cell-size))); }
+.x1 { left: calc(var(--margin-size) + (1 * var(--cell-size))); }
+.x2 { left: calc(var(--margin-size) + (2 * var(--cell-size))); }
+.x3 { left: calc(var(--margin-size) + (3 * var(--cell-size))); }
+.x4 { left: calc(var(--margin-size) + (4 * var(--cell-size))); }
+.x5 { left: calc(var(--margin-size) + (5 * var(--cell-size))); }
+.x6 { left: calc(var(--margin-size) + (6 * var(--cell-size))); }
+.x7 { left: calc(var(--margin-size) + (7 * var(--cell-size))); }
+
+.y0 { top: calc(var(--margin-size) + (0 * var(--cell-size))); }
+.y1 { top: calc(var(--margin-size) + (1 * var(--cell-size))); }
+.y2 { top: calc(var(--margin-size) + (2 * var(--cell-size))); }
+.y3 { top: calc(var(--margin-size) + (3 * var(--cell-size))); }
+.y4 { top: calc(var(--margin-size) + (4 * var(--cell-size))); }
+.y5 { top: calc(var(--margin-size) + (5 * var(--cell-size))); }
+.y6 { top: calc(var(--margin-size) + (6 * var(--cell-size))); }
+.y7 { top: calc(var(--margin-size) + (7 * var(--cell-size))); }
 
 #body {
 	text-align: center;
@@ -52,8 +60,8 @@
 #canvasLayer {
 	float: left;
 	position: relative;
-	padding-top: 18px;
-	padding-left: 18px;
+	padding: var(--margin-size);
+	/*padding-left: 18px;*/
 	background: #rgb(0,0,0,0.1);
 	border: 1px solid white;
 }
@@ -63,13 +71,14 @@
 	position: relative;
 	left: -50%;
 	background: #rgb(0,0,0,0.1);
+	margin-bottom: 50px;
 }
 
 #matches-display {
 	color: white;
 }
 
-img{
+img {
     -khtml-user-select: none;
     -o-user-select: none;
     -moz-user-select: none;
@@ -102,4 +111,8 @@ img{
   display: inline-block;
   text-align: left;
   vertical-align: middle;
+}
+
+body {
+	overflow-x: hidden;
 }
