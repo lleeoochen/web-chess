@@ -41,7 +41,11 @@ class Firebase {
 			if (auth_user_1) {
 				auth_user = auth_user_1;
 				
-				db.collection(USERS_TABLE).doc(auth_user.uid).set({}, { merge: true });
+				db.collection(USERS_TABLE).doc(auth_user.uid).set({
+					email: auth_user.email,
+					photoURL: auth_user.photoURL,
+					displayName: auth_user.displayName
+				}, { merge: true });
 				callback(auth_user);
 			}
 			else {
@@ -53,6 +57,13 @@ class Firebase {
 	static getMatch(id, callback) {
 		db.collection(MATCHES_TABLE).doc(id).get().then(doc => {
 			console.log("Match get: ", doc.data());
+			callback(doc.data());
+		});
+	}
+
+	static getUser(id, callback) {
+		db.collection(USERS_TABLE).doc(id).get().then(doc => {
+			console.log("User get: ", doc.data());
 			callback(doc.data());
 		});
 	}

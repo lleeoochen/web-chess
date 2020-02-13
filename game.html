@@ -26,12 +26,25 @@
 	  </div>
 	</div>
 
-	<h1 id="title"> Chess Match </h1>
-	<br/>
-
 	<div id="layerWrap">
 		<div id="actionLayer">
-			<canvas id="canvasLayer"/>
+			<div class="row">
+				<img id="black-player-image" class="player-pic pull-left"/>
+				<div class="pull-left white">
+					<h3 id="black-player-name"></h3>
+					<img id="black-player-icon" src="/assets/BRook.svg"/>
+				</div>
+				<img id="white-player-image" class="player-pic pull-right"/>
+				<div class="pull-right white">
+					<h3 id="white-player-name"></h3>
+					<img id="white-player-icon" src="/assets/WRook.svg"/>
+				</div>
+			</div>
+			<canvas id="canvasLayer"></canvas>
+			<div id="gridsLayer"></div>
+			<div id="piecesLayer"></div>
+			<div id="friendsEaten" class="row eaten-panel"></div>
+			<div id="enemiesEaten" class="row eaten-panel"></div>
 		</div>
 	</div>
 

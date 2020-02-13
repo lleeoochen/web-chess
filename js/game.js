@@ -1,6 +1,8 @@
 //Intialize global variables
 var canvasLayer = document.getElementById("canvasLayer");
 var actionLayer = document.getElementById("actionLayer");
+var gridsLayer = document.getElementById("gridsLayer");
+var piecesLayer = document.getElementById("piecesLayer");
 var context = canvasLayer.getContext("2d");
 var chessboard = [[],[],[],[],[],[],[],[]];
 var oldGrid = null;
@@ -11,6 +13,9 @@ var match_id = Util.getParam("match");
 var my_team = null;
 var moves_applied = 0;
 var king_grid = null;
+
+var black_title_set = false;
+var white_title_set = false;
 
 
 Firebase.authenticate((auth_user) => {
@@ -44,6 +49,8 @@ Firebase.authenticate((auth_user) => {
 			my_team = TEAM.W;
 		}
 
+		setTitleBar(auth_user);
+
 		if (match && match.moves) {
 			for (; match.moves.length != moves_applied;) {
 				if (match.moves[moves_applied] / 10 < 10) {
@@ -75,6 +82,40 @@ function initGame() {
 	initPieces();
 }
 
+//Set player info
+function setTitleBar(auth_user) {
+
+	if (!black_title_set) {
+		if (auth_user.uid != match.black) {
+			Firebase.getUser(match.black, (user_data) => {
+				$('#black-player-image').attr('src', user_data.photoURL);
+				$('#black-player-name').text(user_data.displayName);
+				black_title_set = true;
+			});
+		}
+		else {
+			$('#black-player-image').attr('src', auth_user.photoURL);
+			$('#black-player-name').text(auth_user.displayName);
+			black_title_set = true;
+		}
+	}
+
+	if (!white_title_set) {
+		if (auth_user.uid != match.white) {
+			Firebase.getUser(match.white, (user_data) => {
+				$('#white-player-image').attr('src', user_data.photoURL);
+				$('#white-player-name').text(user_data.displayName);
+				white_title_set = true;
+			});
+		}
+		else {
+			$('#white-player-image').attr('src', auth_user.photoURL);
+			$('#white-player-name').text(auth_user.displayName);
+			white_title_set = true;
+		}
+	}
+}
+
 
 //Intialize chessboard background
 function initBoard(){
@@ -95,7 +136,7 @@ function initBoard(){
 			gridListener.setAttribute("class", "grid x" + x + " y" + y);
 			gridListener.setAttribute("style", `z-index: 10;`)
 			gridListener.setAttribute("onClick", `onClick(event, ${x}, ${y})`);
-			actionLayer.append(gridListener);
+			gridsLayer.append(gridListener);
 		}
 	}
 }
@@ -147,10 +188,8 @@ function initEachPiece(id, x, y, team, type) {
 	let imageHTML = document.createElement("img");
 	imageHTML.setAttribute("class", "piece x" + x + " y" + y);
 	imageHTML.setAttribute("src", "assets/" + team + type + ".svg");
-	// imageHTML.setAttribute("style", `height: 80%; width: 80%; margin-top: 10%;`)
 	imageHTML.setAttribute("draggable", "false");
-
-	actionLayer.append(imageHTML);
+	piecesLayer.append(imageHTML);
 
 	chessboard[x][y].piece = id;
 	pieces[id] = PieceFactory.createPiece(team, type, imageHTML);
@@ -431,12 +470,22 @@ function moveChess(oldGrid, newGrid) {
 
 		var old_img = oldGrid.get_piece().image
 		var new_img = newGrid.get_piece().image;
+		var newGridTeam = newGrid.get_piece().team;
 
 		//Eating animation delay.
 		old_img.style.zIndex = "1000";
 		setTimeout(() => {
-			actionLayer.removeChild(new_img);
+			piecesLayer.removeChild(new_img);
+			new_img.setAttribute("class", "eaten-piece");
 			old_img.style.zIndex = "0";
+
+			if (newGridTeam == my_team) {
+				$('#friendsEaten').append(new_img);
+			}
+			else {
+				$('#enemiesEaten').append(new_img);
+			}
+
 		}, 300);
 
 		// if (newGrid.get_piece().type == CHESS.King) {
@@ -459,7 +508,6 @@ function moveChess(oldGrid, newGrid) {
 	oldGrid.piece = -1;
 	moves_applied += 1;
 	switchTurn();
-
 }
 
 
@@ -527,10 +575,16 @@ function isKingSafe(board, oldGrid, newGrid) {
 
 //Switch active team turn
 function switchTurn() {
-	if (turn == TEAM.B)
+	if (turn == TEAM.B) {
 		turn = TEAM.W;
-	else
+		$("#white-player-icon").css("background-color", "#008640");
+		$("#black-player-icon").css("background-color", "");
+	}
+	else {
 		turn = TEAM.B;
+		$("#black-player-icon").css("background-color", "#008640");
+		$("#white-player-icon").css("background-color", "");
+	}
 }
 
 

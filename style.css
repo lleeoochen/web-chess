@@ -1,15 +1,17 @@
 @media screen and (orientation:portrait) {
 	:root {
-		--cell-size: 8vw;
+		--cell-size: 9vw;
 		--margin-size: 2vw;
-		--piece-size: 8vw;
+		--piece-size: 9vw;
+		--picture-size: 10vw;
 	}
 }
 @media screen and (orientation:landscape) {
 	:root {
-		--cell-size: 8vh;
+		--cell-size: 9vh;
 		--margin-size: 2vh;
-		--piece-size: 8vh;
+		--piece-size: 9vh;
+		--picture-size: 10vh;
 	}
 }
 
@@ -29,23 +31,28 @@
 	margin-left: calc(var(--piece-size) * 0.1);
 }
 
-.x0 { left: calc(var(--margin-size) + (0 * var(--cell-size))); }
-.x1 { left: calc(var(--margin-size) + (1 * var(--cell-size))); }
-.x2 { left: calc(var(--margin-size) + (2 * var(--cell-size))); }
-.x3 { left: calc(var(--margin-size) + (3 * var(--cell-size))); }
-.x4 { left: calc(var(--margin-size) + (4 * var(--cell-size))); }
-.x5 { left: calc(var(--margin-size) + (5 * var(--cell-size))); }
-.x6 { left: calc(var(--margin-size) + (6 * var(--cell-size))); }
-.x7 { left: calc(var(--margin-size) + (7 * var(--cell-size))); }
+.eaten-piece {
+	width: calc(var(--piece-size) * 0.5);
+	height: calc(var(--piece-size) * 0.5);
+}
 
-.y0 { top: calc(var(--margin-size) + (0 * var(--cell-size))); }
-.y1 { top: calc(var(--margin-size) + (1 * var(--cell-size))); }
-.y2 { top: calc(var(--margin-size) + (2 * var(--cell-size))); }
-.y3 { top: calc(var(--margin-size) + (3 * var(--cell-size))); }
-.y4 { top: calc(var(--margin-size) + (4 * var(--cell-size))); }
-.y5 { top: calc(var(--margin-size) + (5 * var(--cell-size))); }
-.y6 { top: calc(var(--margin-size) + (6 * var(--cell-size))); }
-.y7 { top: calc(var(--margin-size) + (7 * var(--cell-size))); }
+.x0 { left: calc(var(--margin-size) * 2 + (0 * var(--cell-size))); }
+.x1 { left: calc(var(--margin-size) * 2 + (1 * var(--cell-size))); }
+.x2 { left: calc(var(--margin-size) * 2 + (2 * var(--cell-size))); }
+.x3 { left: calc(var(--margin-size) * 2 + (3 * var(--cell-size))); }
+.x4 { left: calc(var(--margin-size) * 2 + (4 * var(--cell-size))); }
+.x5 { left: calc(var(--margin-size) * 2 + (5 * var(--cell-size))); }
+.x6 { left: calc(var(--margin-size) * 2 + (6 * var(--cell-size))); }
+.x7 { left: calc(var(--margin-size) * 2 + (7 * var(--cell-size))); }
+
+.y0 { top: calc(var(--margin-size) * 3 + var(--picture-size) + (0 * var(--cell-size))); }
+.y1 { top: calc(var(--margin-size) * 3 + var(--picture-size) + (1 * var(--cell-size))); }
+.y2 { top: calc(var(--margin-size) * 3 + var(--picture-size) + (2 * var(--cell-size))); }
+.y3 { top: calc(var(--margin-size) * 3 + var(--picture-size) + (3 * var(--cell-size))); }
+.y4 { top: calc(var(--margin-size) * 3 + var(--picture-size) + (4 * var(--cell-size))); }
+.y5 { top: calc(var(--margin-size) * 3 + var(--picture-size) + (5 * var(--cell-size))); }
+.y6 { top: calc(var(--margin-size) * 3 + var(--picture-size) + (6 * var(--cell-size))); }
+.y7 { top: calc(var(--margin-size) * 3 + var(--picture-size) + (7 * var(--cell-size))); }
 
 #body {
 	text-align: center;
@@ -79,16 +86,18 @@
 	float: left;
 	position: relative;
 	padding: var(--margin-size);
-	background: rgba(0, 0, 0, 0.8);
-	border: 1px solid #8b4513;
+	background-image: linear-gradient(rgba(0, 0, 0, 1), rgba(0, 0, 0, 0.2));
+	margin-bottom: 3px;
 }
 
 #actionLayer {
 	float: left;
 	position: relative;
 	left: -50%;
-	background: #rgb(0,0,0,0.1);
-	margin-bottom: 50px;
+	background-image: linear-gradient(rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 1));
+	padding: var(--margin-size);
+	padding-top: 0;
+	padding-bottom: 0;
 }
 
 #matches-display {
@@ -132,4 +141,27 @@ img {
 
 body {
 	overflow-x: hidden;
+}
+
+.eaten-panel {
+	display: contents;
+	background-color: white;
+}
+
+.player-pic {
+	width: var(--picture-size);
+	height: var(--picture-size);
+	margin: var(--margin-size);
+}
+
+.player-pic.pull-left {
+	margin-left: calc(var(--margin-size) * 2);
+}
+
+.player-pic.pull-right {
+	margin-right: calc(var(--margin-size) * 2);
+}
+
+.white {
+	color: white;
 }

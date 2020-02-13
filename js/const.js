@@ -5,8 +5,8 @@ const TEAM = {B: "B", W: "W", None:"N"}
 
 
 const BOARD_SIZE = 8;
-const GRID_SIZE_P = Util.vw2px(8);
-const OFFSET_MARGIN = Util.vw2px(8);
+const GRID_SIZE_P = Util.vw2px(9);
+const OFFSET_MARGIN = Util.vw2px(9);
 
 console.log(document.getElementById("actionLayer").getBoundingClientRect())
 console.log(document.getElementById("canvasLayer").getBoundingClientRect())
