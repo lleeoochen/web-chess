@@ -26,8 +26,10 @@ class Util {
 	}
 
 	static vw2px(px) {
-		let f = document.documentElement.clientWidth / 100
-		return px * f;
+		if(window.innerHeight < window.innerWidth)
+			return px * document.documentElement.clientHeight / 100;
+		else
+			return px * document.documentElement.clientWidth / 100;
 	}
 
 	static pack(oldGrid, newGrid, turn) {

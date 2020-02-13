@@ -87,12 +87,12 @@ function initBoard(){
 	for (var x = 0; x < BOARD_SIZE; x++) {
 		for (var y = 0; y < BOARD_SIZE; y++) {
 			color = (y % 2 != 0) ^ (x % 2 == 0) ? color1 : color2;
-			chessboard[x][y] = new Grid(x, y, -1);
+			chessboard[x][y] = new Grid(x, y, -1, color);
 			fillGrid(chessboard[x][y], color);
 
 			//Grid Listener for onclick event
 			let gridListener = document.createElement("div");
-			gridListener.setAttribute("class", "piece x" + x + " y" + y);
+			gridListener.setAttribute("class", "grid x" + x + " y" + y);
 			gridListener.setAttribute("style", `z-index: 10;`)
 			gridListener.setAttribute("onClick", `onClick(event, ${x}, ${y})`);
 			actionLayer.append(gridListener);
@@ -490,7 +490,7 @@ function fillGrid(grid, color) {
 		return;
 
 	if (color == COLOR_ORIGINAL)
-		color = (grid.y % 2 != 0) ^ (grid.x % 2 == 0) ? COLOR_BOARD_DARK : COLOR_BOARD_LIGHT;
+		color = grid.color;
 
 	context.fillStyle = color;
 	context.fillRect(grid.x * GRID_SIZE_P, grid.y * GRID_SIZE_P, GRID_SIZE_P, GRID_SIZE_P);
@@ -538,7 +538,7 @@ function copyBoard(board) {
 	let newBoard = [[],[],[],[],[],[],[],[]];
 	for (let i = 0; i < board.length; i++) {
 		for (let j = 0; j < board.length; j++) {
-			newBoard[i][j] = new Grid(i, j, board[i][j].piece);
+			newBoard[i][j] = new Grid(i, j, board[i][j].piece, board[i][j].color);
 		}
 	}
 	return newBoard;
