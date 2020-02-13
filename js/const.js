@@ -1,18 +1,15 @@
+const CANVAS_LAYER = document.getElementById("canvasLayer");
+
 const CHESS = {King: "King", Queen: "Queen", Rook: "Rook", Bishop: "Bishop", Knight: "Knight", Pawn: "Pawn", None: "None"};
 const VALUE = {King: 200, Queen: 9, Rook: 5, Bishop: 3, Knight: 3, Pawn: 1, None: 0};
 const TEAM = {B: "B", W: "W", None:"N"}
-
-
 
 const BOARD_SIZE = 8;
 const GRID_SIZE_P = Util.vw2px(9);
 const OFFSET_MARGIN = Util.vw2px(9);
 
-console.log(document.getElementById("actionLayer").getBoundingClientRect())
-console.log(document.getElementById("canvasLayer").getBoundingClientRect())
-
-const OFFSET_X_P = document.getElementById("canvasLayer") ? document.getElementById("canvasLayer").getBoundingClientRect().left + OFFSET_MARGIN : 0;
-const OFFSET_Y_P = document.getElementById("canvasLayer") ? document.getElementById("canvasLayer").getBoundingClientRect().top + OFFSET_MARGIN : 0;
+const OFFSET_X_P = CANVAS_LAYER ? CANVAS_LAYER.getBoundingClientRect().left + OFFSET_MARGIN : 0;
+const OFFSET_Y_P = CANVAS_LAYER ? CANVAS_LAYER.getBoundingClientRect().top + OFFSET_MARGIN : 0;
 
 const HIGHLIGHT_P = 3;
 
@@ -21,5 +18,7 @@ const COLOR_BOARD_LIGHT = "#E6BF83";
 const COLOR_BOARD_DARK = "#8B4513";
 const COLOR_HIGHLIGHT = "#7B68EE9A";
 
-document.getElementById("canvasLayer").width = GRID_SIZE_P * BOARD_SIZE;
-document.getElementById("canvasLayer").height = GRID_SIZE_P * BOARD_SIZE;
+if (CANVAS_LAYER) {
+	CANVAS_LAYER.width = GRID_SIZE_P * BOARD_SIZE;
+	CANVAS_LAYER.height = GRID_SIZE_P * BOARD_SIZE;
+}

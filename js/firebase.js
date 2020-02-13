@@ -61,6 +61,28 @@ class Firebase {
 		});
 	}
 
+	static getMatches(ids, user, callback) {
+		let total = Math.floor(ids.length / 10) + 1;
+		let sent = 0;
+		let result = [];
+
+
+		for (let i = 0; i < total; i++) {
+		    var data = ids.slice(i * 10, i * 10 + 10);
+			db.collection(MATCHES_TABLE).where(firebase.firestore.FieldPath.documentId(), "in", data).get().then(async snapshot => {
+				await snapshot.forEach(function(doc) {
+		            result.push([doc.id, doc.data()]);
+		        });
+
+				sent++;
+				if (sent == total) {
+					callback(result);					
+				}
+			});
+		}
+
+	}
+
 	static getUser(id, callback) {
 		db.collection(USERS_TABLE).doc(id).get().then(doc => {
 			console.log("User get: ", doc.data());
@@ -82,19 +104,22 @@ class Firebase {
 		});
 	}
 
-	static createMatch(user) {
+	static createMatch(user, callback) {
 		db.collection(MATCHES_TABLE).add({
 		    black: auth_user.uid,
 		    white: null,
 		    moves: []
 		})
-		.then(function(ref) {
+		.then(async function(ref) {
+			console.log(user.matches);
 			let matches = (user && user.matches) ? user.matches : [];
 			matches.push(ref.id);
 
-			db.collection(USERS_TABLE).doc(auth_user.uid).set({
+			await db.collection(USERS_TABLE).doc(auth_user.uid).set({
 				matches: matches
 			}, { merge: true });
+
+			callback(ref.id);
 		})
 	}
 

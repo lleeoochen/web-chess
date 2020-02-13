@@ -78,6 +78,8 @@ Firebase.authenticate((auth_user) => {
 //Game
 function initGame() {
 	canvasLayer.addEventListener("click", onClick, false);
+	$("#white-player-icon").css("background-color", "#008640");
+
 	initBoard();
 	initPieces();
 }
@@ -102,11 +104,13 @@ function setTitleBar(auth_user) {
 
 	if (!white_title_set) {
 		if (auth_user.uid != match.white) {
-			Firebase.getUser(match.white, (user_data) => {
-				$('#white-player-image').attr('src', user_data.photoURL);
-				$('#white-player-name').text(user_data.displayName);
-				white_title_set = true;
-			});
+			if (match.white) {
+				Firebase.getUser(match.white, (user_data) => {
+					$('#white-player-image').attr('src', user_data.photoURL);
+					$('#white-player-name').text(user_data.displayName);
+					white_title_set = true;
+				});
+			}
 		}
 		else {
 			$('#white-player-image').attr('src', auth_user.photoURL);
