@@ -1,8 +1,8 @@
 @media screen and (orientation:portrait) {
 	:root {
-		--cell-size: 9vw;
+		--cell-size: 10vw;
 		--margin-size: 2vw;
-		--piece-size: 9vw;
+		--piece-size: 10vw;
 		--eaten-piece-size: 3vw;
 		--picture-size: 10vw;
 		--title-size: 3vw;
@@ -11,9 +11,9 @@
 }
 @media screen and (orientation:landscape) {
 	:root {
-		--cell-size: 9vh;
+		--cell-size: 10vh;
 		--margin-size: 2vh;
-		--piece-size: 9vh;
+		--piece-size: 10vh;
 		--eaten-piece-size: 3vh;
 		--picture-size: 10vh;
 		--title-size: 3vh;
@@ -146,8 +146,9 @@ img {
 
 #actionLayer {
 	background-image: linear-gradient(rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.2));
-	padding: var(--margin-size);
-	padding-bottom: calc(var(--cell-size));
+	padding-left: var(--margin-size);
+	padding-right: var(--margin-size);
+	padding-bottom: var(--margin-size);
 	margin-left: auto;
 	margin-right: auto;
     width: calc(var(--margin-size) * 4 + (8 * var(--cell-size)));
@@ -162,4 +163,6 @@ img {
 	margin-left: calc(var(--btn-size) * -2 - var(--margin-size));
 	min-width: 50px;
 	min-height: 25px;*/
+	margin-top: 50px;
+
 }
