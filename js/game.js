@@ -13,6 +13,7 @@ var match_id = Util.getParam("match");
 var my_team = null;
 var moves_applied = 0;
 var king_grid = null;
+var king_moved = null;
 var lastMove = {};
 
 var black_title_set = false;
@@ -226,9 +227,15 @@ function handleChessEvent(x, y) {
 	//Initalize important variables
 	let newGrid = chessboard[x][y];
 	let isLegal = isLegalMove(newGrid);
+	isLegal = isLegal && isKingSafe(oldGrid, newGrid);
 
-	let board = copyBoard(chessboard);
-	isLegal = isLegal && isKingSafe(board, oldGrid, newGrid);
+	//Action0 - Castle
+	if (canCastle(oldGrid, newGrid)) {
+		moveChess(oldGrid, newGrid);
+		Firebase.updateChessboard(match_id, match, oldGrid, newGrid, turn);
+		oldGrid = null;
+		return;
+	}
 
 	//Action1 - Deselect Piece by clicking on illegal grid
 	if (oldGrid != null && !isLegal) {
@@ -246,10 +253,8 @@ function handleChessEvent(x, y) {
 
 	//Action3 - Move Piece by clicking on empty grid or eat enemy by clicking on legal grid. Switch turn.
 	else if (oldGrid != null && oldGrid.get_piece() != null && isLegal) {
-		fillGrid(oldGrid, COLOR_ORIGINAL);
 		moveChess(oldGrid, newGrid);
 		Firebase.updateChessboard(match_id, match, oldGrid, newGrid, turn);
-
 		oldGrid = null;
 
 		//Thinking...
@@ -453,8 +458,7 @@ function isCheckmate() {
 				let validMoves = grid.get_piece().getPossibleMoves(chessboard, grid);
 
 				for (let k = 0; k < validMoves.length; k++) {
-					let board = copyBoard(chessboard);
-					if (isKingSafe(board, grid, chessboard[validMoves[k].x][validMoves[k].y])) {
+					if (isKingSafe(grid, chessboard[validMoves[k].x][validMoves[k].y])) {
 						return false;
 					}
 				}
@@ -489,8 +493,28 @@ function moveChess(oldGrid, newGrid) {
 			else {
 				$('#whitesEaten').append(new_img);
 			}
-
 		}, 300);
+	}
+
+
+	//Castle move
+	if (oldGrid.get_piece().type == CHESS.King) {
+		let row = (oldGrid.get_piece().team == my_team) ? BOARD_SIZE - 1 : 0;
+		if (newGrid.x - oldGrid.x == 2) {
+			chessboard[oldGrid.x + 1][oldGrid.y].piece = chessboard[BOARD_SIZE - 1][oldGrid.y].piece;
+			chessboard[oldGrid.x + 1][oldGrid.y].get_piece().image.setAttribute("class", "piece x" + (oldGrid.x + 1) + " y" + oldGrid.y);
+			chessboard[BOARD_SIZE - 1][oldGrid.y].piece = -1;
+		}
+		else {
+			chessboard[oldGrid.x - 1][oldGrid.y].piece = chessboard[0][oldGrid.y].piece;
+			chessboard[oldGrid.x - 1][oldGrid.y].get_piece().image.setAttribute("class", "piece x" + (oldGrid.x - 1) + " y" + oldGrid.y);
+			chessboard[0][oldGrid.y].piece = -1;
+		}
+	}
+
+	//King has moved, cannot castle anymore
+	if (oldGrid == king_grid) {
+		king_moved = true;
 	}
 
 	//Color last move
@@ -564,21 +588,50 @@ function isLegalMove(grid) {
 }
 
 //Check legal move of chess piece
-function isKingSafe(board, oldGrid, newGrid) {
+function isKingSafe(oldGrid, newGrid) {
+	let board = copyBoard(chessboard);
+
 	let isKingSafe = true;
-
-	board[newGrid.x][newGrid.y].piece = board[oldGrid.x][oldGrid.y].piece;
-	board[oldGrid.x][oldGrid.y].piece = -1;
-
 	let target_grid = king_grid;
-	if (oldGrid == king_grid)
-		target_grid = newGrid;
+
+	if (oldGrid && newGrid) {
+		board[newGrid.x][newGrid.y].piece = board[oldGrid.x][oldGrid.y].piece;
+		board[oldGrid.x][oldGrid.y].piece = -1;
+
+		if (oldGrid == king_grid)
+			target_grid = newGrid;
+	}
 
 	let stats = getValidPieces(board, target_grid, my_team)
 	let enemies = stats.enemies;
 	let friends = stats.friends;
 
 	return enemies.length == 0;
+}
+
+
+function canCastle(oldGrid, newGrid) {
+	if (oldGrid != king_grid) return false;
+	if (newGrid.y != BOARD_SIZE - 1) return false;
+	if (Math.abs(newGrid.x - oldGrid.x) != 2) return false;
+	if (king_moved) return false;
+	if (!isKingSafe()) return false;
+
+	let leftSide = newGrid.x - oldGrid.x < 0;
+	if (leftSide) {
+		for (let x = 1; x < oldGrid.x; x++)
+			if (chessboard[x][BOARD_SIZE - 1].get_piece())
+				return false;
+		return isKingSafe(king_grid, chessboard[king_grid.x - 1][king_grid.y])
+			&& isKingSafe(king_grid, chessboard[king_grid.x - 2][king_grid.y]);
+	}
+	else {
+		for (let x = oldGrid.x + 1; x < BOARD_SIZE - 1; x++)
+			if (chessboard[x][BOARD_SIZE - 1].get_piece())
+				return false;
+		return isKingSafe(king_grid, chessboard[king_grid.x + 1][king_grid.y])
+			&& isKingSafe(king_grid, chessboard[king_grid.x + 2][king_grid.y]);
+	}
 }
 
 
