@@ -18,6 +18,7 @@ var lastMove = {};
 
 var black_title_set = false;
 var white_title_set = false;
+var id = 0;
 
 
 Firebase.authenticate((auth_user) => {
@@ -162,7 +163,6 @@ function initPieces() {
 		white_pawn_pos = 1;
 	}
 
-	let id = 0;
 	initEachPiece(id++, 0, black_pos, TEAM.B, CHESS.Rook);
 	initEachPiece(id++, 7, black_pos, TEAM.B, CHESS.Rook);
 	initEachPiece(id++, 1, black_pos, TEAM.B, CHESS.Knight);
@@ -524,6 +524,14 @@ function moveChess(oldGrid, newGrid) {
 	//Move chess piece from old grid to current grid.
 	newGrid.piece = oldGrid.piece;
 	newGrid.get_piece().image.setAttribute("class", "piece x" + newGrid.x + " y" + newGrid.y);
+
+	//Pawn to Queen
+	if (newGrid.get_piece().type == CHESS.Pawn) {
+		if ((newGrid.get_piece().team == my_team && newGrid.y == 0) || (newGrid.get_piece().team != my_team && newGrid.y == BOARD_SIZE - 1)) {
+			piecesLayer.removeChild(newGrid.get_piece().image);
+			initEachPiece(id++, newGrid.x, newGrid.y, newGrid.get_piece().team, CHESS.Queen);
+		}
+	}
 
 	if (oldGrid == king_grid)
 		king_grid = newGrid;
