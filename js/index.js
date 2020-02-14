@@ -19,11 +19,12 @@ function showMatches() {
 
 	Firebase.getMatches(user.matches, user, async matches_data => {
 		var elements = $();
+		matches_data.sort((a, b) => a.updated - b.updated);
 		await matches_data.forEach(match => {
 			let match_name = match[0];
 			let match_data = match[1];
 			if (match_data.moves && Math.floor(match_data.moves[match_data.moves.length - 1] / 10) != 0)
-				elements = elements.add(`<a class="btn btn-warning match-link" href="${ CHESS_URL }/game.html?match=${ match_name }">${ match_name }</a><br/><br/>`);
+				elements = elements.add(`<a class="btn btn-warning match-link" href="${ CHESS_URL }/game.html?match=${ match_name }">${ match_data.updated.toDate() }</a><br/><br/>`);
 		});
 
 		$('#matches-list').empty();

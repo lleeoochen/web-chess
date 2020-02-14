@@ -108,7 +108,8 @@ class Firebase {
 		db.collection(MATCHES_TABLE).add({
 		    black: auth_user.uid,
 		    white: null,
-		    moves: []
+		    moves: [],
+			updated: new Date()
 		})
 		.then(async function(ref) {
 			console.log(user.matches);
@@ -129,6 +130,7 @@ class Firebase {
 
 		db.collection(MATCHES_TABLE).doc(match_id).set({
 		    moves: moves,
+			updated: new Date()
 		}, { merge: true });
 	}
 
@@ -138,6 +140,7 @@ class Firebase {
 
 		db.collection(MATCHES_TABLE).doc(match_id).set({
 		    moves: moves,
+			updated: new Date()
 		}, { merge: true });
 	}
 

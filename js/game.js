@@ -44,10 +44,14 @@ Firebase.authenticate((auth_user) => {
 			my_team = TEAM.W;
 		}
 
-		initGame();
+		if (my_team) {
+			initGame();
+		}
 	});
 
 	Firebase.listenMatch(match_id, (match_data) => {
+		if (!my_team) return;
+
 		match = match_data;
 
 		if (auth_user.uid == match.black) {
@@ -76,6 +80,7 @@ Firebase.authenticate((auth_user) => {
 				turn = move.turn;
 			}
 			if (isCheckmate()) {
+				console.log("huh");
 				Firebase.checkmate(match_id, match, my_team == TEAM.W ? TEAM.B : TEAM.W);
 			}
 		}
@@ -574,11 +579,13 @@ function updateMoves(grid) {
 
 function updateStats() {
 	let w_stat = stats.white / (stats.white + stats.black) * 100;
+	let b_stat = stats.black / (stats.white + stats.black) * 100;
+	console.log(w_stat)
 
 	if (my_team == TEAM.B)
-		$("#canvasLayer").css("background", `linear-gradient(#FFFFFFFF ${ Math.round(w_stat) }%, #000000FF)`);
+		$("#canvasLayer").css("background", `linear-gradient(#FFFFFFFF ${ Math.round(w_stat) }%, #000000FF ${ Math.round(b_stat) }%)`);
 	else
-		$("#canvasLayer").css("background", `linear-gradient(#000000FF, #FFFFFFFF ${ Math.round(w_stat) }%)`);
+		$("#canvasLayer").css("background", `linear-gradient(#000000FF ${ Math.round(b_stat) }%, #FFFFFFFF ${ Math.round(w_stat) }%)`);
 }
 
 //Clear and hide all possible moves
