@@ -72,7 +72,7 @@ img {
 
 	position: absolute;
 	float: left;
-	transition: .4s all ease;
+	transition: .2s all ease;
 }
 
 .eaten-piece {
