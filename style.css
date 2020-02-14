@@ -135,7 +135,6 @@ img {
 	left: 0;
 	position: absolute;
 	padding: var(--margin-size);
-	background-image: linear-gradient(rgba(0, 0, 0, 1), rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 1));
 }
 
 #canvas-wrap {
@@ -144,7 +143,7 @@ img {
 }
 
 #actionLayer {
-	background-image: linear-gradient(rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 1));
+	background-image: linear-gradient(rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.2));
 	padding: var(--margin-size);
 	padding-bottom: calc(var(--cell-size));
 	margin-left: auto;

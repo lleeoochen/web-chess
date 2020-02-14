@@ -13,12 +13,17 @@ var match_id = Util.getParam("match");
 var my_team = null;
 var moves_applied = 0;
 var king_grid = null;
-var king_moved = null;
+var king_moved = false;
+var other_king_moved = false;
 var lastMove = {};
 
 var black_title_set = false;
 var white_title_set = false;
 var id = 0;
+var stats = {
+	black: 29,
+	white: 29
+};
 
 
 Firebase.authenticate((auth_user) => {
@@ -83,6 +88,7 @@ function initGame() {
 	canvasLayer.addEventListener("click", onClick, false);
 	$("#white-player-icon").css("background-color", "#008640");
 
+	updateStats();
 	initBoard();
 	initPieces();
 }
@@ -476,6 +482,11 @@ function moveChess(oldGrid, newGrid) {
 	//Remove chess piece being eaten 
 	if (newGrid.get_piece() != null) {
 
+		if (newGrid.get_piece().team == TEAM.B)
+			stats.black -= VALUE[newGrid.get_piece().type];
+		else
+			stats.white -= VALUE[newGrid.get_piece().type];
+
 		var old_img = oldGrid.get_piece().image
 		var new_img = newGrid.get_piece().image;
 		var newGridTeam = newGrid.get_piece().team;
@@ -498,23 +509,29 @@ function moveChess(oldGrid, newGrid) {
 
 
 	//Castle move
-	if (oldGrid.get_piece().type == CHESS.King) {
-		let row = (oldGrid.get_piece().team == my_team) ? BOARD_SIZE - 1 : 0;
-		if (newGrid.x - oldGrid.x == 2) {
-			chessboard[oldGrid.x + 1][oldGrid.y].piece = chessboard[BOARD_SIZE - 1][oldGrid.y].piece;
-			chessboard[oldGrid.x + 1][oldGrid.y].get_piece().image.setAttribute("class", "piece x" + (oldGrid.x + 1) + " y" + oldGrid.y);
-			chessboard[BOARD_SIZE - 1][oldGrid.y].piece = -1;
-		}
-		else {
-			chessboard[oldGrid.x - 1][oldGrid.y].piece = chessboard[0][oldGrid.y].piece;
-			chessboard[oldGrid.x - 1][oldGrid.y].get_piece().image.setAttribute("class", "piece x" + (oldGrid.x - 1) + " y" + oldGrid.y);
-			chessboard[0][oldGrid.y].piece = -1;
+	if (my_team == oldGrid.get_piece().team && !king_moved || my_team != oldGrid.get_piece().team && !other_king_moved) {
+		if (oldGrid.get_piece().type == CHESS.King) {
+			let row = (oldGrid.get_piece().team == my_team) ? BOARD_SIZE - 1 : 0;
+			if (newGrid.x - oldGrid.x == 2) {
+				chessboard[oldGrid.x + 1][oldGrid.y].piece = chessboard[BOARD_SIZE - 1][oldGrid.y].piece;
+				chessboard[oldGrid.x + 1][oldGrid.y].get_piece().image.setAttribute("class", "piece x" + (oldGrid.x + 1) + " y" + oldGrid.y);
+				chessboard[BOARD_SIZE - 1][oldGrid.y].piece = -1;
+			}
+			else {
+				chessboard[oldGrid.x - 1][oldGrid.y].piece = chessboard[0][oldGrid.y].piece;
+				chessboard[oldGrid.x - 1][oldGrid.y].get_piece().image.setAttribute("class", "piece x" + (oldGrid.x - 1) + " y" + oldGrid.y);
+				chessboard[0][oldGrid.y].piece = -1;
+			}
 		}
 	}
 
 	//King has moved, cannot castle anymore
 	if (oldGrid == king_grid) {
 		king_moved = true;
+	}
+
+	if (my_team != oldGrid.get_piece().team && oldGrid.get_piece().type == CHESS.King) {
+		other_king_moved = true;
 	}
 
 	//Color last move
@@ -530,6 +547,11 @@ function moveChess(oldGrid, newGrid) {
 		if ((newGrid.get_piece().team == my_team && newGrid.y == 0) || (newGrid.get_piece().team != my_team && newGrid.y == BOARD_SIZE - 1)) {
 			piecesLayer.removeChild(newGrid.get_piece().image);
 			initEachPiece(id++, newGrid.x, newGrid.y, newGrid.get_piece().team, CHESS.Queen);
+
+			if (newGrid.get_piece().team == TEAM.B)
+				stats.black += VALUE[CHESS.Queen] - VALUE[CHESS.Pawn];
+			else
+				stats.white += VALUE[CHESS.Queen] - VALUE[CHESS.Pawn];
 		}
 	}
 
@@ -539,6 +561,7 @@ function moveChess(oldGrid, newGrid) {
 	oldGrid.piece = -1;
 	moves_applied += 1;
 	switchTurn();
+	updateStats();
 }
 
 
@@ -548,6 +571,15 @@ function updateMoves(grid) {
 	setMovesColor(COLOR_HIGHLIGHT);
 }
 
+
+function updateStats() {
+	let w_stat = stats.white / (stats.white + stats.black) * 100;
+
+	if (my_team == TEAM.B)
+		$("#canvasLayer").css("background", `linear-gradient(#FFFFFFFF ${ Math.round(w_stat) }%, #000000FF)`);
+	else
+		$("#canvasLayer").css("background", `linear-gradient(#000000FF, #FFFFFFFF ${ Math.round(w_stat) }%)`);
+}
 
 //Clear and hide all possible moves
 function clearMoves() {
