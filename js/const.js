@@ -23,3 +23,6 @@ if (CANVAS_LAYER) {
 	CANVAS_LAYER.width = GRID_SIZE_P * BOARD_SIZE;
 	CANVAS_LAYER.height = GRID_SIZE_P * BOARD_SIZE;
 }
+
+const CHESS_URL = "/web-chess"
+// const CHESS_URL = ""

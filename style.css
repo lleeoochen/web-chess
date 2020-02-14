@@ -6,6 +6,7 @@
 		--eaten-piece-size: 3vw;
 		--picture-size: 10vw;
 		--title-size: 3vw;
+		--btn-size: 4vw;
 	}
 }
 @media screen and (orientation:landscape) {
@@ -16,11 +17,12 @@
 		--eaten-piece-size: 3vh;
 		--picture-size: 10vh;
 		--title-size: 3vh;
+		--btn-size: 4vh;
 	}
 }
 
 body {
-	overflow: hidden;
+	overflow-x: hidden;
 }
 
 h3 {
@@ -149,4 +151,15 @@ img {
 	margin-left: auto;
 	margin-right: auto;
     width: calc(var(--margin-size) * 4 + (8 * var(--cell-size)));
+}
+
+#home-btn {/*
+	width: calc(var(--btn-size) * 2);
+	height: var(--btn-size);
+	font-size: 10px;
+	float: left;
+	margin-top: var(--margin-size);
+	margin-left: calc(var(--btn-size) * -2 - var(--margin-size));
+	min-width: 50px;
+	min-height: 25px;*/
 }

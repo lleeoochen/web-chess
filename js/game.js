@@ -96,7 +96,22 @@ function initGame() {
 	updateStats();
 	initBoard();
 	initPieces();
+	initToolbar();
 }
+
+
+function initToolbar() {
+	// Signout button
+	$('#signout-btn').on('click', (e) => {
+		firebase.auth().signOut();
+		location.reload();
+	});
+
+	$('#home-btn').on('click', (e) => {
+		window.location = CHESS_URL + "/";
+	});
+}
+
 
 //Set player info
 function setTitleBar(auth_user) {
