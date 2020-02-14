@@ -53,7 +53,7 @@ Firebase.authenticate((auth_user) => {
 
 		if (match && match.moves) {
 			for (; match.moves.length != moves_applied;) {
-				if (match.moves[moves_applied] / 10 < 10) {
+				if (Math.floor(match.moves[moves_applied] / 10) == 0) {
 					swal({title: `Checkmate. ${ match.moves[moves_applied] == 0 ? "White" : "Black" } Team Wins!`});
 					return;
 				}
@@ -483,11 +483,11 @@ function moveChess(oldGrid, newGrid) {
 			new_img.setAttribute("class", "eaten-piece");
 			old_img.style.zIndex = "0";
 
-			if (newGridTeam == my_team) {
-				$('#friendsEaten').append(new_img);
+			if (newGridTeam == TEAM.B) {
+				$('#blacksEaten').append(new_img);
 			}
 			else {
-				$('#enemiesEaten').append(new_img);
+				$('#whitesEaten').append(new_img);
 			}
 
 		}, 300);
@@ -581,13 +581,13 @@ function isKingSafe(board, oldGrid, newGrid) {
 function switchTurn() {
 	if (turn == TEAM.B) {
 		turn = TEAM.W;
-		$("#white-player-icon").css("background-color", "#008640");
-		$("#black-player-icon").css("background-color", "");
+		$("#white-player-image").css("border", "calc(var(--picture-size) / 10) solid #008640");
+		$("#black-player-image").css("border", "");
 	}
 	else {
 		turn = TEAM.B;
-		$("#black-player-icon").css("background-color", "#008640");
-		$("#white-player-icon").css("background-color", "");
+		$("#black-player-image").css("border", "calc(var(--picture-size) / 10) solid #008640");
+		$("#white-player-image").css("border", "");
 	}
 }
 

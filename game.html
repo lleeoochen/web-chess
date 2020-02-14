@@ -26,25 +26,24 @@
 	  </div>
 	</div>
 
-	<div id="layerWrap">
-		<div id="actionLayer">
-			<div class="row">
-				<img id="black-player-image" class="player-pic pull-left" src="assets/profile.jpg"/>
-				<div class="pull-left white text-left">
-					<h3 id="black-player-name">-</h3>
-					<img id="black-player-icon" class="eaten-piece" src="assets/BRook.svg"/>
-				</div>
-				<img id="white-player-image" class="player-pic pull-right" src="assets/profile.jpg"/>
-				<div class="pull-right white text-right">
-					<h3 id="white-player-name">-</h3>
-					<img id="white-player-icon" class="eaten-piece" src="assets/WRook.svg"/>
-				</div>
+	<div id="actionLayer">
+		<div class="row">
+			<img id="black-player-image" class="player-pic pull-left" src="assets/profile.jpg"/>
+			<div class="pull-left white text-left">
+				<h3 id="black-player-name">-</h3>
+				<div id="blacksEaten" class="row eaten-panel"></div>
 			</div>
+			<img id="white-player-image" class="player-pic pull-right" src="assets/profile.jpg"/>
+			<div class="pull-right white text-right">
+				<h3 id="white-player-name">-</h3>
+				<div id="whitesEaten" class="row eaten-panel"></div>
+			</div>
+		</div>
+		<br/>
+		<div id="canvas-wrap">
 			<canvas id="canvasLayer"></canvas>
 			<div id="gridsLayer"></div>
 			<div id="piecesLayer"></div>
-			<div id="friendsEaten" class="row eaten-panel"></div>
-			<div id="enemiesEaten" class="row eaten-panel"></div>
 		</div>
 	</div>
 

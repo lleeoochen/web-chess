@@ -3,6 +3,7 @@
 		--cell-size: 9vw;
 		--margin-size: 2vw;
 		--piece-size: 9vw;
+		--eaten-piece-size: 3vw;
 		--picture-size: 10vw;
 		--title-size: 3vw;
 	}
@@ -12,10 +13,47 @@
 		--cell-size: 9vh;
 		--margin-size: 2vh;
 		--piece-size: 9vh;
+		--eaten-piece-size: 3vh;
 		--picture-size: 10vh;
 		--title-size: 3vh;
 	}
 }
+
+body {
+	overflow: hidden;
+}
+
+h3 {
+	font-size: calc(var(--title-size)) !important;
+}
+
+img {
+    -khtml-user-select: none;
+    -o-user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+.x0 { left: calc(var(--margin-size) + (0 * var(--cell-size))); }
+.x1 { left: calc(var(--margin-size) + (1 * var(--cell-size))); }
+.x2 { left: calc(var(--margin-size) + (2 * var(--cell-size))); }
+.x3 { left: calc(var(--margin-size) + (3 * var(--cell-size))); }
+.x4 { left: calc(var(--margin-size) + (4 * var(--cell-size))); }
+.x5 { left: calc(var(--margin-size) + (5 * var(--cell-size))); }
+.x6 { left: calc(var(--margin-size) + (6 * var(--cell-size))); }
+.x7 { left: calc(var(--margin-size) + (7 * var(--cell-size))); }
+
+.y0 { top: calc(var(--margin-size) + (0 * var(--cell-size))); }
+.y1 { top: calc(var(--margin-size) + (1 * var(--cell-size))); }
+.y2 { top: calc(var(--margin-size) + (2 * var(--cell-size))); }
+.y3 { top: calc(var(--margin-size) + (3 * var(--cell-size))); }
+.y4 { top: calc(var(--margin-size) + (4 * var(--cell-size))); }
+.y5 { top: calc(var(--margin-size) + (5 * var(--cell-size))); }
+.y6 { top: calc(var(--margin-size) + (6 * var(--cell-size))); }
+.y7 { top: calc(var(--margin-size) + (7 * var(--cell-size))); }
+
+.white { color: white; }
 
 .grid {
 	width: var(--piece-size);
@@ -27,34 +65,49 @@
 .piece {
 	width: calc(var(--piece-size) * 0.8);
 	height: calc(var(--piece-size) * 0.8);
-	transition: .4s all ease;
-	position: absolute;
 	margin-top: calc(var(--piece-size) * 0.1);
 	margin-left: calc(var(--piece-size) * 0.1);
+
+	position: absolute;
+	float: left;
+	transition: .4s all ease;
 }
 
 .eaten-piece {
-	width: calc(var(--piece-size) * 0.5);
-	height: calc(var(--piece-size) * 0.5);
+	width: var(--eaten-piece-size);
+	height: var(--eaten-piece-size);
 }
 
-.x0 { left: calc(var(--margin-size) * 2 + (0 * var(--cell-size))); }
-.x1 { left: calc(var(--margin-size) * 2 + (1 * var(--cell-size))); }
-.x2 { left: calc(var(--margin-size) * 2 + (2 * var(--cell-size))); }
-.x3 { left: calc(var(--margin-size) * 2 + (3 * var(--cell-size))); }
-.x4 { left: calc(var(--margin-size) * 2 + (4 * var(--cell-size))); }
-.x5 { left: calc(var(--margin-size) * 2 + (5 * var(--cell-size))); }
-.x6 { left: calc(var(--margin-size) * 2 + (6 * var(--cell-size))); }
-.x7 { left: calc(var(--margin-size) * 2 + (7 * var(--cell-size))); }
+.eaten-panel {
+	height: calc(var(--eaten-piece-size) * 2);
+	width: calc(var(--eaten-piece-size) * 9);
+	padding-left: 10px;
+	padding-right: 10px;
+}
 
-.y0 { top: calc(var(--margin-size) * 3 + var(--picture-size) + (0 * var(--cell-size))); }
-.y1 { top: calc(var(--margin-size) * 3 + var(--picture-size) + (1 * var(--cell-size))); }
-.y2 { top: calc(var(--margin-size) * 3 + var(--picture-size) + (2 * var(--cell-size))); }
-.y3 { top: calc(var(--margin-size) * 3 + var(--picture-size) + (3 * var(--cell-size))); }
-.y4 { top: calc(var(--margin-size) * 3 + var(--picture-size) + (4 * var(--cell-size))); }
-.y5 { top: calc(var(--margin-size) * 3 + var(--picture-size) + (5 * var(--cell-size))); }
-.y6 { top: calc(var(--margin-size) * 3 + var(--picture-size) + (6 * var(--cell-size))); }
-.y7 { top: calc(var(--margin-size) * 3 + var(--picture-size) + (7 * var(--cell-size))); }
+.match-link {
+	width: 30vw;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.modal { text-align: center; }
+.modal-dialog {
+  display: inline-block;
+  text-align: left;
+  vertical-align: middle;
+}
+
+.player-pic {
+	width: var(--picture-size);
+	height: var(--picture-size);
+	margin: var(--margin-size);
+	border-radius: calc(var(--picture-size) / 10);
+}
+.player-pic.pull-left  { margin-left: calc(var(--margin-size)); }
+.player-pic.pull-right { margin-right: calc(var(--margin-size)); }
+
 
 #body {
 	text-align: center;
@@ -78,98 +131,23 @@
 	margin-bottom: 10px;
 }
 
-#layerWrap {
-	float: left;
-	position: relative;
-	left: 50%;
+#canvasLayer {
+	left: 0;
+	position: absolute;
+	padding: var(--margin-size);
+	background-image: linear-gradient(rgba(0, 0, 0, 1), rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 1));
 }
 
-#canvasLayer {
-	float: left;
-	position: relative;
-	padding: var(--margin-size);
-	background-image: linear-gradient(rgba(0, 0, 0, 1), rgba(0, 0, 0, 0.2));
-	margin-bottom: calc(var(--margin-size));
+#canvas-wrap {
+    position: relative;
+    height: calc(var(--margin-size) * 2 + (8 * var(--cell-size)));
 }
 
 #actionLayer {
-	float: left;
-	position: relative;
-	left: -50%;
 	background-image: linear-gradient(rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 1));
 	padding: var(--margin-size);
-	padding-top: 0;
-	padding-bottom: calc(var(--margin-size));
-}
-
-#matches-display {
-	color: white;
-}
-
-img {
-    -khtml-user-select: none;
-    -o-user-select: none;
-    -moz-user-select: none;
-    -webkit-user-select: none;
-    user-select: none;
-}
-
-.match-link {
-	width: 30vw;
-	white-space: nowrap;
-	overflow: hidden;
-	text-overflow: ellipsis;
-}
-
-
-.modal {
-  text-align: center;
-}
-
-@media screen and (min-width: 768px) { 
-  .modal:before {
-    display: inline-block;
-    vertical-align: middle;
-    content: " ";
-    height: 100%;
-  }
-}
-
-.modal-dialog {
-  display: inline-block;
-  text-align: left;
-  vertical-align: middle;
-}
-
-body {
-	overflow-x: hidden;
-}
-
-.eaten-panel {
-	display: contents;
-	background-color: white;
-}
-
-.player-pic {
-	width: var(--picture-size);
-	height: var(--picture-size);
-	margin: var(--margin-size);
-	background-color: white;
-	border-radius: calc(var(--picture-size) / 10);
-}
-
-.player-pic.pull-left {
-	margin-left: calc(var(--margin-size));
-}
-
-.player-pic.pull-right {
-	margin-right: calc(var(--margin-size));
-}
-
-.white {
-	color: white;
-}
-
-h3 {
-	font-size: calc(var(--title-size)) !important;
+	padding-bottom: calc(var(--cell-size));
+	margin-left: auto;
+	margin-right: auto;
+    width: calc(var(--margin-size) * 4 + (8 * var(--cell-size)));
 }
