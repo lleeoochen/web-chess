@@ -13,6 +13,7 @@ var match_id = Util.getParam("match");
 var my_team = null;
 var moves_applied = 0;
 var king_grid = null;
+var lastMove = {};
 
 var black_title_set = false;
 var white_title_set = false;
@@ -247,7 +248,6 @@ function handleChessEvent(x, y) {
 	else if (oldGrid != null && oldGrid.get_piece() != null && isLegal) {
 		fillGrid(oldGrid, COLOR_ORIGINAL);
 		moveChess(oldGrid, newGrid);
-		clearMoves();
 		Firebase.updateChessboard(match_id, match, oldGrid, newGrid, turn);
 
 		oldGrid = null;
@@ -491,16 +491,11 @@ function moveChess(oldGrid, newGrid) {
 			}
 
 		}, 300);
-
-		// if (newGrid.get_piece().type == CHESS.King) {
-		// 	swal({
-		// 		title: `Checkmate. ${ newGrid.get_piece().team == TEAM.B ? "White" : "Black" } Team Wins!`
-		// 	}, () => {
-		// 		window.location.reload();
-		// 	});
-		// }
 	}
 
+	//Color last move
+	clearMoves();
+	colorLatestMove(oldGrid, newGrid);
 
 	//Move chess piece from old grid to current grid.
 	newGrid.piece = oldGrid.piece;
@@ -546,6 +541,16 @@ function fillGrid(grid, color) {
 
 	context.fillStyle = color;
 	context.fillRect(grid.x * GRID_SIZE_P, grid.y * GRID_SIZE_P, GRID_SIZE_P, GRID_SIZE_P);
+}
+
+//Set last move grid color
+function colorLatestMove(oldGrid, newGrid) {
+	fillGrid(lastMove.oldGrid, COLOR_ORIGINAL);
+	fillGrid(lastMove.newGrid, COLOR_ORIGINAL);
+	lastMove.oldGrid = oldGrid;
+	lastMove.newGrid = newGrid;
+	fillGrid(lastMove.oldGrid, COLOR_LAST_MOVE);
+	fillGrid(lastMove.newGrid, COLOR_LAST_MOVE);
 }
 
 
