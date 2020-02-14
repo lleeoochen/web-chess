@@ -530,7 +530,7 @@ function moveChess(oldGrid, newGrid) {
 
 	//Castle move
 	if (my_team == oldGrid.get_piece().team && !king_moved || my_team != oldGrid.get_piece().team && !other_king_moved) {
-		if (oldGrid.get_piece().type == CHESS.King) {
+		if (oldGrid.get_piece().type == CHESS.King && Math.abs(newGrid.x - oldGrid.x) == 2) {
 			let row = (oldGrid.get_piece().team == my_team) ? BOARD_SIZE - 1 : 0;
 			if (newGrid.x - oldGrid.x == 2) {
 				chessboard[oldGrid.x + 1][oldGrid.y].piece = chessboard[BOARD_SIZE - 1][oldGrid.y].piece;
