@@ -56,6 +56,8 @@ img {
 .y7 { top: calc(var(--margin-size) + (7 * var(--cell-size))); }
 
 .white { color: white; }
+.bg-white { background-color: white; }
+.bg-black { background-color: black; }
 
 .grid {
 	width: var(--piece-size);
@@ -73,6 +75,14 @@ img {
 	position: absolute;
 	float: left;
 	transition: .2s all ease;
+    z-index: 3;
+}
+
+.canvas-border {
+	position: absolute;
+    width: calc(var(--margin-size) * 2 + (8 * var(--cell-size)));
+    height: calc(var(--margin-size) * 2 + (8 * var(--cell-size)));
+    z-index: 0;
 }
 
 .eaten-piece {
@@ -137,6 +147,7 @@ img {
 	left: 0;
 	position: absolute;
 	padding: var(--margin-size);
+	z-index: 3;
 }
 
 #canvas-wrap {
@@ -154,15 +165,6 @@ img {
     width: calc(var(--margin-size) * 4 + (8 * var(--cell-size)));
 }
 
-#home-btn {/*
-	width: calc(var(--btn-size) * 2);
-	height: var(--btn-size);
-	font-size: 10px;
-	float: left;
-	margin-top: var(--margin-size);
-	margin-left: calc(var(--btn-size) * -2 - var(--margin-size));
-	min-width: 50px;
-	min-height: 25px;*/
+#home-btn {
 	margin-top: 50px;
-
 }

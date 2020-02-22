@@ -32,6 +32,13 @@ class Util {
 			return px * document.documentElement.clientWidth / 100;
 	}
 
+	static reloadStylesheets() {
+	    var queryString = '?reload=' + new Date().getTime();
+	    $('link[rel="stylesheet"]').each(function () {
+	        this.href = this.href.replace(/\?.*|$/, queryString);
+	    });
+	}
+
 	static pack(oldGrid, newGrid, turn) {
 		return oldGrid.x * 10000 + oldGrid.y * 1000 + newGrid.x * 100 + newGrid.y * 10 + (turn == TEAM.W ? 1 : 0);
 	}

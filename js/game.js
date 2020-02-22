@@ -516,7 +516,7 @@ function moveChess(oldGrid, newGrid) {
 		setTimeout(() => {
 			piecesLayer.removeChild(new_img);
 			new_img.setAttribute("class", "eaten-piece");
-			old_img.style.zIndex = "0";
+			old_img.style.zIndex = "";
 
 			if (newGridTeam == TEAM.B) {
 				$('#blacksEaten').append(new_img);
@@ -593,14 +593,12 @@ function updateMoves(grid) {
 
 
 function updateStats() {
-	let w_stat = stats.white / (stats.white + stats.black) * 100;
-	let b_stat = stats.black / (stats.white + stats.black) * 100;
-	console.log(w_stat)
+	let w_stat = stats.white / (stats.white + stats.black);
+	let b_stat = stats.black / (stats.white + stats.black);
+	let w_pos = my_team == TEAM.W ? "bottom" : "top";
 
-	if (my_team == TEAM.B)
-		$("#canvasLayer").css("background", `linear-gradient(#FFFFFFFF ${ Math.round(w_stat) }%, #000000FF ${ Math.round(b_stat) }%)`);
-	else
-		$("#canvasLayer").css("background", `linear-gradient(#000000FF ${ Math.round(b_stat) }%, #FFFFFFFF ${ Math.round(w_stat) }%)`);
+	$(".canvas-border.bg-white").css("height", `calc(${w_stat} * (var(--margin-size) * 2 + (8 * var(--cell-size))))`);
+	$(".canvas-border.bg-white").css(w_pos, `0`);
 }
 
 //Clear and hide all possible moves

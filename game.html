@@ -13,7 +13,7 @@
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap-theme.min.css" integrity="sha384-6pzBo3FDv/PJ8r2KRkGHifhEocL+1X2rVCTTkUfGk7/0pbek5mMa1upzvWbrUbOZ" crossorigin="anonymous">
 </head>
 
-<body id="body">
+<body id="body" onresize="location.reload();">
 
 	<!-- Authentication Popup Window -->
 	<div id="modal" class="modal" tabindex="-1" role="dialog">
@@ -41,6 +41,8 @@
 			</div>
 		</div>
 		<div id="canvas-wrap">
+			<div class="canvas-border bg-black"></div>
+			<div class="canvas-border bg-white"></div>
 			<canvas id="canvasLayer"></canvas>
 			<div id="gridsLayer"></div>
 			<div id="piecesLayer"></div>
