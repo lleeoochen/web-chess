@@ -98,16 +98,16 @@ img {
 }
 
 .match-link {
-	width: 30vw;
+	width: 20vw;
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
-	font-size: 2vw !important;
+	font-size: 1.5vw !important;
 	color: black !important;
 }
 
 .match-link-date {
-	font-size: 1.5vw !important;
+	font-size: 1.2vw !important;
 	color: black !important;
 	font-style: italic;
 }
