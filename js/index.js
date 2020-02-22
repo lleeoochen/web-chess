@@ -21,8 +21,21 @@ function showMatches() {
 		await matches_data.forEach(match => {
 			let match_name = match[0];
 			let match_data = match[1];
-			if (match_data.moves && Math.floor(match_data.moves[match_data.moves.length - 1] / 10) != 0)
-				elements = elements.add(`<a class="btn btn-warning match-link" href="${ CHESS_URL }/game.html?match=${ match_name }">${ match_data.updated.toDate() }</a><br/><br/>`);
+			let match_opponent = match[2];
+
+			let d = match_data.updated.toDate();
+			let d_str = d.getMonth() + "/" + d.getDate() + " " + ("0" + d.getHours()).slice(-2) + ":" + ("0" + d.getMinutes()).slice(-2);
+
+			if (match_data.moves && Math.floor(match_data.moves[match_data.moves.length - 1] / 10) != 0) {
+				elements = elements.add(`
+					<a class="btn btn-warning match-link" href="${ CHESS_URL }/game.html?match=${ match_name }">
+						${ match_opponent ? match_opponent.displayName : "New Match" }<br/>
+						<div class="match-link-date"> ${ d_str } </div>
+					</a>
+					<br/>
+					<br/>`
+				);
+			}
 		});
 
 		$('#matches-list').empty();

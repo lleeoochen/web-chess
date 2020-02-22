@@ -9,14 +9,14 @@ class Firebase {
 	static init() {
 		// General Init
 		let firebaseConfig = {
-		    apiKey: "AIzaSyDGTEzcebCXK3B4e--I2itLD0lBtXTQPYs",
-		    authDomain: "web-chess-e5c05.firebaseapp.com",
-		    databaseURL: "https://web-chess-e5c05.firebaseio.com",
-		    projectId: "web-chess-e5c05",
-		    storageBucket: "web-chess-e5c05.appspot.com",
-		    messagingSenderId: "730184283244",
-		    appId: "1:730184283244:web:34b7cb61dfe77db0049449",
-		    measurementId: "G-8C72YJXJ07"
+			apiKey: "AIzaSyDGTEzcebCXK3B4e--I2itLD0lBtXTQPYs",
+			authDomain: "web-chess-e5c05.firebaseapp.com",
+			databaseURL: "https://web-chess-e5c05.firebaseio.com",
+			projectId: "web-chess-e5c05",
+			storageBucket: "web-chess-e5c05.appspot.com",
+			messagingSenderId: "730184283244",
+			appId: "1:730184283244:web:34b7cb61dfe77db0049449",
+			measurementId: "G-8C72YJXJ07"
 		};
 		firebase.initializeApp(firebaseConfig);
 		db = firebase.firestore();
@@ -66,21 +66,46 @@ class Firebase {
 		let sent = 0;
 		let result = [];
 
+		// let user_cache = {};
 
 		for (let i = 0; i < total; i++) {
-		    var data = ids.slice(i * 10, i * 10 + 10);
+			var data = ids.slice(i * 10, i * 10 + 10);
 			db.collection(MATCHES_TABLE).where(firebase.firestore.FieldPath.documentId(), "in", data).get().then(async snapshot => {
 				await snapshot.forEach(function(doc) {
-		            result.push([doc.id, doc.data()]);
-		        });
+					let id = (auth_user.uid == doc.data()["black"]) ? doc.data()["white"] : doc.data()["black"];
 
-				sent++;
-				if (sent == total) {
-					callback(result);					
-				}
+					if (id) {
+						Firebase.getUser(id, (user) => {
+							result.push([doc.id, doc.data(), user]);
+							sent ++;
+							if (sent == ids.length) {
+								callback(result);					
+							}
+						});
+					}
+					else {
+						sent ++;
+						result.push([doc.id, doc.data(), null]);
+						if (sent == ids.length) {
+							callback(result);					
+						}
+					}
+					// if (user_cache[id]) {
+					// 	 result.push([doc.id, doc.data(), user_cache[id]]);
+					// }
+					// else {
+					// 	Firebase.getUser(id, (user) => {
+					// 		result.push([doc.id, doc.data(), user]);
+					// 		user_cache[id] = user;
+					// 		sent ++;
+					// 		if (sent == ids.length) {
+					// 			callback(result);					
+					// 		}
+					// 	});
+					// }
+				});
 			});
 		}
-
 	}
 
 	static getUser(id, callback) {
@@ -106,9 +131,9 @@ class Firebase {
 
 	static createMatch(user, callback) {
 		db.collection(MATCHES_TABLE).add({
-		    black: auth_user.uid,
-		    white: null,
-		    moves: [],
+			black: auth_user.uid,
+			white: null,
+			moves: [],
 			updated: new Date()
 		})
 		.then(async function(ref) {
@@ -129,7 +154,7 @@ class Firebase {
 		moves.push(Util.pack(oldGrid, newGrid, turn));
 
 		db.collection(MATCHES_TABLE).doc(match_id).set({
-		    moves: moves,
+			moves: moves,
 			updated: new Date()
 		}, { merge: true });
 	}
@@ -139,14 +164,14 @@ class Firebase {
 		moves.push(winning_team == TEAM.W ? 0 : 1); // checkmate
 
 		db.collection(MATCHES_TABLE).doc(match_id).set({
-		    moves: moves,
+			moves: moves,
 			updated: new Date()
 		}, { merge: true });
 	}
 
 	static registerOpponent(match_id, user_id) {
 		db.collection(MATCHES_TABLE).doc(match_id).set({
-		    white: user_id,
+			white: user_id,
 		}, { merge: true });
 
 		db.collection(USERS_TABLE).doc(user_id).get().then(doc => {
