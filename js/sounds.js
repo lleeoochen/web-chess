@@ -10,6 +10,12 @@ var sounds = {
   "uhoh" : {
     url : "assets/uhoh.mp3"
   },
+  "opening" : {
+    url : "assets/opening.m4a"
+  },
+  "omgwow" : {
+    url : "assets/omgwow.mp3"
+  },
 };
 
 

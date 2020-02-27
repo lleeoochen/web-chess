@@ -16,6 +16,7 @@ var king_grid = null;
 var king_moved = false;
 var other_king_moved = false;
 var lastMove = {};
+var first_move = true;
 
 var black_title_set = false;
 var white_title_set = false;
@@ -80,8 +81,8 @@ Firebase.authenticate((auth_user) => {
 				turn = move.turn;
 			}
 			if (isCheckmate()) {
-				console.log("huh");
 				Firebase.checkmate(match_id, match, my_team == TEAM.W ? TEAM.B : TEAM.W);
+				playSound("omgwow");
 			}
 		}
 	});
@@ -254,6 +255,8 @@ function handleChessEvent(x, y) {
 	let newGrid = chessboard[x][y];
 	let isLegal = isLegalMove(newGrid);
 	isLegal = isLegal && isKingSafe(oldGrid, newGrid);
+
+	first_move = false;
 
 	//Action0 - Castle
 	if (canCastle(oldGrid, newGrid)) {
@@ -499,12 +502,17 @@ function isCheckmate() {
 function moveChess(oldGrid, newGrid) {
 	if (oldGrid.get_piece() == null) return;
 
-	if (!newGrid.get_piece())
-		playSound("doo");
-	else if (newGrid.get_piece().team == my_team)
-		playSound("uhoh");
-	else
-		playSound("yay");
+	if (!first_move) {
+		if (!newGrid.get_piece())
+			playSound("doo");
+		else if (newGrid.get_piece().team == my_team)
+			playSound("uhoh");
+		else
+			playSound("yay");
+	}
+	else {
+		playSound("opening");
+	}
 
 	//Remove chess piece being eaten 
 	if (newGrid.get_piece() != null) {
