@@ -499,6 +499,13 @@ function isCheckmate() {
 function moveChess(oldGrid, newGrid) {
 	if (oldGrid.get_piece() == null) return;
 
+	if (!newGrid.get_piece())
+		playSound("doo");
+	else if (newGrid.get_piece().team == my_team)
+		playSound("uhoh");
+	else
+		playSound("yay");
+
 	//Remove chess piece being eaten 
 	if (newGrid.get_piece() != null) {
 
