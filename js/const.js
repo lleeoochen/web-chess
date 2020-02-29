@@ -5,12 +5,7 @@ const VALUE = {King: 200, Queen: 9, Rook: 5, Bishop: 3, Knight: 3, Pawn: 1, None
 const TEAM = {B: "B", W: "W", None:"N"}
 
 const BOARD_SIZE = 8;
-const GRID_SIZE_P = Util.vw2px(10);
-const OFFSET_MARGIN = Util.vw2px(10);
-
-const OFFSET_X_P = CANVAS_LAYER ? CANVAS_LAYER.getBoundingClientRect().left + OFFSET_MARGIN : 0;
-const OFFSET_Y_P = CANVAS_LAYER ? CANVAS_LAYER.getBoundingClientRect().top + OFFSET_MARGIN : 0;
-
+const GRID_SIZE_P = (window.innerHeight > window.innerWidth) ? Util.vw2px(11.5) : Util.vw2px(10);
 const HIGHLIGHT_P = 3;
 
 const COLOR_ORIGINAL = "ORIGINAL";

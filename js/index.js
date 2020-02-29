@@ -31,9 +31,7 @@ function showMatches() {
 					<a class="btn btn-warning match-link" href="${ CHESS_URL }/game.html?match=${ match_name }">
 						${ match_opponent ? match_opponent.displayName : "New Match" }<br/>
 						<div class="match-link-date"> ${ d_str } </div>
-					</a>
-					<br/>
-					<br/>`
+					</a>`
 				);
 			}
 		});

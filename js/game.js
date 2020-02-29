@@ -22,8 +22,8 @@ var black_title_set = false;
 var white_title_set = false;
 var id = 0;
 var stats = {
-	black: 29,
-	white: 29
+	black: 50,
+	white: 50
 };
 
 

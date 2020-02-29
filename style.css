@@ -1,8 +1,15 @@
 @media screen and (orientation:portrait) {
 	:root {
-		--cell-size: 10vw;
+		--home-title-size: 10vw;
+		--home-button-size: 5vw;
+		--home-match-width: 80vw;
+		--home-match-text-size: 8vw;
+		--home-match-margin: 2vw;
+
+		--cell-size: 11.5vw;
 		--margin-size: 2vw;
 		--piece-size: 10vw;
+		--piece-image-margin: 2vw;
 		--eaten-piece-size: 3vw;
 		--picture-size: 10vw;
 		--title-size: 3vw;
@@ -11,9 +18,16 @@
 }
 @media screen and (orientation:landscape) {
 	:root {
+		--home-title-size: 5vh;
+		--home-button-size: 2vh;
+		--home-match-width: 18vw;
+		--home-match-text-size: 2vw;
+		--home-match-margin: 1vw;
+
 		--cell-size: 10vh;
 		--margin-size: 2vh;
 		--piece-size: 10vh;
+		--piece-image-margin: 1vh;
 		--eaten-piece-size: 3vh;
 		--picture-size: 10vh;
 		--title-size: 3vh;
@@ -69,8 +83,8 @@ img {
 .piece {
 	width: calc(var(--piece-size) * 0.8);
 	height: calc(var(--piece-size) * 0.8);
-	margin-top: calc(var(--piece-size) * 0.1);
-	margin-left: calc(var(--piece-size) * 0.1);
+	margin-top: var(--piece-image-margin);
+	margin-left: var(--piece-image-margin);
 
 	position: absolute;
 	float: left;
@@ -98,18 +112,21 @@ img {
 }
 
 .match-link {
-	width: 20vw;
+	width: var(--home-match-width);
+	margin-left: var(--home-match-margin);
+	margin-top: var(--home-match-margin);
+	border-radius: calc(var(--home-match-margin)) !important;
+
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
-	font-size: 1.5vw !important;
+	font-size: var(--home-match-text-size) !important;
 	color: black !important;
 }
 
 .match-link-date {
-	font-size: 1.2vw !important;
-	color: black !important;
-	font-style: italic;
+	font-size: calc(var(--home-match-text-size) * 0.8) !important;
+	color: #2f71aa !important;
 }
 
 .modal { text-align: center; }
@@ -138,6 +155,7 @@ img {
 #title {
 	color: white;
 	margin-bottom: 0px;
+	font-size: var(--home-title-size);
 }
 
 #subtitle {
@@ -149,6 +167,13 @@ img {
 #chess-toolbar {
 	margin-top: 2px;
 	margin-bottom: 10px;
+}
+
+#chess-toolbar .btn {
+	font-size: var(--home-button-size);
+	padding: calc(var(--home-button-size) / 2);
+	margin: calc(var(--home-button-size) / 4);
+	border-radius: calc(var(--home-button-size) / 4);
 }
 
 #canvasLayer {

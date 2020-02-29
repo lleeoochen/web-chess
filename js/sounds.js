@@ -45,6 +45,7 @@ function loadSound(name){
 }
 
 function playSound(name, options){
+  return; // TODO: take it out later (it's so noisy omg)
   var sound = sounds[name];
   var soundVolume = sounds[name].volume || 1;
 
