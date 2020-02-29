@@ -12,7 +12,7 @@
 		--eaten-piece-size: 3vw;
 		--picture-size: 10vw;
 		--title-size: 3vw;
-		--btn-size: 4vw;
+		--btn-size: 3vw;
 	}
 }
 @media screen and (orientation:landscape) {
@@ -29,7 +29,7 @@
 		--eaten-piece-size: 3vh;
 		--picture-size: 10vh;
 		--title-size: 3vh;
-		--btn-size: 4vh;
+		--btn-size: 3vh;
 	}
 }
 
@@ -198,6 +198,8 @@ img {
 }
 
 #home-btn {
-	height: 35px;
-	margin-top: calc(var(--picture-size) + var(--margin-size) - 35px);
+	font-size: var(--btn-size);
+	padding: calc(var(--btn-size) / 2);
+	border-radius: calc(var(--btn-size) / 4);
+	margin-top: calc(var(--picture-size) - var(--margin-size) - var(--btn-size));
 }
