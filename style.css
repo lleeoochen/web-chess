@@ -9,7 +9,6 @@
 		--cell-size: 11.5vw;
 		--margin-size: 2vw;
 		--piece-size: 10vw;
-		--piece-image-margin: 2vw;
 		--eaten-piece-size: 3vw;
 		--picture-size: 10vw;
 		--title-size: 3vw;
@@ -27,7 +26,6 @@
 		--cell-size: 10vh;
 		--margin-size: 2vh;
 		--piece-size: 10vh;
-		--piece-image-margin: 1vh;
 		--eaten-piece-size: 3vh;
 		--picture-size: 10vh;
 		--title-size: 3vh;
@@ -81,10 +79,8 @@ img {
 }
 
 .piece {
-	width: calc(var(--piece-size) * 0.8);
-	height: calc(var(--piece-size) * 0.8);
-	margin-top: var(--piece-image-margin);
-	margin-left: var(--piece-image-margin);
+	width: calc(var(--piece-size));
+	height: calc(var(--piece-size));
 
 	position: absolute;
 	float: left;
@@ -199,5 +195,6 @@ img {
 }
 
 #home-btn {
-	margin-top: 50px;
+	height: 35px;
+	margin-top: calc(var(--picture-size) + var(--margin-size) - 35px);
 }

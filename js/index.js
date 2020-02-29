@@ -17,14 +17,15 @@ function showMatches() {
 
 	Firebase.getMatches(user.matches, user, async matches_data => {
 		var elements = $();
-		matches_data.sort((a, b) => a.updated - b.updated);
+		console.log(matches_data);
+		matches_data.sort((a, b) => b[1].updated.toDate().getTime() - a[1].updated.toDate().getTime());
 		await matches_data.forEach(match => {
 			let match_name = match[0];
 			let match_data = match[1];
 			let match_opponent = match[2];
 
 			let d = match_data.updated.toDate();
-			let d_str = d.getMonth() + "/" + d.getDate() + " " + ("0" + d.getHours()).slice(-2) + ":" + ("0" + d.getMinutes()).slice(-2);
+			let d_str = formatDate(d);
 
 			if (match_data.moves && Math.floor(match_data.moves[match_data.moves.length - 1] / 10) != 0) {
 				elements = elements.add(`
@@ -57,4 +58,16 @@ function initToolbar() {
 	});
 
 	$('#chess-toolbar').removeAttr('hidden');
+}
+
+// https://stackoverflow.com/a/8888498
+function formatDate(date) {
+	var hours = date.getHours();
+	var minutes = date.getMinutes();
+	var ampm = hours >= 12 ? 'pm' : 'am';
+	hours = hours % 12;
+	hours = hours ? hours : 12; // the hour '0' should be '12'
+	minutes = minutes < 10 ? '0'+minutes : minutes;
+	var strTime = date.getMonth() + "/" + date.getDate() + " " + hours + ':' + minutes + ampm;
+	return strTime;
 }
