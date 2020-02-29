@@ -6,9 +6,9 @@
 		--home-match-text-size: 8vw;
 		--home-match-margin: 2vw;
 
-		--cell-size: 11.5vw;
 		--margin-size: 2vw;
-		--piece-size: 10vw;
+		--cell-size: 11.5vw;
+		--piece-size: 11.5vw;
 		--eaten-piece-size: 3vw;
 		--picture-size: 10vw;
 		--title-size: 3vw;
@@ -23,8 +23,8 @@
 		--home-match-text-size: 2vw;
 		--home-match-margin: 1vw;
 
-		--cell-size: 10vh;
 		--margin-size: 2vh;
+		--cell-size: 10vh;
 		--piece-size: 10vh;
 		--eaten-piece-size: 3vh;
 		--picture-size: 10vh;
@@ -138,9 +138,12 @@ img {
 	margin: var(--margin-size);
 	border-radius: calc(var(--picture-size) / 10);
 }
-.player-pic.pull-left  { margin-left: calc(var(--margin-size)); }
-.player-pic.pull-right { margin-right: calc(var(--margin-size)); }
+.player-pic.pull-left  { margin-left: 0; }
+.player-pic.pull-right { margin-right: 0; }
 
+.player-name {
+	margin-top: var(--margin-size) !important;
+}
 
 #body {
 	text-align: center;
