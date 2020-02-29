@@ -13,6 +13,8 @@
 		--picture-size: 10vw;
 		--title-size: 3vw;
 		--btn-size: 3vw;
+
+		--google-auth-size: 3vw;
 	}
 }
 @media screen and (orientation:landscape) {
@@ -30,6 +32,8 @@
 		--picture-size: 10vh;
 		--title-size: 3vh;
 		--btn-size: 2vh;
+
+		--google-auth-size: 3vh;
 	}
 }
 
@@ -202,4 +206,20 @@ img {
 	padding: calc(var(--btn-size) / 2);
 	border-radius: calc(var(--btn-size) / 4);
 	margin-top: calc(var(--picture-size) - var(--margin-size) - var(--btn-size));
+}
+
+.firebaseui-container, .firebaseui-idp-button, .firebaseui-tenant-button {
+	max-width: unset !important;
+	width: unset !important;
+}
+
+.firebaseui-idp-text {
+	font-size: var(--google-auth-size) !important;
+}
+.firebaseui-idp-icon-wrapper {
+	font-size: var(--google-auth-size) !important;
+}
+.firebaseui-idp-icon {
+	width: var(--google-auth-size) !important;
+	height: var(--google-auth-size) !important;
 }
