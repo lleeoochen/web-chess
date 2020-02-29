@@ -44,6 +44,9 @@ Firebase.authenticate((auth_user) => {
 		else if (auth_user.uid == match.white) {
 			my_team = TEAM.W;
 		}
+		else {
+			my_team = TEAM.B; // spectate mode
+		}
 
 		if (my_team) {
 			initGame();
@@ -51,7 +54,7 @@ Firebase.authenticate((auth_user) => {
 	});
 
 	Firebase.listenMatch(match_id, (match_data) => {
-		if (!my_team) return;
+		// if (!my_team) return;
 
 		match = match_data;
 
@@ -60,6 +63,9 @@ Firebase.authenticate((auth_user) => {
 		}
 		else if (auth_user.uid == match.white) {
 			my_team = TEAM.W;
+		}
+		else {
+			my_team = TEAM.B; // spectate mode
 		}
 
 		setTitleBar(auth_user);
@@ -241,7 +247,7 @@ function onClick(event, x, y) {
 
 //Handle chess event with (x, y) click coordinate
 function handleChessEvent(x, y) {
-	if (my_team != turn)
+	if ((auth_user.uid != match.black && auth_user.uid != match.white) || my_team != turn)
 		return;
 
 	// //Thinking...
