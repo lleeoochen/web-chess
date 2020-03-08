@@ -52,4 +52,15 @@ class Util {
 			turn: (Math.floor((data % 10) / 1) == 1) ? TEAM.W : TEAM.B
 		};
 	}
+
+	static packMessage(message, my_team) {
+		return my_team + message;
+	}
+
+	static unpackMessage(data) {
+		return {
+			team: data[0],
+			message: data.slice(1)
+		};
+	}
 }

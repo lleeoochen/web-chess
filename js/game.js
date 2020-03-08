@@ -12,6 +12,7 @@ var match = null;
 var match_id = Util.getParam("match");
 var my_team = null;
 var moves_applied = 0;
+var chats_applied = 0;
 var king_grid = null;
 var king_moved = false;
 var other_king_moved = false;
@@ -69,6 +70,14 @@ Firebase.authenticate((auth_user) => {
 
 		setTitleBar(auth_user);
 
+		if (match && match.chat) {
+			for (; match.chat.length != chats_applied; chats_applied++) {
+				let chat = Util.unpackMessage(match.chat[chats_applied]);
+				$("#chat-messages-content").append(`<div class="chat-message"><strong>${ chat.team }</strong>&nbsp;&nbsp;&nbsp; ${ chat.message }</div>`);
+				$("#chat-messages-content").scrollTop($("#chat-messages-content")[0].scrollHeight);
+			}
+		}
+
 		if (match && match.moves) {
 			for (; match.moves.length != moves_applied;) {
 				if (match.moves[moves_applied] == DB_STALEMATE) {
@@ -121,6 +130,7 @@ function initGame() {
 	initBoard();
 	initPieces();
 	initToolbar();
+	initChat();
 }
 
 
@@ -252,6 +262,21 @@ function initEachPiece(id, x, y, team, type) {
 
 	if (my_team == team && type == CHESS.King)
 		king_grid = chessboard[x][y];
+}
+
+function initChat() {
+	$("#chat-layer").on('keyup', function (e) {
+	    if (e.keyCode === 13) {
+			let message = $("#chat-text-input").val();
+			Firebase.message(match_id, match, message, my_team);
+			$("#chat-text-input").val("");
+	    }
+	});
+	$("#chat-send-button").on('click', function (e) {
+		let message = $("#chat-text-input").val();
+		Firebase.message(match_id, match, message, my_team);
+		$("#chat-text-input").val("");
+	});
 }
 
 

@@ -194,6 +194,16 @@ class Firebase {
 			}, { merge: true });
 		});
 	}
+
+	static message(match_id, match, message, my_team) {
+		let chat = (match && match.chat) ? match.chat : [];
+		chat.push(Util.packMessage(message, my_team));
+
+		db.collection(MATCHES_TABLE).doc(match_id).set({
+			chat: chat,
+			updated: new Date()
+		}, { merge: true });
+	}
 }
 
 Firebase.init()
