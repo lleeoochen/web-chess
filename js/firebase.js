@@ -161,7 +161,17 @@ class Firebase {
 
 	static checkmate(match_id, match, winning_team) {
 		let moves = (match && match.moves) ? match.moves : [];
-		moves.push(winning_team == TEAM.W ? 0 : 1); // checkmate
+		moves.push(winning_team == TEAM.W ? DB_CHECKMATE_WHITE : DB_CHECKMATE_BLACK); // checkmate
+
+		db.collection(MATCHES_TABLE).doc(match_id).set({
+			moves: moves,
+			updated: new Date()
+		}, { merge: true });
+	}
+
+	static stalemate(match_id, match) {
+		let moves = (match && match.moves) ? match.moves : [];
+		moves.push(DB_STALEMATE); // stalement
 
 		db.collection(MATCHES_TABLE).doc(match_id).set({
 			moves: moves,

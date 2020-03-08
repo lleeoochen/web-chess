@@ -22,8 +22,8 @@ var black_title_set = false;
 var white_title_set = false;
 var id = 0;
 var stats = {
-	black: 50,
-	white: 50
+	black: STATS_MAX,
+	white: STATS_MAX
 };
 
 
@@ -37,8 +37,7 @@ Firebase.authenticate((auth_user) => {
 			Firebase.registerOpponent(match_id, auth_user.uid);
 			my_team = TEAM.W;
 		}
-
-		if (auth_user.uid == match.black) {
+		else if (auth_user.uid == match.black) {
 			my_team = TEAM.B;
 		}
 		else if (auth_user.uid == match.white) {
@@ -53,7 +52,7 @@ Firebase.authenticate((auth_user) => {
 		}
 	});
 
-	Firebase.listenMatch(match_id, (match_data) => {
+	Firebase.listenMatch(match_id, async (match_data) => {
 		// if (!my_team) return;
 
 		match = match_data;
@@ -72,8 +71,16 @@ Firebase.authenticate((auth_user) => {
 
 		if (match && match.moves) {
 			for (; match.moves.length != moves_applied;) {
-				if (Math.floor(match.moves[moves_applied] / 10) == 0) {
-					swal({title: `Checkmate. ${ match.moves[moves_applied] == 0 ? "White" : "Black" } Team Wins!`});
+				if (match.moves[moves_applied] == DB_STALEMATE) {
+					swal('Stalemate.', {button: false });
+					return;
+				}
+				else if (match.moves[moves_applied] == DB_CHECKMATE_BLACK) {
+					swal('Checkmate. Black Team Wins!', {button: false });
+					return;
+				}
+				else if (match.moves[moves_applied] == DB_CHECKMATE_WHITE) {
+					swal('Checkmate. White Team Wins!', {button: false });
 					return;
 				}
 
@@ -83,12 +90,22 @@ Firebase.authenticate((auth_user) => {
 					move.new_y = BOARD_SIZE - move.new_y - 1;
 				}
 
-				moveChess(chessboard[move.old_x][move.old_y], chessboard[move.new_x][move.new_y]);
+				await new Promise((resolve, reject) => {
+				  setTimeout(() => {
+					moveChess(chessboard[move.old_x][move.old_y], chessboard[move.new_x][move.new_y]);
+				    resolve('Promise A win!');
+				  }, 50);
+				})
 				turn = move.turn;
 			}
-			if (isCheckmate()) {
-				Firebase.checkmate(match_id, match, my_team == TEAM.W ? TEAM.B : TEAM.W);
-				playSound("omgwow");
+			switch(isCheckmate()) {
+				case STATUS_CHECKMATE:
+					Firebase.checkmate(match_id, match, my_team == TEAM.W ? TEAM.B : TEAM.W);
+					playSound("omgwow");
+					break;
+				case STATUS_STALEMATE:
+					Firebase.stalemate(match_id, match);
+					break;
 			}
 		}
 	});
@@ -494,13 +511,17 @@ function isCheckmate() {
 
 				for (let k = 0; k < validMoves.length; k++) {
 					if (isKingSafe(grid, chessboard[validMoves[k].x][validMoves[k].y])) {
-						return false;
+						return STATUS_NONE;
 					}
 				}
 			}
 		}
 	}
-	return true;
+
+	if (isKingSafe()) {
+		return STATUS_STALEMATE;
+	}
+	return STATUS_CHECKMATE;
 }
 
 
@@ -615,11 +636,22 @@ function updateMoves(grid) {
 
 function updateStats() {
 	let w_stat = stats.white / (stats.white + stats.black);
-	let b_stat = stats.black / (stats.white + stats.black);
+	w_stat = 0.35 * Math.atan(10 * w_stat - 5) + 0.5;
+
+	// let b_stat = stats.black / (stats.white + stats.black);
 	let w_pos = my_team == TEAM.W ? "bottom" : "top";
 
 	$(".canvas-border.bg-white").css("height", `calc(${w_stat} * (var(--margin-size) * 2 + (8 * var(--cell-size))))`);
-	$(".canvas-border.bg-white").css(w_pos, `0`);
+	$(".canvas-border.bg-white").css(w_pos, '0');
+
+	if (my_team == TEAM.W) {
+		$(".canvas-border.bg-white").css('border-radius', '0px 0px 5px 5px');
+		$(".canvas-border.bg-black").css('border-radius', '5px 5px 0px 0px');
+	}
+	else {
+		$(".canvas-border.bg-white").css('border-radius', '5px 5px 0px 0px');
+		$(".canvas-border.bg-black").css('border-radius', '0px 0px 5px 5px');
+	}
 }
 
 //Clear and hide all possible moves
@@ -683,9 +715,9 @@ function isKingSafe(oldGrid, newGrid) {
 			target_grid = newGrid;
 	}
 
-	let stats = getValidPieces(board, target_grid, my_team)
-	let enemies = stats.enemies;
-	let friends = stats.friends;
+	let validPieces = getValidPieces(board, target_grid, my_team)
+	let enemies = validPieces.enemies;
+	let friends = validPieces.friends;
 
 	return enemies.length == 0;
 }
@@ -720,13 +752,13 @@ function canCastle(oldGrid, newGrid) {
 function switchTurn() {
 	if (turn == TEAM.B) {
 		turn = TEAM.W;
-		$("#white-player-image").css("border", "calc(var(--picture-size) / 10) solid #008640");
-		$("#black-player-image").css("border", "");
+		$("#white-player-image").css("border", "calc(var(--picture-size) / 15) solid #008640");
+		$("#black-player-image").css("border", "calc(var(--picture-size) / 15) solid #000000");
 	}
 	else {
 		turn = TEAM.B;
-		$("#black-player-image").css("border", "calc(var(--picture-size) / 10) solid #008640");
-		$("#white-player-image").css("border", "");
+		$("#black-player-image").css("border", "calc(var(--picture-size) / 15) solid #008640");
+		$("#white-player-image").css("border", "calc(var(--picture-size) / 15) solid #000000");
 	}
 }
 
