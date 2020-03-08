@@ -29,5 +29,4 @@ if (CANVAS_LAYER) {
 	CANVAS_LAYER.height = GRID_SIZE_P * BOARD_SIZE;
 }
 
-const CHESS_URL = "/web-chess"
-// const CHESS_URL = ""
+const CHESS_URL = (location.hostname == "localhost") ? "" : "/web-chess"
