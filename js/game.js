@@ -18,13 +18,16 @@ var king_moved = false;
 var other_king_moved = false;
 var lastMove = {};
 var first_move = true;
-
 var black_title_set = false;
 var white_title_set = false;
 var id = 0;
 var stats = {
 	black: STATS_MAX,
 	white: STATS_MAX
+};
+var names = {
+	black: null,
+	white: null
 };
 
 
@@ -73,7 +76,15 @@ Firebase.authenticate((auth_user) => {
 		if (match && match.chat) {
 			for (; match.chat.length != chats_applied; chats_applied++) {
 				let chat = Util.unpackMessage(match.chat[chats_applied]);
-				$("#chat-messages-content").append(`<div class="chat-message"><strong>${ chat.team }</strong>&nbsp;&nbsp;&nbsp; ${ chat.message }</div>`);
+
+				let team_name = "";
+				if (chat.team == TEAM.W) team_name = names.white ? names.white : `[${chat.team}]`;
+				else 					 team_name = names.black ? names.black : `[${chat.team}]`;
+
+				$("#chat-messages-content").append(`
+					<div class="chat-message">
+						<strong>${ team_name }</strong>&nbsp;&nbsp;&nbsp; ${ chat.message }
+					</div>`);
 				$("#chat-messages-content").scrollTop($("#chat-messages-content")[0].scrollHeight);
 			}
 		}
@@ -150,36 +161,26 @@ function initToolbar() {
 //Set player info
 function setTitleBar(auth_user) {
 
-	if (!black_title_set) {
-		if (auth_user.uid != match.black) {
-			Firebase.getUser(match.black, (user_data) => {
-				$('#black-player-image').attr('src', user_data.photoURL);
-				$('#black-player-name').text(user_data.displayName);
-				black_title_set = true;
-			});
-		}
-		else {
-			$('#black-player-image').attr('src', auth_user.photoURL);
-			$('#black-player-name').text(auth_user.displayName);
+	if (!black_title_set && match.black) {
+		Firebase.getUser(match.black, (user_data) => {
+			$('#black-player-image').attr('src', user_data.photoURL);
+			$('#black-player-name').text(user_data.displayName);
 			black_title_set = true;
-		}
+			names.black = user_data.displayName;
+
+			$('#chat-messages-content').replaceWith($.parseHTML($('#chat-messages-content').prop('outerHTML').replace(/\[B\]/g, names.black))); 
+		});
 	}
 
-	if (!white_title_set) {
-		if (auth_user.uid != match.white) {
-			if (match.white) {
-				Firebase.getUser(match.white, (user_data) => {
-					$('#white-player-image').attr('src', user_data.photoURL);
-					$('#white-player-name').text(user_data.displayName);
-					white_title_set = true;
-				});
-			}
-		}
-		else {
-			$('#white-player-image').attr('src', auth_user.photoURL);
-			$('#white-player-name').text(auth_user.displayName);
+	if (!white_title_set && match.white) {
+		Firebase.getUser(match.white, (user_data) => {
+			$('#white-player-image').attr('src', user_data.photoURL);
+			$('#white-player-name').text(user_data.displayName);
 			white_title_set = true;
-		}
+			names.white = user_data.displayName;
+
+			$('#chat-messages-content').replaceWith($.parseHTML($('#chat-messages-content').prop('outerHTML').replace(/\[W\]/g, names.white))); 
+		});
 	}
 }
 
@@ -206,8 +207,13 @@ function initBoard(){
 			gridsLayer.append(gridListener);
 		}
 	}
-}
 
+	for (var x = 0; x < BOARD_SIZE; x++) {
+		for (var y = 0; y < BOARD_SIZE; y++) {
+			fillNumbering(x, y);
+		}
+	}
+}
 
 //Intialize all chess pieces
 function initPieces() {
@@ -703,6 +709,27 @@ function fillGrid(grid, color) {
 
 	context.fillStyle = color;
 	context.fillRect(grid.x * GRID_SIZE_P, grid.y * GRID_SIZE_P, GRID_SIZE_P, GRID_SIZE_P);
+	context.font = `bold ${GRID_SIZE_P / 5}px Spectral, serif`;
+	fillNumbering(grid.x, grid.y);
+}
+
+//Set numbering for specific grids
+function fillNumbering(x, y) {
+	if (my_team == TEAM.B)
+		context.fillStyle = (y % 2 == 0) ? "#000000" : "#ffffff";
+	else
+		context.fillStyle = (y % 2 != 0) ? "#000000" : "#ffffff";
+
+	if (x == 0)
+		context.fillText(BOARD_SIZE - y, x * GRID_SIZE_P + GRID_SIZE_P / 21, y * GRID_SIZE_P + GRID_SIZE_P / 5);
+
+	if (my_team == TEAM.W)
+		context.fillStyle = (x % 2 == 0) ? "#000000" : "#ffffff";
+	else
+		context.fillStyle = (x % 2 != 0) ? "#000000" : "#ffffff";
+
+	if (y == BOARD_SIZE - 1)
+		context.fillText(String.fromCharCode(x + 97), x * GRID_SIZE_P + GRID_SIZE_P / 1.2, y * GRID_SIZE_P + GRID_SIZE_P / 1.05);
 }
 
 //Set last move grid color
@@ -783,7 +810,7 @@ function switchTurn() {
 	else {
 		turn = TEAM.B;
 		$("#black-player-image").css("border", "calc(var(--picture-size) / 15) solid #008640");
-		$("#white-player-image").css("border", "calc(var(--picture-size) / 15) solid #000000");
+		$("#white-player-image").css("border", "calc(var(--picture-size) / 15) solid #ffffff");
 	}
 }
 

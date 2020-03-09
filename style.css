@@ -5,6 +5,7 @@
 		--home-match-width: 80vw;
 		--home-match-text-size: 8vw;
 		--home-match-margin: 2vw;
+		--home-match-icon-size: 15vw;
 
 		--margin-size: 2vw;
 		--cell-size: 11.5vw;
@@ -19,11 +20,12 @@
 }
 @media screen and (orientation:landscape) {
 	:root {
-		--home-title-size: 5vh;
+		--home-title-size: 8vh;
 		--home-button-size: 2vh;
-		--home-match-width: 18vw;
-		--home-match-text-size: 2vw;
+		--home-match-width: 40vh;
+		--home-match-text-size: 3vh;
 		--home-match-margin: 1vw;
+		--home-match-icon-size: 7vh;
 
 		--margin-size: 2vh;
 		--cell-size: 10vh;
@@ -112,22 +114,39 @@ img {
 	padding-right: 10px;
 }
 
+#matches-display {
+	margin-left: 50px;
+	margin-right: 50px;
+	margin-bottom: 50px;
+	margin-top: 0px;
+}
+
 .match-link {
 	width: var(--home-match-width);
-	margin-left: var(--home-match-margin);
+	margin-left: calc(var(--home-match-margin) / 2);
+	margin-right: calc(var(--home-match-margin) / 2);
 	margin-top: var(--home-match-margin);
-	border-radius: calc(var(--home-match-margin)) !important;
+	border-radius: calc(var(--home-match-margin) / 2) !important;
 
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
 	font-size: var(--home-match-text-size) !important;
 	color: black !important;
+
+	background-image: unset !important;
+	border: unset !important;
+	background-color: #57bf69 !important;
+}
+
+.match-link img {
+	width: var(--home-match-icon-size);
+	margin-right: var(--margin-size);
 }
 
 .match-link-date {
 	font-size: calc(var(--home-match-text-size) * 0.8) !important;
-	color: #2f71aa !important;
+	color: darkslategrey;
 }
 
 .modal { text-align: center; }
@@ -158,8 +177,10 @@ img {
 
 #title {
 	color: white;
+	-webkit-text-stroke: 2px black;
 	margin-bottom: 0px;
 	font-size: var(--home-title-size);
+	font-weight: bold;
 }
 
 #subtitle {
@@ -175,9 +196,13 @@ img {
 
 #chess-toolbar .btn {
 	font-size: var(--home-button-size);
-	padding: calc(var(--home-button-size) / 2);
-	margin: calc(var(--home-button-size) / 4);
-	border-radius: calc(var(--home-button-size) / 4);
+	padding: calc(var(--btn-size) / 3);
+	padding-left: calc(var(--btn-size) / 1.5);
+	padding-right: calc(var(--btn-size) / 1.5);
+	border-radius: calc(var(--btn-size) / 4);
+	background-image: unset;
+	background-color: black;
+	border: unset;
 }
 
 #canvasLayer {
@@ -205,6 +230,8 @@ img {
 #home-btn {
 	font-size: calc(var(--btn-size) * 0.75);
 	padding: calc(var(--btn-size) / 3);
+	padding-left: calc(var(--btn-size) / 1.5);
+	padding-right: calc(var(--btn-size) / 1.5);
 	border-radius: calc(var(--btn-size) / 4);
 	margin-top: calc(var(--picture-size) - var(--margin-size) - var(--btn-size));
 	background-image: unset;
@@ -212,9 +239,17 @@ img {
 	border: unset;
 }
 
+#new-match-btn {
+	margin-left: 10px;
+}
+
 .firebaseui-container, .firebaseui-idp-button, .firebaseui-tenant-button {
 	max-width: unset !important;
 	width: unset !important;
+}
+
+.firebaseui-idp-button {
+	background-color: black !important;
 }
 
 .firebaseui-idp-text {
@@ -228,7 +263,7 @@ img {
 	height: var(--google-auth-size) !important;
 }
 
-.swal-modal {
+.swal-modal, .modal-body {
 	/*background-image: url("assets/background.jpg");*/
 	background-size: cover;
 	border-color: grey;
@@ -295,6 +330,7 @@ img {
 
 #chat-messages-content {
 	max-height: 200px;
+	height: 200px;
 	overflow-y: scroll;
 }
 
@@ -318,5 +354,5 @@ img {
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-  background: #b30000;
+  background: grey;
 }

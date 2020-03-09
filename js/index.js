@@ -1,8 +1,10 @@
-var user = null
+var user = null;
+var auth_user = null;
 
-Firebase.authenticate((auth_user) => {
+Firebase.authenticate((auth_user1) => {
 	initToolbar();
-	Firebase.getUser(auth_user.uid, (user_data) => {
+	auth_user = auth_user1;
+	Firebase.getUser(auth_user1.uid, (user_data) => {
 		user = user_data;
 		showMatches();
 	});
@@ -17,7 +19,6 @@ function showMatches() {
 
 	Firebase.getMatches(user.matches, user, async matches_data => {
 		var elements = $();
-		console.log(matches_data);
 		matches_data.sort((a, b) => b[1].updated.toDate().getTime() - a[1].updated.toDate().getTime());
 		await matches_data.forEach(match => {
 			let match_name = match[0];
@@ -27,11 +28,20 @@ function showMatches() {
 			let d = match_data.updated.toDate();
 			let d_str = formatDate(d);
 
+			let color = (match_data.black == auth_user.uid) ? "B" : "W";
+
 			if (match_data.moves && Math.floor(match_data.moves[match_data.moves.length - 1] / 10) != 0) {
 				elements = elements.add(`
 					<a class="btn btn-warning match-link" href="${ CHESS_URL }/game.html?match=${ match_name }">
-						${ match_opponent ? match_opponent.displayName : "New Match" }<br/>
-						<div class="match-link-date"> ${ d_str } </div>
+						<div style="display: flex; align-items: center;">
+							<div>
+								<img src="assets/${color}King.svg"/>
+							</div>
+							<div style="text-align: left;">
+								${ match_opponent ? match_opponent.displayName : "New Match" }<br/>
+								<div class="match-link-date"> ${ d_str } </div>
+							</div>
+						</div>
 					</a>`
 				);
 			}
