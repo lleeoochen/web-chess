@@ -86,6 +86,10 @@ Firebase.authenticate((auth_user) => {
 						<strong>${ team_name }</strong>&nbsp;&nbsp;&nbsp; ${ chat.message }
 					</div>`);
 				$("#chat-messages-content").scrollTop($("#chat-messages-content")[0].scrollHeight);
+
+				if ((window.innerHeight + window.scrollY) < document.body.offsetHeight) {
+					$('#chat-notification').removeAttr('hidden');
+				}
 			}
 		}
 
@@ -113,7 +117,7 @@ Firebase.authenticate((auth_user) => {
 				await new Promise((resolve, reject) => {
 				  setTimeout(() => {
 					moveChess(chessboard[move.old_x][move.old_y], chessboard[move.new_x][move.new_y]);
-				    resolve('Promise A win!');
+					resolve('Promise A win!');
 				  }, 50);
 				})
 				turn = move.turn;
@@ -272,11 +276,11 @@ function initEachPiece(id, x, y, team, type) {
 
 function initChat() {
 	$("#chat-layer").on('keyup', function (e) {
-	    if (e.keyCode === 13) {
+		if (e.keyCode === 13) {
 			let message = $("#chat-text-input").val();
 			Firebase.message(match_id, match, message, my_team);
 			$("#chat-text-input").val("");
-	    }
+		}
 	});
 	$("#chat-send-button").on('click', function (e) {
 		let message = $("#chat-text-input").val();
@@ -859,3 +863,9 @@ function gridToString(grid) {
 	}
 	return result;
 }
+
+window.onscroll = function(ev) {
+	if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+		$('#chat-notification').attr('hidden', 'hidden');
+	}
+};

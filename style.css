@@ -322,10 +322,11 @@ img {
 }
 
 #chat-messages {
-	background-color: black;
+	background-color: #00000073;
     padding: var(--margin-size);
     text-align: left;
 	border-radius: calc(var(--btn-size) / 4) calc(var(--btn-size) / 4) 0px 0px;
+	color: #b3af72;
 }
 
 #chat-messages-content {
@@ -334,6 +335,15 @@ img {
 	overflow-y: scroll;
 }
 
+#chat-notification {
+    margin-top: calc(-3 * var(--margin-size));
+    margin-right: calc(-4.5 * var(--margin-size));
+
+    float: right;
+    position: relative;
+    z-index: 100;
+	width: calc(3 * var(--home-button-size));
+}
 
 /* width */
 ::-webkit-scrollbar {
