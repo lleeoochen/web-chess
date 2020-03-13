@@ -681,11 +681,11 @@ function updateStats() {
 
 	if (my_team == TEAM.W) {
 		$(".canvas-border.bg-white").css('border-radius', '0px 0px 5px 5px');
-		$(".canvas-border.bg-black").css('border-radius', '5px 5px 0px 0px');
+		$(".canvas-border.bg-black").css('border-radius', '5px 5px 5px 5px');
 	}
 	else {
 		$(".canvas-border.bg-white").css('border-radius', '5px 5px 0px 0px');
-		$(".canvas-border.bg-black").css('border-radius', '0px 0px 5px 5px');
+		$(".canvas-border.bg-black").css('border-radius', '5px 5px 5px 5px');
 	}
 }
 

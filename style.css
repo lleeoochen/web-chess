@@ -1,4 +1,4 @@
-@media screen and (orientation:portrait) {
+@media screen and (orientation: portrait) {
 	:root {
 		--home-title-size: 10vw;
 		--home-button-size: 5vw;
@@ -16,9 +16,12 @@
 		--btn-size: 3vw;
 
 		--google-auth-size: 3vw;
+		--game-content-display: unset;
+		--layer-margin-auto: auto;
+		--chat-layer-padding-left: var(--margin-size);
 	}
 }
-@media screen and (orientation:landscape) {
+@media screen and (orientation: landscape) {
 	:root {
 		--home-title-size: 8vh;
 		--home-button-size: 2vh;
@@ -36,6 +39,33 @@
 		--btn-size: 3vh;
 
 		--google-auth-size: 3vh;
+		--game-content-display: flex;
+		--layer-margin-auto: unset;
+		--chat-layer-padding-left: unset;
+	}
+}
+@media (max-width: 176vh) and (orientation: landscape) {
+	:root {
+		--home-title-size: 8vh;
+		--home-button-size: 2vh;
+		--home-match-width: 40vh;
+		--home-match-text-size: 3vh;
+		--home-match-margin: 1vw;
+		--home-match-icon-size: 7vh;
+
+		--margin-size: 2vh;
+		--cell-size: 10vh;
+		--piece-size: 10vh;
+		--eaten-piece-size: 3vh;
+		--picture-size: 10vh;
+		--title-size: 3vh;
+		--btn-size: 3vh;
+
+		--google-auth-size: 3vh;
+		--game-content-display: unset;
+		--layer-margin-auto: auto;
+		--chat-layer-padding-left: var(--margin-size);
+		--chat-layer-width: calc(var(--margin-size) * 4 + (8 * var(--cell-size)));
 	}
 }
 
@@ -49,11 +79,11 @@ h3 {
 }
 
 img {
-    -khtml-user-select: none;
-    -o-user-select: none;
-    -moz-user-select: none;
-    -webkit-user-select: none;
-    user-select: none;
+	-khtml-user-select: none;
+	-o-user-select: none;
+	-moz-user-select: none;
+	-webkit-user-select: none;
+	user-select: none;
 }
 
 .x0 { left: calc(var(--margin-size) + (0 * var(--cell-size))); }
@@ -92,14 +122,14 @@ img {
 	position: absolute;
 	float: left;
 	transition: .2s all ease;
-    z-index: 3;
+	z-index: 3;
 }
 
 .canvas-border {
 	position: absolute;
-    width: calc(var(--margin-size) * 2 + (8 * var(--cell-size)));
-    height: calc(var(--margin-size) * 2 + (8 * var(--cell-size)));
-    z-index: 0;
+	width: calc(var(--margin-size) * 2 + (8 * var(--cell-size)));
+	height: calc(var(--margin-size) * 2 + (8 * var(--cell-size)));
+	z-index: 0;
 }
 
 .eaten-piece {
@@ -171,7 +201,8 @@ img {
 
 #body {
 	text-align: center;
-	background: url("assets/background.jpg") no-repeat center center fixed;
+	/*background: url("assets/background.jpg") no-repeat center center fixed;*/
+	background-color: black;
 	background-size: cover;
 }
 
@@ -187,6 +218,10 @@ img {
 	color: white;
 	margin-top: 2px;
 	margin-bottom: 10px;
+}
+
+#game-content {
+	display: var(--game-content-display);
 }
 
 #chess-toolbar {
@@ -213,8 +248,8 @@ img {
 }
 
 #canvas-wrap {
-    position: relative;
-    height: calc(var(--margin-size) * 2 + (8 * var(--cell-size)));
+	position: relative;
+	height: calc(var(--margin-size) * 2 + (8 * var(--cell-size)));
 }
 
 #actionLayer {
@@ -223,8 +258,9 @@ img {
 	padding-right: var(--margin-size);
 	padding-bottom: var(--margin-size);
 	margin-left: auto;
-	margin-right: auto;
-    width: calc(var(--margin-size) * 4 + (8 * var(--cell-size)));
+	margin-right: var(--layer-margin-auto);
+	width: calc(var(--margin-size) * 4 + (8 * var(--cell-size)));
+	min-width: calc(var(--margin-size) * 4 + (8 * var(--cell-size)));
 }
 
 #home-btn {
@@ -277,32 +313,53 @@ img {
 .swal-text {
 	color: white !important;
 	font-weight: normal !important;
-	font-size: 30px;
+	font-size: calc(1.2 * var(--title-size));
 	text-align: center;
 }
 
 #chat-layer {
 	background-image: linear-gradient(rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.2));
-	padding: var(--margin-size);
+	padding-left: var(--chat-layer-padding-left);
+	padding-right: var(--margin-size);
 	padding-top: 0;
-	margin-left: auto;
+	margin-left: var(--layer-margin-auto);
 	margin-right: auto;
-    width: calc(var(--margin-size) * 4 + (8 * var(--cell-size)));
-    color: white;
-    text-align: left;
+	width: var(--chat-layer-width);
+	min-width: calc(var(--margin-size) * 4 + (8 * var(--cell-size)));
+	color: white;
+	text-align: left;
+	height: 100vh;
+	display: flow-root;
+}
+
+#utility-section {
+	height: calc(70% - 3 * var(--margin-size));
+	margin-top: var(--margin-size);
+	margin-bottom: var(--margin-size);
+	background-color: #00000073;
+	border-radius: calc(var(--btn-size) / 4);
+}
+
+#chat-section {
+	height: calc(30%);
+	background-color: #00000073;
+	border-radius: calc(var(--btn-size) / 4);
 }
 
 #chat-bottom {
-    display: flex;
-    height: calc(var(--btn-size) * 2);
-    margin-left: unset;
-    margin-right: unset;
+	display: flex;
+	height: 20%;
+	margin-left: unset;
+	margin-right: unset;
 }
 
 #chat-text-input {
 	font-size: calc(var(--title-size));
 	height: 100%;
 	border-radius: 0px 0px 0px calc(var(--btn-size) / 4);
+	border-color: grey !important;
+	border-width: 2px !important;
+	border-style: solid !important;
 }
 
 #chat-send-button {
@@ -322,26 +379,25 @@ img {
 }
 
 #chat-messages {
-	background-color: #00000073;
-    padding: var(--margin-size);
-    text-align: left;
+	padding: var(--margin-size);
+	text-align: left;
 	border-radius: calc(var(--btn-size) / 4) calc(var(--btn-size) / 4) 0px 0px;
 	color: #b3af72;
+	height: 80%;
 }
 
 #chat-messages-content {
-	max-height: 200px;
-	height: 200px;
+	height: 100%;
 	overflow-y: scroll;
 }
 
 #chat-notification {
-    margin-top: calc(-3 * var(--margin-size));
-    margin-right: calc(-4.5 * var(--margin-size));
+	margin-top: calc(-3 * var(--margin-size));
+	margin-right: calc(-4.5 * var(--margin-size));
 
-    float: right;
-    position: relative;
-    z-index: 100;
+	float: right;
+	position: relative;
+	z-index: 100;
 	width: calc(3 * var(--home-button-size));
 }
 
