@@ -3,6 +3,7 @@
 
 <head>
 	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 	<title>Match - Web Chess</title>
 	<link href="style.css" rel="stylesheet" type="text/css">
 	<link rel="shortcut icon" type="image/x-icon" href="favicon.ico" />
@@ -14,8 +15,7 @@
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap-theme.min.css" integrity="sha384-6pzBo3FDv/PJ8r2KRkGHifhEocL+1X2rVCTTkUfGk7/0pbek5mMa1upzvWbrUbOZ" crossorigin="anonymous">
 </head>
 
-<!-- <body id="body" onresize="location.reload();"> -->
-<body>
+<body onresize="onResize()">
 
 	<!-- Authentication Popup Window -->
 	<div id="modal" class="modal" tabindex="-1" role="dialog">
@@ -29,6 +29,7 @@
 	</div>
 
 	<div id="game-content">
+		<img id="chat-notification" src="assets/notification.png" hidden/>
 		<div id="actionLayer">
 			<div class="row" style="margin: 0 !important;">
 				<img id="black-player-image" class="player-pic pull-left" src="assets/profile.jpg"/>
@@ -55,7 +56,6 @@
 			<div id="utility-section">
 			</div>
 			<div id="chat-section">
-				<img id="chat-notification" src="assets/notification.png" hidden/>
 				<div id="chat-messages">
 					<div id="chat-messages-content">
 					</div>

@@ -87,7 +87,8 @@ Firebase.authenticate((auth_user) => {
 					</div>`);
 				$("#chat-messages-content").scrollTop($("#chat-messages-content")[0].scrollHeight);
 
-				if ((window.innerHeight + window.scrollY) < document.body.offsetHeight) {
+				let offset = 10;
+				if (!SCREEN_PORTRAIT && (window.innerHeight + window.scrollY + offset) < document.body.offsetHeight) {
 					$('#chat-notification').removeAttr('hidden');
 				}
 			}
@@ -865,7 +866,15 @@ function gridToString(grid) {
 }
 
 window.onscroll = function(ev) {
-	if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+	let offset = 10;
+	if (!SCREEN_PORTRAIT && (window.innerHeight + window.scrollY + offset) >= document.body.offsetHeight) {
 		$('#chat-notification').attr('hidden', 'hidden');
+	}
+};
+
+window.onresize = function() {
+	if ((SCREEN_PORTRAIT && window.innerHeight < window.innerWidth) ||
+		(!SCREEN_PORTRAIT && window.innerHeight > window.innerWidth)) {
+		location.reload();
 	}
 };

@@ -2,10 +2,12 @@ const CANVAS_LAYER = document.getElementById("canvasLayer");
 
 const CHESS = {King: "King", Queen: "Queen", Rook: "Rook", Bishop: "Bishop", Knight: "Knight", Pawn: "Pawn", None: "None"};
 const VALUE = {King: 200, Queen: 9, Rook: 5, Bishop: 3, Knight: 3, Pawn: 1, None: 0};
-const TEAM = {B: "B", W: "W", None:"N"}
+const TEAM = {B: "B", W: "W", None:"N"};
+
+const SCREEN_PORTRAIT = window.innerHeight > window.innerWidth;
 
 const BOARD_SIZE = 8;
-const GRID_SIZE_P = (window.innerHeight > window.innerWidth) ? Util.vw2px(11.5) : Util.vh2px(10);
+const GRID_SIZE_P = SCREEN_PORTRAIT ? Util.vw2px(11.5) : Util.vh2px(10);
 const HIGHLIGHT_P = 3;
 
 const COLOR_ORIGINAL = "ORIGINAL";
