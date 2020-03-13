@@ -72,6 +72,9 @@
 body {
 	overflow-x: hidden;
 	font-family: 'Spectral', serif !important;
+	text-align: center;
+	background-color: black !important;
+	background-size: cover;
 }
 
 h3 {
@@ -197,13 +200,6 @@ img {
 
 .player-name {
 	margin-top: var(--margin-size) !important;
-}
-
-#body {
-	text-align: center;
-	/*background: url("assets/background.jpg") no-repeat center center fixed;*/
-	background-color: black;
-	background-size: cover;
 }
 
 #title {

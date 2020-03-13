@@ -25,11 +25,12 @@ class Util {
 	    }
 	}
 
-	static vw2px(px) {
-		if (window.innerHeight < window.innerWidth)
-			return px * document.documentElement.clientHeight / 100;
-		else
-			return px * document.documentElement.clientWidth / 100;
+	static vw2px(v) {
+		return v * document.documentElement.clientWidth / 100;
+	}
+
+	static vh2px(v) {
+		return v * document.documentElement.clientHeight / 100;
 	}
 
 	static reloadStylesheets() {
