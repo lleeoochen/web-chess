@@ -27,8 +27,10 @@ const DB_STALEMATE = 2;
 const STATS_MAX = 42; // treat king as 3 score
 
 if (CANVAS_LAYER) {
-	CANVAS_LAYER.width = GRID_SIZE_P * BOARD_SIZE;
-	CANVAS_LAYER.height = GRID_SIZE_P * BOARD_SIZE;
+	CANVAS_LAYER.width = 2 * GRID_SIZE_P * BOARD_SIZE;
+	CANVAS_LAYER.height = 2 * GRID_SIZE_P * BOARD_SIZE;
+	CANVAS_LAYER.style.width = GRID_SIZE_P * BOARD_SIZE;
+	CANVAS_LAYER.style.height = GRID_SIZE_P * BOARD_SIZE;
 }
 
 const CHESS_URL = (location.hostname == "localhost") ? "" : "/web-chess"
