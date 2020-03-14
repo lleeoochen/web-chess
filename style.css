@@ -268,7 +268,7 @@ img {
 }
 
 #actionLayer {
-	background-image: linear-gradient(rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.2));
+	background-color: rgba(255, 255, 255, 0.2);
 	padding-left: var(--margin-size);
 	padding-right: var(--margin-size);
 	padding-bottom: var(--margin-size);
@@ -351,6 +351,7 @@ img {
 	height: calc(70% - 3 * var(--margin-size));
 	margin-top: var(--margin-size);
 	margin-bottom: var(--margin-size);
+	padding: var(--margin-size);
 	background-color: #00000073;
 	border-radius: calc(var(--btn-size) / 4);
 }
@@ -444,4 +445,49 @@ body::-webkit-scrollbar {
 /* Hide scrollbar for IE and Edge */
 body {
 	-ms-overflow-style: none;
+}
+
+.player-utility {
+	margin: 0 !important;
+	margin-bottom: var(--margin-size) !important;
+	padding: var(--margin-size);
+	background-color: rgba(255, 255, 255, 0.2);
+	border-radius: calc(var(--btn-size) / 4);
+	display: flex;
+}
+
+.player-utility-profile {
+	width: 40%;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+    overflow: hidden;
+    display: block;
+	padding-left: var(--margin-size);
+}
+
+.player-utility-name {
+	font-size: var(--title-size);
+}
+
+.player-utility-pic {
+	width: var(--picture-size);
+	height: var(--picture-size);
+	border-radius: calc(var(--picture-size) / 10);
+}
+
+.player-utility-stat {
+	width: 20%;
+    text-align: center;
+    margin-top: auto;
+    margin-bottom: auto;
+    font-size: calc(var(--title-size) * 2);
+}
+
+.player-utility-timer {
+	width: 40%;
+    text-align: right;
+    margin-top: auto;
+    margin-bottom: auto;
+	padding-right: var(--margin-size);
+    font-size: calc(var(--title-size) * 2);
 }

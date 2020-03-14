@@ -26,7 +26,7 @@ function showMatches() {
 			let match_opponent = match[2];
 
 			let d = match_data.updated.toDate();
-			let d_str = formatDate(d);
+			let d_str = Util.formatDate(d);
 
 			let color = (match_data.black == auth_user.uid) ? "B" : "W";
 
@@ -68,16 +68,4 @@ function initToolbar() {
 	});
 
 	$('#chess-toolbar').removeAttr('hidden');
-}
-
-// https://stackoverflow.com/a/8888498
-function formatDate(date) {
-	var hours = date.getHours();
-	var minutes = date.getMinutes();
-	var ampm = hours >= 12 ? 'pm' : 'am';
-	hours = hours % 12;
-	hours = hours ? hours : 12; // the hour '0' should be '12'
-	minutes = minutes < 10 ? '0'+minutes : minutes;
-	var strTime = date.getMonth() + "/" + date.getDate() + " " + hours + ':' + minutes + ampm;
-	return strTime;
 }

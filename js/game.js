@@ -3,7 +3,6 @@ var canvasLayer = document.getElementById("canvasLayer");
 var actionLayer = document.getElementById("actionLayer");
 var gridsLayer = document.getElementById("gridsLayer");
 var piecesLayer = document.getElementById("piecesLayer");
-// var context = canvasLayer.getContext("2d");
 var chessboard = [[],[],[],[],[],[],[],[]];
 var background = [[],[],[],[],[],[],[],[]];
 var oldGrid = null;
@@ -21,6 +20,10 @@ var lastMove = {};
 var first_move = true;
 var black_title_set = false;
 var white_title_set = false;
+
+var white_timer = 15 * 60;
+var black_timer = 15 * 60;
+
 var id = 0;
 var stats = {
 	black: STATS_MAX,
@@ -95,6 +98,14 @@ Firebase.authenticate((auth_user) => {
 			}
 		}
 
+		if (match && match.wtimer) {
+
+		}
+
+		if (match && match.btimer) {
+
+		}
+
 		if (match && match.moves) {
 			for (; match.moves.length != moves_applied;) {
 				if (match.moves[moves_applied] == DB_STALEMATE) {
@@ -151,6 +162,32 @@ function initGame() {
 }
 
 
+function countDown() {
+	if (turn == TEAM.W) {
+		let min = Math.floor(white_timer / 60);
+		let sec = white_timer - min * 60;
+		min = min < 10 ? '0' + min : min;
+		sec = sec < 10 ? '0' + sec : sec;
+		$('#white-timer').text(min + ":" + sec);
+
+		white_timer --;
+		if (white_timer <= 0)
+			Firebase.checkmate(match_id, match, my_team == TEAM.W ? TEAM.B : TEAM.W);
+	}
+	else {
+		let min = Math.floor(black_timer / 60);
+		let sec = black_timer - min * 60;
+		min = min < 10 ? '0' + min : min;
+		sec = sec < 10 ? '0' + sec : sec;
+		$('#black-timer').text(min + ":" + sec);
+
+		black_timer --;
+		if (black_timer <= 0)
+			Firebase.checkmate(match_id, match, my_team == TEAM.W ? TEAM.B : TEAM.W);
+	}
+}
+
+
 function initToolbar() {
 	// Signout button
 	$('#signout-btn').on('click', (e) => {
@@ -171,6 +208,8 @@ function setTitleBar(auth_user) {
 		Firebase.getUser(match.black, (user_data) => {
 			$('#black-player-image').attr('src', user_data.photoURL);
 			$('#black-player-name').text(user_data.displayName);
+			$('#black-player-utility-image').attr('src', user_data.photoURL);
+			$('#black-player-utility-name').text(user_data.displayName);
 			black_title_set = true;
 			names.black = user_data.displayName;
 
@@ -182,6 +221,8 @@ function setTitleBar(auth_user) {
 		Firebase.getUser(match.white, (user_data) => {
 			$('#white-player-image').attr('src', user_data.photoURL);
 			$('#white-player-name').text(user_data.displayName);
+			$('#white-player-utility-image').attr('src', user_data.photoURL);
+			$('#white-player-utility-name').text(user_data.displayName);
 			white_title_set = true;
 			names.white = user_data.displayName;
 
@@ -190,12 +231,8 @@ function setTitleBar(auth_user) {
 	}
 }
 
-
 //Intialize chessboard background
 function initBoard(){
-	// context.fillStyle = COLOR_BOARD_LIGHT;
-	// context.fillRect(0, 0, BOARD_SIZE * GRID_SIZE_P, BOARD_SIZE * GRID_SIZE_P); //Draw board outline
-
 	let color1 = my_team == TEAM.W ? COLOR_BOARD_DARK : COLOR_BOARD_LIGHT;
 	let color2 = my_team == TEAM.W ? COLOR_BOARD_LIGHT : COLOR_BOARD_DARK;
 
@@ -695,6 +732,15 @@ function updateStats() {
 		$(".canvas-border.bg-white").css('border-radius', '5px 5px 0px 0px');
 		$(".canvas-border.bg-black").css('border-radius', '5px 5px 5px 5px');
 	}
+
+	if (stats.white > stats.black) {
+		$("#white-stat").text("+" + (stats.white - stats.black));
+		$("#black-stat").text("-");
+	}
+	else {
+		$("#white-stat").text("-");
+		$("#black-stat").text("+" + (stats.black - stats.white));
+	}
 }
 
 //Clear and hide all possible moves
@@ -726,7 +772,6 @@ function fillGrid(grid, color) {
 		color = (grid.color == COLOR_BOARD_DARK) ? COLOR_LAST_MOVE_DARK : COLOR_LAST_MOVE_LIGHT;
 
 	background[grid.x][grid.y].setAttribute("style", `background-color: ${color};`);
-	// fillNumbering(grid.x, grid.y);
 }
 
 //Set numbering for specific grids
