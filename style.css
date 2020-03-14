@@ -75,7 +75,7 @@ body {
 	overflow-x: hidden;
 	font-family: 'Spectral', serif !important;
 	text-align: center;
-	background-color: darkslategrey !important;
+	background-color: black !important;
 	background-size: cover;
 }
 
@@ -110,8 +110,25 @@ img {
 .y7 { top: calc(var(--margin-size) + (7 * var(--cell-size))); }
 
 .white { color: white; }
+.black { color: black; }
 .bg-white { background-color: white; }
 .bg-black { background-color: black; }
+
+.numbering {
+	text-align: left;
+	margin-left: calc(var(--margin-size) / 4);
+	position: absolute;
+	font-weight: bold;
+	font-size: calc(var(--btn-size) * 0.75);
+}
+
+.lettering {
+	text-align: right;
+	margin-top: calc(var(--cell-size) - var(--margin-size) * 1.5);
+	margin-right: calc(var(--margin-size) / 4);
+	font-weight: bold;
+	font-size: calc(var(--btn-size) * 0.75);
+}
 
 .grid {
 	width: var(--piece-size);

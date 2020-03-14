@@ -3,8 +3,9 @@ var canvasLayer = document.getElementById("canvasLayer");
 var actionLayer = document.getElementById("actionLayer");
 var gridsLayer = document.getElementById("gridsLayer");
 var piecesLayer = document.getElementById("piecesLayer");
-var context = canvasLayer.getContext("2d");
+// var context = canvasLayer.getContext("2d");
 var chessboard = [[],[],[],[],[],[],[],[]];
+var background = [[],[],[],[],[],[],[],[]];
 var oldGrid = null;
 var moves = [];
 var turn = TEAM.W;
@@ -192,8 +193,8 @@ function setTitleBar(auth_user) {
 
 //Intialize chessboard background
 function initBoard(){
-	context.fillStyle = COLOR_BOARD_LIGHT;
-	context.fillRect(0, 0, BOARD_SIZE * GRID_SIZE_P, BOARD_SIZE * GRID_SIZE_P); //Draw board outline
+	// context.fillStyle = COLOR_BOARD_LIGHT;
+	// context.fillRect(0, 0, BOARD_SIZE * GRID_SIZE_P, BOARD_SIZE * GRID_SIZE_P); //Draw board outline
 
 	let color1 = my_team == TEAM.W ? COLOR_BOARD_DARK : COLOR_BOARD_LIGHT;
 	let color2 = my_team == TEAM.W ? COLOR_BOARD_LIGHT : COLOR_BOARD_DARK;
@@ -202,12 +203,19 @@ function initBoard(){
 		for (var y = 0; y < BOARD_SIZE; y++) {
 			color = (y % 2 != 0) ^ (x % 2 == 0) ? color1 : color2;
 			chessboard[x][y] = new Grid(x, y, -1, color);
+
+			//Grid Background
+			let backgroundGrid = document.createElement("div");
+			backgroundGrid.setAttribute("class", "grid x" + x + " y" + y);
+			canvasLayer.append(backgroundGrid);
+			background[x][y] = backgroundGrid;
+
 			fillGrid(chessboard[x][y], color);
 
 			//Grid Listener for onclick event
 			let gridListener = document.createElement("div");
 			gridListener.setAttribute("class", "grid x" + x + " y" + y);
-			gridListener.setAttribute("style", `z-index: 10;`)
+			gridListener.setAttribute("style", `z-index: 10;`);
 			gridListener.setAttribute("onClick", `onClick(event, ${x}, ${y})`);
 			gridsLayer.append(gridListener);
 		}
@@ -674,7 +682,6 @@ function updateStats() {
 	let w_stat = stats.white / (stats.white + stats.black);
 	w_stat = 0.35 * Math.atan(10 * w_stat - 5) + 0.5;
 
-	// let b_stat = stats.black / (stats.white + stats.black);
 	let w_pos = my_team == TEAM.W ? "bottom" : "top";
 
 	$(".canvas-border.bg-white").css("height", `calc(${w_stat} * (var(--margin-size) * 2 + (8 * var(--cell-size))))`);
@@ -712,29 +719,46 @@ function fillGrid(grid, color) {
 	if (color == COLOR_ORIGINAL)
 		color = grid.color;
 
-	context.fillStyle = color;
-	context.fillRect(grid.x * GRID_SIZE_P + 0.5, grid.y * GRID_SIZE_P + 0.5, GRID_SIZE_P, GRID_SIZE_P);
-	context.font = `bold ${GRID_SIZE_P / 5}px Spectral, serif`;
-	fillNumbering(grid.x, grid.y);
+	if (color == COLOR_HIGHLIGHT)
+		color = (grid.color == COLOR_BOARD_DARK) ? COLOR_HIGHLIGHT_DARK : COLOR_HIGHLIGHT_LIGHT;
+
+	if (color == COLOR_LAST_MOVE)
+		color = (grid.color == COLOR_BOARD_DARK) ? COLOR_LAST_MOVE_DARK : COLOR_LAST_MOVE_LIGHT;
+
+	background[grid.x][grid.y].setAttribute("style", `background-color: ${color};`);
+	// fillNumbering(grid.x, grid.y);
 }
 
 //Set numbering for specific grids
 function fillNumbering(x, y) {
-	if (my_team == TEAM.B)
-		context.fillStyle = (y % 2 == 0) ? "#000000" : "#ffffff";
-	else
-		context.fillStyle = (y % 2 != 0) ? "#000000" : "#ffffff";
+	console.log(x, y);
 
-	if (x == 0)
-		context.fillText(BOARD_SIZE - y, x * GRID_SIZE_P + GRID_SIZE_P / 21, y * GRID_SIZE_P + GRID_SIZE_P / 5);
+	let color;
+
+	if (my_team == TEAM.B)
+		color = (y % 2 == 0) ? "black" : "white";
+	else
+		color = (y % 2 != 0) ? "black" : "white";
+
+
+	if (x == 0) {
+		let number = document.createElement("div");
+		number.setAttribute("class", `${color} numbering`);
+		number.innerText = BOARD_SIZE - y;
+		background[x][y].append(number);
+	}
 
 	if (my_team == TEAM.W)
-		context.fillStyle = (x % 2 == 0) ? "#000000" : "#ffffff";
+		color = (x % 2 == 0) ? "black" : "white";
 	else
-		context.fillStyle = (x % 2 != 0) ? "#000000" : "#ffffff";
+		color = (x % 2 != 0) ? "black" : "white";
 
-	if (y == BOARD_SIZE - 1)
-		context.fillText(String.fromCharCode(x + 97), x * GRID_SIZE_P + GRID_SIZE_P / 1.2, y * GRID_SIZE_P + GRID_SIZE_P / 1.05);
+	if (y == BOARD_SIZE - 1) {
+		let letter = document.createElement("div");
+		letter.setAttribute("class", `${color} lettering`);
+		letter.innerText = String.fromCharCode(x + 97);
+		background[x][y].append(letter);
+	}
 }
 
 //Set last move grid color
