@@ -713,7 +713,7 @@ function fillGrid(grid, color) {
 		color = grid.color;
 
 	context.fillStyle = color;
-	context.fillRect(grid.x * GRID_SIZE_P, grid.y * GRID_SIZE_P, GRID_SIZE_P, GRID_SIZE_P);
+	context.fillRect(grid.x * GRID_SIZE_P + 0.5, grid.y * GRID_SIZE_P + 0.5, GRID_SIZE_P, GRID_SIZE_P);
 	context.font = `bold ${GRID_SIZE_P / 5}px Spectral, serif`;
 	fillNumbering(grid.x, grid.y);
 }
