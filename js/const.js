@@ -22,7 +22,6 @@ const COLOR_LAST_MOVE = "LAST_MOVE";
 const COLOR_LAST_MOVE_LIGHT = "#FDFD84";
 const COLOR_LAST_MOVE_DARK = "#EFEF6E";
 
-
 const STATUS_NONE = 0;
 const STATUS_CHECKMATE = 1;
 const STATUS_STALEMATE = 2;
@@ -30,6 +29,8 @@ const STATUS_STALEMATE = 2;
 const DB_CHECKMATE_WHITE = 0;
 const DB_CHECKMATE_BLACK = 1;
 const DB_STALEMATE = 2;
+
+const MAX_TIME = 15 * 60; // 15 min in seconds
 
 const STATS_MAX = 42; // treat king as 3 score
 

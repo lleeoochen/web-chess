@@ -134,7 +134,9 @@ class Firebase {
 			black: auth_user.uid,
 			white: null,
 			moves: [],
-			updated: new Date()
+			updated: new Date(),
+			black_timer: MAX_TIME,
+			white_timer: MAX_TIME,
 		})
 		.then(async function(ref) {
 			console.log(user.matches);
@@ -149,13 +151,23 @@ class Firebase {
 		})
 	}
 
-	static updateChessboard(match_id, match, oldGrid, newGrid, turn) {
+	static updateChessboard(match_id, match, oldGrid, newGrid, turn, black_timer, white_timer) {
 		let moves = (match && match.moves) ? match.moves : [];
 		moves.push(Util.pack(oldGrid, newGrid, turn));
 
+		console.log(black_timer);
 		db.collection(MATCHES_TABLE).doc(match_id).set({
 			moves: moves,
-			updated: new Date()
+			updated: new Date(),
+			black_timer: black_timer,
+			white_timer: white_timer,
+		}, { merge: true });
+	}
+
+	static updateTimer(match_id, match, black_timer, white_timer) {
+		db.collection(MATCHES_TABLE).doc(match_id).set({
+			black_timer: black_timer,
+			white_timer: white_timer,
 		}, { merge: true });
 	}
 

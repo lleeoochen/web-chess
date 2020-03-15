@@ -21,8 +21,9 @@ var first_move = true;
 var black_title_set = false;
 var white_title_set = false;
 
-var white_timer = 15 * 60;
-var black_timer = 15 * 60;
+var interval = null;
+var white_timer = MAX_TIME;
+var black_timer = MAX_TIME;
 
 var id = 0;
 var stats = {
@@ -98,14 +99,6 @@ Firebase.authenticate((auth_user) => {
 			}
 		}
 
-		if (match && match.wtimer) {
-
-		}
-
-		if (match && match.btimer) {
-
-		}
-
 		if (match && match.moves) {
 			for (; match.moves.length != moves_applied;) {
 				if (match.moves[moves_applied] == DB_STALEMATE) {
@@ -145,6 +138,27 @@ Firebase.authenticate((auth_user) => {
 					break;
 			}
 		}
+
+		if (match && match.black && match.white && match.white_timer && match.black_timer) {
+			let t1 = match_data.updated.toDate();
+			let t2 = new Date();
+			let diff = t1.getTime() - t2.getTime();
+			let sec = Math.floor(Math.abs(diff / 1000));
+
+			if (turn == TEAM.B) {
+				white_timer = match.white_timer;
+				black_timer = match.black_timer - sec;
+			}
+			else {
+				black_timer = match.black_timer;
+				white_timer = match.white_timer - sec;
+			}
+
+			clearInterval(interval);
+			interval = setInterval(function() {
+				countDown();
+			}, 1000);
+		}
 	});
 });
 
@@ -163,24 +177,15 @@ function initGame() {
 
 
 function countDown() {
-	if (turn == TEAM.W) {
-		let min = Math.floor(white_timer / 60);
-		let sec = white_timer - min * 60;
-		min = min < 10 ? '0' + min : min;
-		sec = sec < 10 ? '0' + sec : sec;
-		$('#white-timer').text(min + ":" + sec);
+	$('#white-timer').text(Util.formatTimer(white_timer));
+	$('#black-timer').text(Util.formatTimer(black_timer));
 
+	if (turn == TEAM.W) {
 		white_timer --;
 		if (white_timer <= 0)
 			Firebase.checkmate(match_id, match, my_team == TEAM.W ? TEAM.B : TEAM.W);
 	}
 	else {
-		let min = Math.floor(black_timer / 60);
-		let sec = black_timer - min * 60;
-		min = min < 10 ? '0' + min : min;
-		sec = sec < 10 ? '0' + sec : sec;
-		$('#black-timer').text(min + ":" + sec);
-
 		black_timer --;
 		if (black_timer <= 0)
 			Firebase.checkmate(match_id, match, my_team == TEAM.W ? TEAM.B : TEAM.W);
@@ -213,7 +218,7 @@ function setTitleBar(auth_user) {
 			black_title_set = true;
 			names.black = user_data.displayName;
 
-			$('#chat-messages-content').replaceWith($.parseHTML($('#chat-messages-content').prop('outerHTML').replace(/\[B\]/g, names.black))); 
+			$('#chat-messages-content').replaceWith($.parseHTML($('#chat-messages-content').prop('outerHTML').replace(/\[B\]/g, names.black)));
 		});
 	}
 
@@ -226,7 +231,7 @@ function setTitleBar(auth_user) {
 			white_title_set = true;
 			names.white = user_data.displayName;
 
-			$('#chat-messages-content').replaceWith($.parseHTML($('#chat-messages-content').prop('outerHTML').replace(/\[W\]/g, names.white))); 
+			$('#chat-messages-content').replaceWith($.parseHTML($('#chat-messages-content').prop('outerHTML').replace(/\[W\]/g, names.white)));
 		});
 	}
 }
@@ -365,7 +370,7 @@ function handleChessEvent(x, y) {
 	//Action0 - Castle
 	if (canCastle(oldGrid, newGrid)) {
 		moveChess(oldGrid, newGrid);
-		Firebase.updateChessboard(match_id, match, oldGrid, newGrid, turn);
+		Firebase.updateChessboard(match_id, match, oldGrid, newGrid, turn, black_timer, white_timer);
 		oldGrid = null;
 		return;
 	}
@@ -387,7 +392,7 @@ function handleChessEvent(x, y) {
 	//Action3 - Move Piece by clicking on empty grid or eat enemy by clicking on legal grid. Switch turn.
 	else if (oldGrid != null && oldGrid.get_piece() != null && isLegal) {
 		moveChess(oldGrid, newGrid);
-		Firebase.updateChessboard(match_id, match, oldGrid, newGrid, turn);
+		Firebase.updateChessboard(match_id, match, oldGrid, newGrid, turn, black_timer, white_timer);
 		oldGrid = null;
 
 		//Thinking...
@@ -622,7 +627,7 @@ function moveChess(oldGrid, newGrid) {
 		playSound("opening");
 	}
 
-	//Remove chess piece being eaten 
+	//Remove chess piece being eaten
 	if (newGrid.get_piece() != null) {
 
 		if (newGrid.get_piece().team == TEAM.B)
@@ -938,12 +943,5 @@ window.onscroll = function(ev) {
 	let offset = 10;
 	if (!SCREEN_PORTRAIT && (window.innerHeight + window.scrollY + offset) >= document.body.offsetHeight) {
 		$('#chat-notification').attr('hidden', 'hidden');
-	}
-};
-
-window.onresize = function() {
-	if ((SCREEN_PORTRAIT && window.innerHeight < window.innerWidth) ||
-		(!SCREEN_PORTRAIT && window.innerHeight > window.innerWidth)) {
-		location.reload();
 	}
 };
