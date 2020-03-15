@@ -76,6 +76,7 @@ body {
 	font-family: 'Spectral', serif !important;
 	text-align: center;
 	background-color: black !important;
+	/*background-image: url('assets/background.jpg');*/
 	background-size: cover;
 }
 
@@ -490,4 +491,22 @@ body {
     margin-bottom: auto;
 	padding-right: var(--margin-size);
     font-size: calc(var(--title-size) * 2);
+}
+
+.player-utility-timer .timer {
+    padding-top: calc(var(--margin-size) / 2);
+    padding-bottom: calc(var(--margin-size) / 2);
+    padding-left: var(--margin-size);
+    padding-right: var(--margin-size);
+	border-radius: calc(var(--btn-size) / 4);
+    float: right;
+    background-color: #757575;
+}
+
+#black-player-image, #black-player-utility-image {
+	border: calc(var(--picture-size) / 15) solid black;
+}
+
+#white-player-image, #white-player-utility-image {
+	border: calc(var(--picture-size) / 15) solid white;
 }

@@ -191,9 +191,20 @@ class Firebase {
 		}, { merge: true });
 	}
 
+	static timesup(match_id, match, winning_team) {
+		let moves = (match && match.moves) ? match.moves : [];
+		moves.push(winning_team == TEAM.W ? DB_TIMESUP_WHITE : DB_TIMESUP_BLACK); // timesup
+
+		db.collection(MATCHES_TABLE).doc(match_id).set({
+			moves: moves,
+			updated: new Date()
+		}, { merge: true });
+	}
+
 	static registerOpponent(match_id, user_id) {
 		db.collection(MATCHES_TABLE).doc(match_id).set({
 			white: user_id,
+			updated: new Date(),
 		}, { merge: true });
 
 		db.collection(USERS_TABLE).doc(user_id).get().then(doc => {
@@ -202,7 +213,7 @@ class Firebase {
 			matches.push(match_id);
 
 			db.collection(USERS_TABLE).doc(user_id).set({
-				matches: matches
+				matches: matches,
 			}, { merge: true });
 		});
 	}

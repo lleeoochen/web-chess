@@ -113,6 +113,14 @@ Firebase.authenticate((auth_user) => {
 					swal('Checkmate. White Team Wins!', {button: false });
 					return;
 				}
+				else if (match.moves[moves_applied] == DB_TIMESUP_BLACK) {
+					swal('Time\'s Up. Black Team Wins!', {button: false });
+					return;
+				}
+				else if (match.moves[moves_applied] == DB_TIMESUP_WHITE) {
+					swal('Time\'s Up. White Team Wins!', {button: false });
+					return;
+				}
 
 				let move = Util.unpack(match.moves[moves_applied]);
 				if (turn != my_team) {
@@ -180,15 +188,24 @@ function countDown() {
 	$('#white-timer').text(Util.formatTimer(white_timer));
 	$('#black-timer').text(Util.formatTimer(black_timer));
 
-	if (turn == TEAM.W) {
-		white_timer --;
-		if (white_timer <= 0)
-			Firebase.checkmate(match_id, match, my_team == TEAM.W ? TEAM.B : TEAM.W);
+	if (turn == TEAM.W && white_timer >= 0) {
+		if (white_timer <= 0) {
+			Firebase.timesup(match_id, match, TEAM.B);
+			clearInterval(interval);
+		}
+		else {
+			white_timer --;
+		}
 	}
-	else {
-		black_timer --;
-		if (black_timer <= 0)
-			Firebase.checkmate(match_id, match, my_team == TEAM.W ? TEAM.B : TEAM.W);
+
+	if (turn == TEAM.B && black_timer >= 0) {
+		if (black_timer <= 0) {
+			Firebase.timesup(match_id, match, TEAM.W);
+			clearInterval(interval);
+		}
+		else {
+			black_timer --;
+		}
 	}
 }
 
