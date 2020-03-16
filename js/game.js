@@ -750,10 +750,10 @@ function moveChess(oldGrid, newGrid) {
 //Update and show all possible moves based on a specific grid
 function updateMoves(grid) {
 	moves = grid.get_piece().getPossibleMoves(chessboard, grid);
-	if (grid == king_grid && canCastle(grid, chessboard[grid.x - 2][grid.y]))
+	if (!king_moved && grid == king_grid && canCastle(grid, chessboard[grid.x - 2][grid.y]))
 		moves.push(chessboard[grid.x - 2][grid.y]);
 
-	if (grid == king_grid &&canCastle(grid, chessboard[grid.x + 2][grid.y]))
+	if (!king_moved && grid == king_grid &&canCastle(grid, chessboard[grid.x + 2][grid.y]))
 		moves.push(chessboard[grid.x + 2][grid.y]);
 
 	setMovesColor(COLOR_HIGHLIGHT);
