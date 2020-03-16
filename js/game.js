@@ -86,12 +86,19 @@ Firebase.authenticate((auth_user) => {
 				if (chat.team == TEAM.W) team_name = names.white ? names.white : `[${chat.team}]`;
 				else 					 team_name = names.black ? names.black : `[${chat.team}]`;
 
-				$("#chat-messages-content").append(`
-					<div class="chat-message">
-						<strong>${ team_name }</strong>&nbsp;&nbsp;&nbsp; ${ chat.message }
-					</div>`);
-				$("#chat-messages-content").scrollTop($("#chat-messages-content")[0].scrollHeight);
+				if (chats_applied != 0 && chat.team == Util.unpackMessage(match.chat[chats_applied - 1]).team) {
+					let message = $('#chat-messages-content').children().last().find('.chat-message-content');
+					message.html(message.html() + "<br>" + chat.message);
+				}
+				else {
+					$("#chat-messages-content").append(`
+						<div class="chat-message row">
+							<div class="chat-message-sender">${ team_name }</div>
+							<p class="chat-message-content">${ chat.message }</p>
+						</div>`);
+				}
 
+				$("#chat-messages-content").scrollTop($("#chat-messages-content")[0].scrollHeight);
 				let offset = 10;
 				if (!SCREEN_PORTRAIT && (window.innerHeight + window.scrollY + offset) < document.body.offsetHeight) {
 					$('#chat-notification').removeAttr('hidden');
@@ -189,6 +196,7 @@ function countDown() {
 	$('#black-timer').text(Util.formatTimer(black_timer));
 
 	if (turn == TEAM.W && white_timer >= 0) {
+		$('#white-timer').addClass('ticking');
 		if (white_timer <= 0) {
 			Firebase.timesup(match_id, match, TEAM.B);
 			clearInterval(interval);
@@ -197,8 +205,12 @@ function countDown() {
 			white_timer --;
 		}
 	}
+	else {
+		$('#white-timer').removeClass('ticking');
+	}
 
 	if (turn == TEAM.B && black_timer >= 0) {
+		$('#black-timer').addClass('ticking');
 		if (black_timer <= 0) {
 			Firebase.timesup(match_id, match, TEAM.W);
 			clearInterval(interval);
@@ -206,6 +218,9 @@ function countDown() {
 		else {
 			black_timer --;
 		}
+	}
+	else {
+		$('#black-timer').removeClass('ticking');
 	}
 }
 
@@ -236,6 +251,7 @@ function setTitleBar(auth_user) {
 			names.black = user_data.displayName;
 
 			$('#chat-messages-content').replaceWith($.parseHTML($('#chat-messages-content').prop('outerHTML').replace(/\[B\]/g, names.black)));
+			$("#chat-messages-content").scrollTop($("#chat-messages-content")[0].scrollHeight);
 		});
 	}
 
@@ -249,6 +265,7 @@ function setTitleBar(auth_user) {
 			names.white = user_data.displayName;
 
 			$('#chat-messages-content').replaceWith($.parseHTML($('#chat-messages-content').prop('outerHTML').replace(/\[W\]/g, names.white)));
+			$("#chat-messages-content").scrollTop($("#chat-messages-content")[0].scrollHeight);
 		});
 	}
 }
@@ -757,10 +774,10 @@ function updateStats() {
 
 	if (stats.white > stats.black) {
 		$("#white-stat").text("+" + (stats.white - stats.black));
-		$("#black-stat").text("-");
+		$("#black-stat").text("+0");
 	}
 	else {
-		$("#white-stat").text("-");
+		$("#white-stat").text("+0");
 		$("#black-stat").text("+" + (stats.black - stats.white));
 	}
 }
@@ -798,8 +815,6 @@ function fillGrid(grid, color) {
 
 //Set numbering for specific grids
 function fillNumbering(x, y) {
-	console.log(x, y);
-
 	let color;
 
 	if (my_team == TEAM.B)

@@ -219,6 +219,7 @@ img {
 .player-pic.pull-right { margin-right: 0; }
 
 .player-name {
+	font-size: var(--title-size);
 	margin-top: var(--margin-size) !important;
 }
 
@@ -371,7 +372,7 @@ img {
 }
 
 #chat-text-input {
-	font-size: calc(var(--title-size));
+	font-size: calc(var(--btn-size) * 0.75);
 	height: 100%;
 	border-radius: 0px 0px 0px calc(var(--btn-size) / 4);
 	border-color: grey !important;
@@ -380,7 +381,7 @@ img {
 }
 
 #chat-send-button {
-	font-size: calc(var(--title-size));
+	font-size: calc(var(--btn-size) * 0.75);
 	padding: calc(var(--btn-size) / 2);
 	height: 100%;
 	display: flex;
@@ -392,7 +393,27 @@ img {
 }
 
 .chat-message {
-	font-size: calc(var(--title-size)) !important;
+	font-size: calc(var(--title-size) * 0.8) !important;
+	padding: calc(var(--margin-size) * 0.8);
+	margin-right: calc(var(--margin-size) * 0.8) !important;
+	/*margin-bottom: calc(var(--margin-size) * 0.5);*/
+    border-radius: calc(var(--btn-size) / 4 * 0.8);
+    /*background-color: #494949;*/
+    color: white;
+    margin-left: 0 !important;
+	display: flex;
+}
+
+.chat-message-sender {
+	font-weight: bold;
+	margin-right: var(--margin-size);
+	display: block;
+	min-width: 30%;
+}
+
+.chat-message-content {
+	padding-left: calc(var(--margin-size) / 5);
+	margin-bottom: 0;
 }
 
 #chat-messages {
@@ -458,12 +479,12 @@ body {
 }
 
 .player-utility-profile {
-	width: 40%;
+	width: 30%;
 	text-overflow: ellipsis;
 	white-space: nowrap;
     overflow: hidden;
     display: block;
-	padding-left: var(--margin-size);
+	/*padding-left: var(--margin-size);*/
 }
 
 .player-utility-name {
@@ -474,10 +495,11 @@ body {
 	width: var(--picture-size);
 	height: var(--picture-size);
 	border-radius: calc(var(--picture-size) / 10);
+	/*margin-top: calc(var(--margin-size) / 2);*/
 }
 
 .player-utility-stat {
-	width: 20%;
+	width: 30%;
     text-align: center;
     margin-top: auto;
     margin-bottom: auto;
@@ -489,7 +511,7 @@ body {
     text-align: right;
     margin-top: auto;
     margin-bottom: auto;
-	padding-right: var(--margin-size);
+	/*padding-right: var(--margin-size);*/
     font-size: calc(var(--title-size) * 2);
 }
 
@@ -501,6 +523,11 @@ body {
 	border-radius: calc(var(--btn-size) / 4);
     float: right;
     background-color: #757575;
+	color: darkslategrey;
+}
+
+.timer.ticking {
+	color: white !important;
 }
 
 #black-player-image, #black-player-utility-image {
