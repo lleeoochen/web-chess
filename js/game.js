@@ -34,6 +34,10 @@ var names = {
 	black: null,
 	white: null
 };
+var pictures = {
+	black: null,
+	white: null,
+}
 
 
 Firebase.authenticate((auth_user) => {
@@ -332,6 +336,7 @@ function setTitleBar(auth_user) {
 			$('#black-player-utility-name').text(user_data.displayName);
 			black_title_set = true;
 			names.black = user_data.displayName;
+			pictures.black = user_data.photoURL;
 
 			$('#chat-messages-content').replaceWith($.parseHTML($('#chat-messages-content').prop('outerHTML').replace(/\[B\]/g, names.black)));
 			$("#chat-messages-content").scrollTop($("#chat-messages-content")[0].scrollHeight);
@@ -346,6 +351,7 @@ function setTitleBar(auth_user) {
 			$('#white-player-utility-name').text(user_data.displayName);
 			white_title_set = true;
 			names.white = user_data.displayName;
+			pictures.white = user_data.photoURL;
 
 			$('#chat-messages-content').replaceWith($.parseHTML($('#chat-messages-content').prop('outerHTML').replace(/\[W\]/g, names.white)));
 			$("#chat-messages-content").scrollTop($("#chat-messages-content")[0].scrollHeight);

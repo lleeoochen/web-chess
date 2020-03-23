@@ -12,6 +12,7 @@
 		--piece-size: 11.5vw;
 		--eaten-piece-size: 3vw;
 		--picture-size: 10vw;
+		--icon-size: 3vw;
 		--title-size: 3vw;
 		--btn-size: 3vw;
 
@@ -36,6 +37,7 @@
 		--piece-size: 10vh;
 		--eaten-piece-size: 3vh;
 		--picture-size: 10vh;
+		--icon-size: 3vh;
 		--title-size: 3vh;
 		--btn-size: 3vh;
 
@@ -575,7 +577,7 @@ body {
 	margin-bottom: auto;
 	margin-right: var(--margin-size);
 	width: 100%;
-	margin-top: calc(2 * var(--margin-size)) !important;
+	margin-top: calc(var(--margin-size)) !important;
 }
 
 .utility-btn {
@@ -606,4 +608,10 @@ body {
 hr {
 	width: 20%;
 	border-color: darkslategrey !important;
+}
+
+.utility-icon {
+	width: var(--icon-size);
+	height: var(--icon-size);
+	margin-right: calc(var(--margin-size) / 2);
 }
