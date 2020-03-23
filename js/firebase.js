@@ -171,6 +171,15 @@ class Firebase {
 		}, { merge: true });
 	}
 
+	static addTime(match_id, match, time) {
+		let t = match.updated.toDate();
+		t.setSeconds(t.getSeconds() + time);
+
+		db.collection(MATCHES_TABLE).doc(match_id).set({
+			updated: t
+		}, { merge: true });
+	}
+
 	static checkmate(match_id, match, winning_team) {
 		let moves = (match && match.moves) ? match.moves : [];
 		moves.push(winning_team == TEAM.W ? DB_CHECKMATE_WHITE : DB_CHECKMATE_BLACK); // checkmate
@@ -194,6 +203,16 @@ class Firebase {
 	static timesup(match_id, match, winning_team) {
 		let moves = (match && match.moves) ? match.moves : [];
 		moves.push(winning_team == TEAM.W ? DB_TIMESUP_WHITE : DB_TIMESUP_BLACK); // timesup
+
+		db.collection(MATCHES_TABLE).doc(match_id).set({
+			moves: moves,
+			updated: new Date()
+		}, { merge: true });
+	}
+
+	static resign(match_id, match, winning_team) {
+		let moves = (match && match.moves) ? match.moves : [];
+		moves.push(winning_team == TEAM.W ? DB_RESIGN_WHITE : DB_RESIGN_BLACK); // resign
 
 		db.collection(MATCHES_TABLE).doc(match_id).set({
 			moves: moves,
@@ -229,4 +248,4 @@ class Firebase {
 	}
 }
 
-Firebase.init()
+Firebase.init();

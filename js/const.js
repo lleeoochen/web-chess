@@ -31,6 +31,8 @@ const DB_CHECKMATE_BLACK = 1;
 const DB_STALEMATE = 2;
 const DB_TIMESUP_WHITE = 3;
 const DB_TIMESUP_BLACK = 4;
+const DB_RESIGN_WHITE = 5;
+const DB_RESIGN_BLACK = 6;
 
 const MAX_TIME = 15 * 60; // 15 min in seconds
 

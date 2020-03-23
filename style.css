@@ -327,11 +327,28 @@ img {
 	font-family: 'Spectral', serif !important;
 }
 
-.swal-text {
+.swal-title {
+	/*font-size: calc(2 * var(--title-size)) !important;*/
+}
+
+.swal-text, .swal-title {
 	color: white !important;
 	font-weight: normal !important;
 	font-size: calc(1.2 * var(--title-size));
 	text-align: center;
+}
+
+.swal-button {
+	font-size: calc(var(--btn-size) * 0.75) !important;
+	padding: calc(var(--btn-size) / 3) !important;
+	padding-left: calc(var(--btn-size) / 1.5) !important;
+	padding-right: calc(var(--btn-size) / 1.5) !important;
+	border-radius: calc(var(--btn-size) / 4) !important;
+}
+
+.swal-button--confirm {
+	background-color: #757575 !important;
+	border-color: unset !important;
 }
 
 #chat-layer {
@@ -551,20 +568,23 @@ body {
 	margin-top: auto;
 	margin-bottom: auto;
 	margin-right: var(--margin-size);
+	width: 100%;
+	text-align: right;
 }
 
 .utility-btn {
     text-align: right;
-    margin-top: auto;
-    margin-bottom: auto;
     font-size: calc(var(--title-size)) !important;
 	background-color: rgba(255, 255, 255, 0.2);
+	border-radius: calc(var(--btn-size) / 4);
 
     padding-top: calc(var(--margin-size) / 2);
     padding-bottom: calc(var(--margin-size) / 2);
     padding-left: var(--margin-size);
     padding-right: var(--margin-size);
-	border-radius: calc(var(--btn-size) / 4);
 
-	margin-right: calc(var(--margin-size));
+    margin-top: auto;
+    margin-bottom: auto;
+	margin-left: calc(var(--margin-size) / 2);
+	/*margin-right: calc(var(--margin-size) / 2);*/
 }

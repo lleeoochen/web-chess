@@ -76,6 +76,19 @@ Firebase.authenticate((auth_user) => {
 			my_team = TEAM.B; // spectate mode
 		}
 
+		if (match.black && match.white) {
+			$('#invite-btn').css('display', 'none');
+			$('#resign-btn').css('display', '');
+			$('#undo-btn').css('display', '');
+			$('#add-time-btn').css('display', '');
+		}
+		else {
+			$('#invite-btn').css('display', '');
+			$('#resign-btn').css('display', 'none');
+			$('#undo-btn').css('display', 'none');
+			$('#add-time-btn').css('display', 'none');
+		}
+
 		setTitleBar(auth_user);
 
 		if (match && match.chat) {
@@ -113,19 +126,27 @@ Firebase.authenticate((auth_user) => {
 					return;
 				}
 				else if (match.moves[moves_applied] == DB_CHECKMATE_BLACK) {
-					swal('Checkmate. Black Team Wins!', {button: false });
+					swal('Checkmate. Black Team Wins!', { button: false });
 					return;
 				}
 				else if (match.moves[moves_applied] == DB_CHECKMATE_WHITE) {
-					swal('Checkmate. White Team Wins!', {button: false });
+					swal('Checkmate. White Team Wins!', { button: false });
 					return;
 				}
 				else if (match.moves[moves_applied] == DB_TIMESUP_BLACK) {
-					swal('Time\'s Up. Black Team Wins!', {button: false });
+					swal('Time\'s Up. Black Team Wins!', { button: false });
 					return;
 				}
 				else if (match.moves[moves_applied] == DB_TIMESUP_WHITE) {
-					swal('Time\'s Up. White Team Wins!', {button: false });
+					swal('Time\'s Up. White Team Wins!', { button: false });
+					return;
+				}
+				else if (match.moves[moves_applied] == DB_RESIGN_BLACK) {
+					swal('White Resigned. Black Team Wins!', { button: false });
+					return;
+				}
+				else if (match.moves[moves_applied] == DB_RESIGN_WHITE) {
+					swal('Black Resigned. White Team Wins!', { button: false });
 					return;
 				}
 
@@ -157,8 +178,8 @@ Firebase.authenticate((auth_user) => {
 		if (match && match.black && match.white && match.white_timer && match.black_timer) {
 			let t1 = match_data.updated.toDate();
 			let t2 = new Date();
-			let diff = t1.getTime() - t2.getTime();
-			let sec = Math.floor(Math.abs(diff / 1000));
+			let diff = t2.getTime() - t1.getTime();
+			let sec = Math.floor(diff / 1000);
 
 			if (turn == TEAM.B) {
 				white_timer = match.white_timer;
@@ -169,10 +190,25 @@ Firebase.authenticate((auth_user) => {
 				white_timer = match.white_timer - sec;
 			}
 
-			clearInterval(interval);
-			interval = setInterval(function() {
+			let network_delay = 1000 - new Date().getMilliseconds();
+
+			if (network_delay > 270) {
+				if (turn == TEAM.B) {
+					black_timer --;
+				}
+				else {
+					white_timer --;
+				}
+			}
+
+			setTimeout(() => {
+				clearInterval(interval);
 				countDown();
-			}, 1000);
+				$('#add-time-btn').removeAttr('disabled');
+				interval = setInterval(function() {
+					countDown();
+				}, 1000);
+			}, network_delay);
 		}
 	});
 });
@@ -190,13 +226,26 @@ function initGame() {
 	initChat();
 }
 
-
-function countDown() {
+function showTimer() {
 	$('#white-timer').text(Util.formatTimer(white_timer));
 	$('#black-timer').text(Util.formatTimer(black_timer));
 
-	if (turn == TEAM.W && white_timer >= 0) {
+	if (turn == TEAM.W && white_timer >= 0)
 		$('#white-timer').addClass('ticking');
+	else
+		$('#white-timer').removeClass('ticking');
+
+	if (turn == TEAM.B && black_timer >= 0)
+		$('#black-timer').addClass('ticking');
+	else
+		$('#black-timer').removeClass('ticking');
+}
+
+function countDown() {
+	showTimer();
+	console.log(white_timer)
+
+	if (turn == TEAM.W && white_timer >= 0) {
 		if (white_timer <= 0) {
 			Firebase.timesup(match_id, match, TEAM.B);
 			clearInterval(interval);
@@ -205,12 +254,8 @@ function countDown() {
 			white_timer --;
 		}
 	}
-	else {
-		$('#white-timer').removeClass('ticking');
-	}
 
 	if (turn == TEAM.B && black_timer >= 0) {
-		$('#black-timer').addClass('ticking');
 		if (black_timer <= 0) {
 			Firebase.timesup(match_id, match, TEAM.W);
 			clearInterval(interval);
@@ -218,9 +263,6 @@ function countDown() {
 		else {
 			black_timer --;
 		}
-	}
-	else {
-		$('#black-timer').removeClass('ticking');
 	}
 }
 
@@ -426,6 +468,12 @@ function handleChessEvent(x, y) {
 	//Action3 - Move Piece by clicking on empty grid or eat enemy by clicking on legal grid. Switch turn.
 	else if (oldGrid != null && oldGrid.get_piece() != null && isLegal) {
 		moveChess(oldGrid, newGrid);
+
+		if (my_team == TEAM.B)
+			black_timer += 1
+		else
+			white_timer += 1
+
 		Firebase.updateChessboard(match_id, match, oldGrid, newGrid, turn, black_timer, white_timer);
 		oldGrid = null;
 
@@ -983,3 +1031,59 @@ window.onscroll = function(ev) {
 		$('#chat-notification').attr('hidden', 'hidden');
 	}
 };
+
+function onInviteClick() {
+	if ($('#invite-btn').attr('disabled') == 'disabled')
+		return;
+
+	let e = document.createElement('textarea');
+	e.value = window.location.href;
+	document.body.appendChild(e);
+	e.select();
+	document.execCommand('copy');
+	document.body.removeChild(e);
+
+	swal('Invite Link Copied!', { button: false, timer: 3000 });
+}
+
+function onResignClick() {
+	if ($('#resign-btn').attr('disabled') == 'disabled')
+		return;
+
+	swal({
+		text: "Resign match?",
+		type: "warning",
+		showCancelButton: true,
+		buttons: [
+		  'Cancel',
+		  'Resign'
+		],
+		closeOnConfirm: false
+	}).then((toResign) => {
+		if (toResign) {
+			Firebase.resign(match_id, match, my_team == TEAM.W ? TEAM.B : TEAM.W);
+		}
+	});
+}
+
+function onUndoClick() {
+	if ($('#undo-btn').attr('disabled') == 'disabled')
+		return;
+	
+}
+
+function onAddTimeClick() {
+	if ($('#add-time-btn').attr('disabled') == 'disabled')
+		return;
+
+	if (my_team == TEAM.W) {
+		black_timer += 16;
+		Firebase.updateTimer(match_id, match, match.black_timer + 15, match.white_timer);
+	}
+	else {
+		white_timer += 16;
+		Firebase.updateTimer(match_id, match, match.black_timer, match.white_timer + 15);
+	}
+	showTimer();
+	$('#add-time-btn').attr('disabled', 'disabled');
+}
