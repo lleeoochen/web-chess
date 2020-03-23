@@ -54,9 +54,9 @@
 		</div>
 		<div id="chat-layer" >
 			<div id="utility-section">
+				<div id="black-player-utility-name" class="player-utility-name">&nbsp;</div>
 				<div id="black-player-utility" class="player-utility">
 					<div class="player-utility-profile">
-						<!-- <div id="black-player-utility-name" class="player-utility-name">&nbsp;</div> -->
 						<img id="black-player-utility-image" class="player-utility-pic" src="assets/profile.jpg"/>
 					</div>
 					<div id="black-stat" class="player-utility-stat"></div>
@@ -64,9 +64,9 @@
 						<div id="black-timer" class="timer"> 00:00 </div>
 					</div>
 				</div>
+				<div id="white-player-utility-name" class="player-utility-name">Opponent</div>
 				<div id="white-player-utility" class="player-utility">
 					<div class="player-utility-profile">
-						<!-- <div id="white-player-utility-name" class="player-utility-name">Opponent</div> -->
 						<img id="white-player-utility-image" class="player-utility-pic" src="assets/profile.jpg"/>
 					</div>
 					<div id="white-stat" class="player-utility-stat"></div>
@@ -74,12 +74,20 @@
 						<div id="white-timer" class="timer">00:00</div>
 					</div>
 				</div>
+				<div id="game-utility-title"> Game Utility </div>
 				<div id="game-utility">
-					<div id="game-utility-title">Game Utility: </div>
-					<div id="invite-btn"   class="btn utility-btn" onclick="onInviteClick()"> Invite </div>
-					<div id="resign-btn"   class="btn utility-btn" onclick="onResignClick()"> Resign </div>
-					<div id="undo-btn"     class="btn utility-btn" onclick="onUndoClick()"> Mercy </div>
-					<div id="add-time-btn" class="btn utility-btn" onclick="onAddTimeClick()"> +15 sec </div>
+					<div id="invite-btn" class="utility-btn-wrap">
+						<div class="btn utility-btn" onclick="onInviteClick()"> Invite </div>
+					</div>	
+					<div id="resign-btn" class="utility-btn-wrap">
+						<div class="btn utility-btn"  onclick="onResignClick()"> Resign </div>
+					</div>	
+					<div id="undo-btn" class="utility-btn-wrap">
+						<div class="btn utility-btn" onclick="onUndoClick()"> Mercy </div>
+					</div>	
+					<div id="add-time-btn" class="utility-btn-wrap"> 
+						<div class="btn utility-btn" onclick="onAddTimeClick()"> +15 sec </div>
+					</div>
 				</div>
 			</div>
 			<div id="chat-section">

@@ -77,16 +77,16 @@ Firebase.authenticate((auth_user) => {
 		}
 
 		if (match.black && match.white) {
-			$('#invite-btn').css('display', 'none');
-			$('#resign-btn').css('display', '');
-			$('#undo-btn').css('display', '');
-			$('#add-time-btn').css('display', '');
+			$('#invite-btn').addClass('hidden');
+			$('#resign-btn').removeClass('hidden');
+			$('#undo-btn').removeClass('hidden');
+			$('#add-time-btn').removeClass('hidden');
 		}
 		else {
-			$('#invite-btn').css('display', '');
-			$('#resign-btn').css('display', 'none');
-			$('#undo-btn').css('display', 'none');
-			$('#add-time-btn').css('display', 'none');
+			$('#invite-btn').removeClass('hidden');
+			$('#resign-btn').addClass('hidden');
+			$('#undo-btn').addClass('hidden');
+			$('#add-time-btn').addClass('hidden');
 		}
 
 		setTitleBar(auth_user);
@@ -194,7 +194,7 @@ Firebase.authenticate((auth_user) => {
 					showCancelButton: true,
 					buttons: [
 					  'Cancel',
-					  'Undo'
+					  'Mercy!'
 					],
 					closeOnConfirm: false
 				}).then((toResign) => {
@@ -210,10 +210,10 @@ Firebase.authenticate((auth_user) => {
 			if (match.moves.length == 0 || turn == my_team ||
 				(my_team == TEAM.B && match.black_undo == DB_REQUEST_ASK) ||
 				(my_team == TEAM.W && match.white_undo == DB_REQUEST_ASK)) {
-				$('#undo-btn').attr('disabled', 'disabled');
+				$('#undo-btn .btn').attr('disabled', 'disabled');
 			}
 			else {
-				$('#undo-btn').removeAttr('disabled');
+				$('#undo-btn .btn').removeAttr('disabled');
 			}
 		}
 
@@ -246,7 +246,7 @@ Firebase.authenticate((auth_user) => {
 			setTimeout(() => {
 				clearInterval(interval);
 				countDown();
-				$('#add-time-btn').removeAttr('disabled');
+				$('#add-time-btn .btn').removeAttr('disabled');
 				interval = setInterval(function() {
 					countDown();
 				}, 1000);
@@ -1074,7 +1074,7 @@ window.onscroll = function(ev) {
 };
 
 function onInviteClick() {
-	if ($('#invite-btn').attr('disabled') == 'disabled')
+	if ($('#invite-btn .btn').attr('disabled') == 'disabled')
 		return;
 
 	let e = document.createElement('textarea');
@@ -1088,7 +1088,7 @@ function onInviteClick() {
 }
 
 function onResignClick() {
-	if ($('#resign-btn').attr('disabled') == 'disabled')
+	if ($('#resign-btn .btn').attr('disabled') == 'disabled')
 		return;
 
 	swal({
@@ -1108,14 +1108,14 @@ function onResignClick() {
 }
 
 function onUndoClick() {
-	if ($('#undo-btn').attr('disabled') == 'disabled')
+	if ($('#undo-btn .btn').attr('disabled') == 'disabled')
 		return;
 
 	Firebase.askUndo(match_id, match, my_team);
 }
 
 function onAddTimeClick() {
-	if ($('#add-time-btn').attr('disabled') == 'disabled')
+	if ($('#add-time-btn .btn').attr('disabled') == 'disabled')
 		return;
 
 	if (my_team == TEAM.W) {
@@ -1127,5 +1127,5 @@ function onAddTimeClick() {
 		Firebase.updateTimer(match_id, match, match.black_timer, match.white_timer + 15);
 	}
 	showTimer();
-	$('#add-time-btn').attr('disabled', 'disabled');
+	$('#add-time-btn .btn').attr('disabled', 'disabled');
 }
