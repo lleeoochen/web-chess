@@ -34,6 +34,10 @@ const DB_TIMESUP_BLACK = 4;
 const DB_RESIGN_WHITE = 5;
 const DB_RESIGN_BLACK = 6;
 
+const DB_REQUEST_NONE = 0;
+const DB_REQUEST_ASK = 1;
+const DB_REQUEST_DONE = 2;
+
 const MAX_TIME = 15 * 60; // 15 min in seconds
 
 const STATS_MAX = 42; // treat king as 3 score

@@ -40,7 +40,7 @@ class Firebase {
 		firebase.auth().onAuthStateChanged(function(auth_user_1) {
 			if (auth_user_1) {
 				auth_user = auth_user_1;
-				
+
 				db.collection(USERS_TABLE).doc(auth_user.uid).set({
 					email: auth_user.email,
 					photoURL: auth_user.photoURL,
@@ -79,7 +79,7 @@ class Firebase {
 							result.push([doc.id, doc.data(), user]);
 							sent ++;
 							if (sent == ids.length) {
-								callback(result);					
+								callback(result);
 							}
 						});
 					}
@@ -87,7 +87,7 @@ class Firebase {
 						sent ++;
 						result.push([doc.id, doc.data(), null]);
 						if (sent == ids.length) {
-							callback(result);					
+							callback(result);
 						}
 					}
 					// if (user_cache[id]) {
@@ -99,7 +99,7 @@ class Firebase {
 					// 		user_cache[id] = user;
 					// 		sent ++;
 					// 		if (sent == ids.length) {
-					// 			callback(result);					
+					// 			callback(result);
 					// 		}
 					// 	});
 					// }
@@ -137,6 +137,8 @@ class Firebase {
 			updated: new Date(),
 			black_timer: MAX_TIME,
 			white_timer: MAX_TIME,
+			black_undo: DB_REQUEST_NONE,
+			white_undo: DB_REQUEST_NONE,
 		})
 		.then(async function(ref) {
 			console.log(user.matches);
@@ -220,6 +222,42 @@ class Firebase {
 		}, { merge: true });
 	}
 
+	static undoMove(match_id, match) {
+		let moves = (match && match.moves) ? match.moves : [];
+
+		if (moves.length > 0) {
+			moves.pop();
+		}
+
+		if (my_team == TEAM.B) {
+			db.collection(MATCHES_TABLE).doc(match_id).set({
+				white_undo: DB_REQUEST_DONE,
+				moves: moves,
+				updated: new Date()
+			}, { merge: true });
+		}
+		else {
+			db.collection(MATCHES_TABLE).doc(match_id).set({
+				black_undo: DB_REQUEST_DONE,
+				moves: moves,
+				updated: new Date()
+			}, { merge: true });
+		}
+	}
+
+	static cancelUndo(match_id, match) {
+		if (my_team == TEAM.B) {
+			db.collection(MATCHES_TABLE).doc(match_id).set({
+				white_undo: DB_REQUEST_NONE,
+			}, { merge: true });
+		}
+		else {
+			db.collection(MATCHES_TABLE).doc(match_id).set({
+				black_undo: DB_REQUEST_NONE,
+			}, { merge: true });
+		}
+	}
+
 	static registerOpponent(match_id, user_id) {
 		db.collection(MATCHES_TABLE).doc(match_id).set({
 			white: user_id,
@@ -245,6 +283,19 @@ class Firebase {
 			chat: chat,
 			updated: new Date()
 		}, { merge: true });
+	}
+
+	static askUndo(match_id, match, my_team) {
+		if (my_team == TEAM.B) {
+			db.collection(MATCHES_TABLE).doc(match_id).set({
+				black_undo: DB_REQUEST_ASK,
+			}, { merge: true });
+		}
+		else {
+			db.collection(MATCHES_TABLE).doc(match_id).set({
+				white_undo: DB_REQUEST_ASK,
+			}, { merge: true });
+		}
 	}
 }
 

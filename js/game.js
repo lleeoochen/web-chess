@@ -120,33 +120,44 @@ Firebase.authenticate((auth_user) => {
 		}
 
 		if (match && match.moves) {
+			if (match.moves.length < moves_applied) {
+				location.reload();
+			}
+
 			for (; match.moves.length != moves_applied;) {
 				if (match.moves[moves_applied] == DB_STALEMATE) {
 					swal('Stalemate.', {button: false });
+					clearInterval(interval);
 					return;
 				}
 				else if (match.moves[moves_applied] == DB_CHECKMATE_BLACK) {
 					swal('Checkmate. Black Team Wins!', { button: false });
+					clearInterval(interval);
 					return;
 				}
 				else if (match.moves[moves_applied] == DB_CHECKMATE_WHITE) {
 					swal('Checkmate. White Team Wins!', { button: false });
+					clearInterval(interval);
 					return;
 				}
 				else if (match.moves[moves_applied] == DB_TIMESUP_BLACK) {
 					swal('Time\'s Up. Black Team Wins!', { button: false });
+					clearInterval(interval);
 					return;
 				}
 				else if (match.moves[moves_applied] == DB_TIMESUP_WHITE) {
 					swal('Time\'s Up. White Team Wins!', { button: false });
+					clearInterval(interval);
 					return;
 				}
 				else if (match.moves[moves_applied] == DB_RESIGN_BLACK) {
 					swal('White Resigned. Black Team Wins!', { button: false });
+					clearInterval(interval);
 					return;
 				}
 				else if (match.moves[moves_applied] == DB_RESIGN_WHITE) {
 					swal('Black Resigned. White Team Wins!', { button: false });
+					clearInterval(interval);
 					return;
 				}
 
@@ -172,6 +183,37 @@ Firebase.authenticate((auth_user) => {
 				case STATUS_STALEMATE:
 					Firebase.stalemate(match_id, match);
 					break;
+			}
+		}
+
+		if (match && match.black_undo != undefined && match.white_undo != undefined) {
+			if (my_team == TEAM.B && match.white_undo == DB_REQUEST_ASK || my_team == TEAM.W && match.black_undo == DB_REQUEST_ASK) {
+				swal({
+					text: `${(my_team == TEAM.B) ? names.white : names.black} is once again asking for your mercy. Undo?`,
+					type: "warning",
+					showCancelButton: true,
+					buttons: [
+					  'Cancel',
+					  'Undo'
+					],
+					closeOnConfirm: false
+				}).then((toResign) => {
+					if (toResign) {
+						Firebase.undoMove(match_id, match);
+					}
+					else {
+						Firebase.cancelUndo(match_id, match);
+					}
+				});
+			}
+
+			if (match.moves.length == 0 || turn == my_team ||
+				(my_team == TEAM.B && match.black_undo == DB_REQUEST_ASK) ||
+				(my_team == TEAM.W && match.white_undo == DB_REQUEST_ASK)) {
+				$('#undo-btn').attr('disabled', 'disabled');
+			}
+			else {
+				$('#undo-btn').removeAttr('disabled');
 			}
 		}
 
@@ -243,7 +285,6 @@ function showTimer() {
 
 function countDown() {
 	showTimer();
-	console.log(white_timer)
 
 	if (turn == TEAM.W && white_timer >= 0) {
 		if (white_timer <= 0) {
@@ -1069,7 +1110,8 @@ function onResignClick() {
 function onUndoClick() {
 	if ($('#undo-btn').attr('disabled') == 'disabled')
 		return;
-	
+
+	Firebase.askUndo(match_id, match, my_team);
 }
 
 function onAddTimeClick() {
