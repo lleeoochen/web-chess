@@ -1,0 +1,40 @@
+@media screen and (orientation: portrait) {
+	:root {
+		--google-auth-size: 3vw;
+	}
+}
+
+@media screen and (orientation: landscape) {
+	:root {
+		--google-auth-size: 3vh;
+	}
+}
+
+@media (max-width: 176vh) and (orientation: landscape) {
+	:root {
+		--google-auth-size: 3vh;
+	}
+}
+
+.firebaseui-container, .firebaseui-idp-button, .firebaseui-tenant-button {
+	max-width: unset !important;
+	width: unset !important;
+}
+
+.firebaseui-idp-button {
+	background-color: black !important;
+}
+
+.firebaseui-idp-text {
+	font-size: var(--google-auth-size) !important;
+}
+
+
+.firebaseui-idp-icon-wrapper {
+	font-size: var(--google-auth-size) !important;
+}
+
+.firebaseui-idp-icon {
+	width: var(--google-auth-size) !important;
+	height: var(--google-auth-size) !important;
+}
