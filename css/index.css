@@ -38,24 +38,6 @@
 	}
 }
 
-body {
-	overflow-x: hidden;
-	font-family: 'Spectral', serif !important;
-	text-align: center;
-	background-color: black !important;
-	/*background-image: url('assets/background.jpg');*/
-	background-size: cover;
-	background-position: center;
-}
-
-img {
-	-khtml-user-select: none;
-	-o-user-select: none;
-	-moz-user-select: none;
-	-webkit-user-select: none;
-	user-select: none;
-}
-
 #matches-display {
 	margin-left: 50px;
 	margin-right: 50px;
