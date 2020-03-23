@@ -76,25 +76,31 @@
 				</div>
 				<div id="game-utility-title"> Utility </div>
 				<div id="game-utility">
-					<div id="invite-btn" class="utility-btn-wrap">
+					<div id="invite-btn" class="utility-btn-wrap hidden">
 						<div class="btn utility-btn" onclick="onInviteClick()">
 							<img class="utility-icon" src="assets/invite.png"/>
 							Invite
 						</div>
-					</div>	
-					<div id="resign-btn" class="utility-btn-wrap">
+					</div>
+					<div id="resign-btn" class="utility-btn-wrap hidden">
 						<div class="btn utility-btn"  onclick="onResignClick()">
 							<img class="utility-icon" src="assets/resign.png"/>
 							Resign
 						</div>
-					</div>	
-					<div id="undo-btn" class="utility-btn-wrap">
+					</div>
+					<div id="draw-btn" class="utility-btn-wrap hidden">
+						<div class="btn utility-btn"  onclick="onDrawClick()">
+							<img class="utility-icon" src="assets/draw.png"/>
+							Draw
+						</div>
+					</div>
+					<div id="undo-btn" class="utility-btn-wrap hidden">
 						<div class="btn utility-btn" onclick="onUndoClick()">
 							<img class="utility-icon" src="assets/mercy.png"/>
 							Mercy
 						</div>
-					</div>	
-					<div id="add-time-btn" class="utility-btn-wrap"> 
+					</div>
+					<div id="add-time-btn" class="utility-btn-wrap hidden"> 
 						<div class="btn utility-btn" onclick="onAddTimeClick()">
 							<img class="utility-icon" src="assets/time.png"/>
 							+15 sec

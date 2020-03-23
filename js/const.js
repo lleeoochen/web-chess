@@ -33,6 +33,7 @@ const DB_TIMESUP_WHITE = 3;
 const DB_TIMESUP_BLACK = 4;
 const DB_RESIGN_WHITE = 5;
 const DB_RESIGN_BLACK = 6;
+const DB_DRAW = 7;
 
 const DB_REQUEST_NONE = 0;
 const DB_REQUEST_ASK = 1;

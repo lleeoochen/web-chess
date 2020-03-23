@@ -139,6 +139,8 @@ class Firebase {
 			white_timer: MAX_TIME,
 			black_undo: DB_REQUEST_NONE,
 			white_undo: DB_REQUEST_NONE,
+			black_draw: DB_REQUEST_NONE,
+			white_draw: DB_REQUEST_NONE,
 		})
 		.then(async function(ref) {
 			console.log(user.matches);
@@ -202,6 +204,16 @@ class Firebase {
 		}, { merge: true });
 	}
 
+	static draw(match_id, match) {
+		let moves = (match && match.moves) ? match.moves : [];
+		moves.push(DB_DRAW); // draw
+
+		db.collection(MATCHES_TABLE).doc(match_id).set({
+			moves: moves,
+			updated: new Date()
+		}, { merge: true });
+	}
+
 	static timesup(match_id, match, winning_team) {
 		let moves = (match && match.moves) ? match.moves : [];
 		moves.push(winning_team == TEAM.W ? DB_TIMESUP_WHITE : DB_TIMESUP_BLACK); // timesup
@@ -258,6 +270,19 @@ class Firebase {
 		}
 	}
 
+	static cancelDraw(match_id, match) {
+		if (my_team == TEAM.B) {
+			db.collection(MATCHES_TABLE).doc(match_id).set({
+				white_draw: DB_REQUEST_NONE,
+			}, { merge: true });
+		}
+		else {
+			db.collection(MATCHES_TABLE).doc(match_id).set({
+				black_draw: DB_REQUEST_NONE,
+			}, { merge: true });
+		}
+	}
+
 	static registerOpponent(match_id, user_id) {
 		db.collection(MATCHES_TABLE).doc(match_id).set({
 			white: user_id,
@@ -294,6 +319,19 @@ class Firebase {
 		else {
 			db.collection(MATCHES_TABLE).doc(match_id).set({
 				white_undo: DB_REQUEST_ASK,
+			}, { merge: true });
+		}
+	}
+
+	static askDraw(match_id, match, my_team) {
+		if (my_team == TEAM.B) {
+			db.collection(MATCHES_TABLE).doc(match_id).set({
+				black_draw: DB_REQUEST_ASK,
+			}, { merge: true });
+		}
+		else {
+			db.collection(MATCHES_TABLE).doc(match_id).set({
+				white_draw: DB_REQUEST_ASK,
 			}, { merge: true });
 		}
 	}

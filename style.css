@@ -80,6 +80,7 @@ body {
 	background-color: black !important;
 	/*background-image: url('assets/background.jpg');*/
 	background-size: cover;
+	background-position: center;
 }
 
 h3 {

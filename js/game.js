@@ -83,12 +83,14 @@ Firebase.authenticate((auth_user) => {
 		if (match.black && match.white) {
 			$('#invite-btn').addClass('hidden');
 			$('#resign-btn').removeClass('hidden');
+			$('#draw-btn').removeClass('hidden');
 			$('#undo-btn').removeClass('hidden');
 			$('#add-time-btn').removeClass('hidden');
 		}
 		else {
 			$('#invite-btn').removeClass('hidden');
 			$('#resign-btn').addClass('hidden');
+			$('#draw-btn').addClass('hidden');
 			$('#undo-btn').addClass('hidden');
 			$('#add-time-btn').addClass('hidden');
 		}
@@ -131,6 +133,11 @@ Firebase.authenticate((auth_user) => {
 			for (; match.moves.length != moves_applied;) {
 				if (match.moves[moves_applied] == DB_STALEMATE) {
 					swal('Stalemate.', {button: false });
+					clearInterval(interval);
+					return;
+				}
+				else if (match.moves[moves_applied] == DB_DRAW) {
+					swal('Draw.', {button: false });
 					clearInterval(interval);
 					return;
 				}
@@ -198,7 +205,7 @@ Firebase.authenticate((auth_user) => {
 					showCancelButton: true,
 					buttons: [
 					  'Cancel',
-					  'Mercy!'
+					  'Mercy'
 					],
 					closeOnConfirm: false
 				}).then((toResign) => {
@@ -218,6 +225,28 @@ Firebase.authenticate((auth_user) => {
 			}
 			else {
 				$('#undo-btn .btn').removeAttr('disabled');
+			}
+		}
+
+		if (match && match.black_draw != undefined && match.white_draw != undefined) {
+			if (my_team == TEAM.B && match.white_draw == DB_REQUEST_ASK || my_team == TEAM.W && match.black_draw == DB_REQUEST_ASK) {
+				swal({
+					text: `${(my_team == TEAM.B) ? names.white : names.black} is asking for a draw. Confirm?`,
+					type: "warning",
+					showCancelButton: true,
+					buttons: [
+					  'Cancel',
+					  'Draw'
+					],
+					closeOnConfirm: false
+				}).then((toResign) => {
+					if (toResign) {
+						Firebase.draw(match_id, match);
+					}
+					else {
+						Firebase.cancelDraw(match_id, match);
+					}
+				});
 			}
 		}
 
@@ -1111,6 +1140,13 @@ function onResignClick() {
 			Firebase.resign(match_id, match, my_team == TEAM.W ? TEAM.B : TEAM.W);
 		}
 	});
+}
+
+function onDrawClick() {
+	if ($('#draw-btn .btn').attr('disabled') == 'disabled')
+		return;
+
+	Firebase.askDraw(match_id, match, my_team);
 }
 
 function onUndoClick() {
