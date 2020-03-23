@@ -5,7 +5,8 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 	<title>Match - Web Chess</title>
-	<link href="style.css" rel="stylesheet" type="text/css">
+	<link href="css/general.css" rel="stylesheet" type="text/css">
+	<link href="css/game.css" rel="stylesheet" type="text/css">
 	<link rel="shortcut icon" type="image/x-icon" href="favicon.ico" />
 	<link rel="stylesheet" href="plugins/css/sweetalert.css">
 	<link type="text/css" rel="stylesheet" href="https://www.gstatic.com/firebasejs/ui/4.4.0/firebase-ui-auth.css" />
@@ -30,7 +31,7 @@
 
 	<div id="game-content">
 		<img id="chat-notification" src="assets/notification.png" hidden/>
-		<div id="actionLayer">
+		<div id="action-layer">
 			<div class="row" style="margin: 0 !important;">
 				<img id="black-player-image" class="player-pic pull-left" src="assets/profile.jpg"/>
 				<div class="pull-left white text-left">
@@ -47,12 +48,12 @@
 			<div id="canvas-wrap">
 				<div class="canvas-border bg-black"></div>
 				<div class="canvas-border bg-white"></div>
-				<div id="canvasLayer"></div>
-				<div id="gridsLayer"></div>
-				<div id="piecesLayer"></div>
+				<div id="canvas-layer"></div>
+				<div id="grids-layer"></div>
+				<div id="pieces-layer"></div>
 			</div>
 		</div>
-		<div id="chat-layer" >
+		<div id="side-layer" >
 			<div id="utility-section">
 				<div id="black-player-utility-name" class="player-utility-name">&nbsp;</div>
 				<div id="black-player-utility" class="player-utility">

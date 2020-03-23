@@ -1,12 +1,5 @@
 @media screen and (orientation: portrait) {
 	:root {
-		--home-title-size: 10vw;
-		--home-button-size: 5vw;
-		--home-match-width: 80vw;
-		--home-match-text-size: 8vw;
-		--home-match-margin: 2vw;
-		--home-match-icon-size: 15vw;
-
 		--margin-size: 2vw;
 		--cell-size: 11.5vw;
 		--piece-size: 11.5vw;
@@ -16,7 +9,6 @@
 		--title-size: 3vw;
 		--btn-size: 3vw;
 
-		--google-auth-size: 3vw;
 		--game-content-display: unset;
 		--layer-margin-auto: auto;
 		--chat-layer-padding-left: var(--margin-size);
@@ -25,13 +17,6 @@
 }
 @media screen and (orientation: landscape) {
 	:root {
-		--home-title-size: 8vh;
-		--home-button-size: 2vh;
-		--home-match-width: 40vh;
-		--home-match-text-size: 3vh;
-		--home-match-margin: 1vw;
-		--home-match-icon-size: 7vh;
-
 		--margin-size: 2vh;
 		--cell-size: 10vh;
 		--piece-size: 10vh;
@@ -41,7 +26,6 @@
 		--title-size: 3vh;
 		--btn-size: 3vh;
 
-		--google-auth-size: 3vh;
 		--game-content-display: flex;
 		--layer-margin-auto: unset;
 		--chat-layer-padding-left: unset;
@@ -50,13 +34,6 @@
 }
 @media (max-width: 176vh) and (orientation: landscape) {
 	:root {
-		--home-title-size: 8vh;
-		--home-button-size: 2vh;
-		--home-match-width: 40vh;
-		--home-match-text-size: 3vh;
-		--home-match-margin: 1vw;
-		--home-match-icon-size: 7vh;
-
 		--margin-size: 2vh;
 		--cell-size: 10vh;
 		--piece-size: 10vh;
@@ -65,11 +42,11 @@
 		--title-size: 3vh;
 		--btn-size: 3vh;
 
-		--google-auth-size: 3vh;
 		--game-content-display: unset;
 		--layer-margin-auto: auto;
 		--chat-layer-padding-left: var(--margin-size);
 		--chat-layer-width: calc(var(--margin-size) * 4 + (8 * var(--cell-size)));
+		--scrollbar-size: 1vh;
 	}
 }
 
@@ -81,10 +58,6 @@ body {
 	/*background-image: url('assets/background.jpg');*/
 	background-size: cover;
 	background-position: center;
-}
-
-h3 {
-	font-size: calc(var(--title-size)) !important;
 }
 
 img {
@@ -171,48 +144,6 @@ img {
 	padding-right: 10px;
 }
 
-#matches-display {
-	margin-left: 50px;
-	margin-right: 50px;
-	margin-bottom: 50px;
-	margin-top: 0px;
-}
-
-.match-link {
-	width: var(--home-match-width);
-	margin-left: calc(var(--home-match-margin) / 2);
-	margin-right: calc(var(--home-match-margin) / 2);
-	margin-top: var(--home-match-margin);
-	border-radius: calc(var(--home-match-margin) / 2) !important;
-
-	white-space: nowrap;
-	overflow: hidden;
-	text-overflow: ellipsis;
-	font-size: var(--home-match-text-size) !important;
-	color: black !important;
-
-	background-image: unset !important;
-	border: unset !important;
-	background-color: #57bf69 !important;
-}
-
-.match-link img {
-	width: var(--home-match-icon-size);
-	margin-right: var(--margin-size);
-}
-
-.match-link-date {
-	font-size: calc(var(--home-match-text-size) * 0.8) !important;
-	color: darkslategrey;
-}
-
-.modal { text-align: center; }
-.modal-dialog {
-  display: inline-block;
-  text-align: left;
-  vertical-align: middle;
-}
-
 .player-pic {
 	width: var(--picture-size);
 	height: var(--picture-size);
@@ -227,41 +158,11 @@ img {
 	margin-top: var(--margin-size) !important;
 }
 
-#title {
-	color: white;
-	-webkit-text-stroke: 2px black;
-	margin-bottom: 0px;
-	font-size: var(--home-title-size);
-	font-weight: bold;
-}
-
-#subtitle {
-	color: white;
-	margin-top: 2px;
-	margin-bottom: 10px;
-}
-
 #game-content {
 	display: var(--game-content-display);
 }
 
-#chess-toolbar {
-	margin-top: 2px;
-	margin-bottom: 10px;
-}
-
-#chess-toolbar .btn {
-	font-size: var(--home-button-size);
-	padding: calc(var(--btn-size) / 3);
-	padding-left: calc(var(--btn-size) / 1.5);
-	padding-right: calc(var(--btn-size) / 1.5);
-	border-radius: calc(var(--btn-size) / 4);
-	background-image: unset;
-	background-color: black;
-	border: unset;
-}
-
-#canvasLayer {
+#canvas-layer {
 	left: 0;
 	position: absolute;
 	padding: var(--margin-size);
@@ -273,7 +174,7 @@ img {
 	height: calc(var(--margin-size) * 2 + (8 * var(--cell-size)));
 }
 
-#actionLayer {
+#action-layer {
 	background-color: rgba(255, 255, 255, 0.2);
 	padding-left: var(--margin-size);
 	padding-right: var(--margin-size);
@@ -296,66 +197,7 @@ img {
 	border: unset;
 }
 
-#new-match-btn {
-	margin-left: 10px;
-}
-
-.firebaseui-container, .firebaseui-idp-button, .firebaseui-tenant-button {
-	max-width: unset !important;
-	width: unset !important;
-}
-
-.firebaseui-idp-button {
-	background-color: black !important;
-}
-
-.firebaseui-idp-text {
-	font-size: var(--google-auth-size) !important;
-}
-.firebaseui-idp-icon-wrapper {
-	font-size: var(--google-auth-size) !important;
-}
-.firebaseui-idp-icon {
-	width: var(--google-auth-size) !important;
-	height: var(--google-auth-size) !important;
-}
-
-.swal-modal, .modal-body {
-	/*background-image: url("assets/background.jpg");*/
-	background-size: cover;
-	border-color: grey;
-	border-width: 5px;
-	border-width: 20px;
-	border-style: ridge;
-	background-color: darkslategrey !important;
-	font-family: 'Spectral', serif !important;
-}
-
-.swal-title {
-	/*font-size: calc(2 * var(--title-size)) !important;*/
-}
-
-.swal-text, .swal-title {
-	color: white !important;
-	font-weight: normal !important;
-	font-size: calc(1.2 * var(--title-size));
-	text-align: center;
-}
-
-.swal-button {
-	font-size: calc(var(--btn-size) * 0.75) !important;
-	padding: calc(var(--btn-size) / 3) !important;
-	padding-left: calc(var(--btn-size) / 1.5) !important;
-	padding-right: calc(var(--btn-size) / 1.5) !important;
-	border-radius: calc(var(--btn-size) / 4) !important;
-}
-
-.swal-button--confirm {
-	background-color: #757575 !important;
-	border-color: unset !important;
-}
-
-#chat-layer {
+#side-layer {
 	background-image: linear-gradient(rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.2));
 	padding-left: var(--chat-layer-padding-left);
 	padding-right: var(--margin-size);
@@ -479,17 +321,6 @@ img {
 	background: grey;
 }
 
-
-/* Hide scrollbar for Chrome, Safari and Opera */
-body::-webkit-scrollbar {
-	display: none;
-}
-
-/* Hide scrollbar for IE and Edge */
-body {
-	-ms-overflow-style: none;
-}
-
 .player-utility {
 	margin: 0 !important;
 	margin-top: calc(var(--margin-size) / 2) !important;
@@ -600,15 +431,6 @@ body {
 
 .utility-btn-wrap {
 	display: table-cell !important;
-}
-
-#game-utility:first-child {
-	margin-left: 0 !important;
-}
-
-hr {
-	width: 20%;
-	border-color: darkslategrey !important;
 }
 
 .utility-icon {

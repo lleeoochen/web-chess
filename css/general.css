@@ -1,0 +1,101 @@
+@media screen and (orientation: portrait) {
+	:root {
+		--title-size: 3vw;
+		--btn-size: 3vw;
+		--google-auth-size: 3vw;
+	}
+}
+@media screen and (orientation: landscape) {
+	:root {
+		--title-size: 3vh;
+		--btn-size: 3vh;
+		--google-auth-size: 3vh;
+	}
+}
+@media (max-width: 176vh) and (orientation: landscape) {
+	:root {
+		--home-title-size: 8vh;
+		--home-button-size: 2vh;
+		--home-match-width: 40vh;
+		--home-match-text-size: 3vh;
+		--home-match-margin: 1vw;
+		--home-match-icon-size: 7vh;
+
+		--margin-size: 2vh;
+		--title-size: 3vh;
+		--btn-size: 3vh;
+
+		--google-auth-size: 3vh;
+	}
+}
+
+.modal { text-align: center; }
+.modal-dialog {
+  display: inline-block;
+  text-align: left;
+  vertical-align: middle;
+}
+
+.firebaseui-container, .firebaseui-idp-button, .firebaseui-tenant-button {
+	max-width: unset !important;
+	width: unset !important;
+}
+
+.firebaseui-idp-button {
+	background-color: black !important;
+}
+
+.firebaseui-idp-text {
+	font-size: var(--google-auth-size) !important;
+}
+
+
+.firebaseui-idp-icon-wrapper {
+	font-size: var(--google-auth-size) !important;
+}
+
+.firebaseui-idp-icon {
+	width: var(--google-auth-size) !important;
+	height: var(--google-auth-size) !important;
+}
+
+.swal-modal, .modal-body {
+	/*background-image: url("assets/background.jpg");*/
+	background-size: cover;
+	border-color: grey;
+	border-width: 5px;
+	border-width: 20px;
+	border-style: ridge;
+	background-color: darkslategrey !important;
+	font-family: 'Spectral', serif !important;
+}
+
+.swal-text, .swal-title {
+	color: white !important;
+	font-weight: normal !important;
+	font-size: calc(1.2 * var(--title-size));
+	text-align: center;
+}
+
+.swal-button {
+	font-size: calc(var(--btn-size) * 0.75) !important;
+	padding: calc(var(--btn-size) / 3) !important;
+	padding-left: calc(var(--btn-size) / 1.5) !important;
+	padding-right: calc(var(--btn-size) / 1.5) !important;
+	border-radius: calc(var(--btn-size) / 4) !important;
+}
+
+.swal-button--confirm {
+	background-color: #757575 !important;
+	border-color: unset !important;
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+body::-webkit-scrollbar {
+	display: none;
+}
+
+/* Hide scrollbar for IE and Edge */
+body {
+	-ms-overflow-style: none;
+}

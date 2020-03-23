@@ -1,4 +1,4 @@
-const CANVAS_LAYER = document.getElementById("canvasLayer");
+const CANVAS_LAYER = document.getElementById("canvas-layer");
 
 const CHESS = {King: "King", Queen: "Queen", Rook: "Rook", Bishop: "Bishop", Knight: "Knight", Pawn: "Pawn", None: "None"};
 const VALUE = {King: 200, Queen: 9, Rook: 5, Bishop: 3, Knight: 3, Pawn: 1, None: 0};

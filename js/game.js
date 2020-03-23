@@ -1,8 +1,8 @@
 //Intialize global variables
-var canvasLayer = document.getElementById("canvasLayer");
-var actionLayer = document.getElementById("actionLayer");
-var gridsLayer = document.getElementById("gridsLayer");
-var piecesLayer = document.getElementById("piecesLayer");
+var canvasLayer = document.getElementById("canvas-layer");
+var actionLayer = document.getElementById("action-layer");
+var gridsLayer = document.getElementById("grids-layer");
+var piecesLayer = document.getElementById("pieces-layer");
 var chessboard = [[],[],[],[],[],[],[],[]];
 var background = [[],[],[],[],[],[],[],[]];
 var oldGrid = null;
@@ -478,7 +478,7 @@ function initEachPiece(id, x, y, team, type) {
 }
 
 function initChat() {
-	$("#chat-layer").on('keyup', function (e) {
+	$("#side-layer").on('keyup', function (e) {
 		if (e.keyCode === 13) {
 			let message = $("#chat-text-input").val();
 			Firebase.message(match_id, match, message, my_team);
