@@ -191,11 +191,12 @@
 	color: white;
 	text-align: left;
 	height: 100vh;
-	display: flow-root;
+	display: flex;
+	flex-direction: column;
 }
 
 #utility-section {
-	height: calc(70% - 3 * var(--margin-size));
+	/*height: calc(70% - 3 * var(--margin-size));*/
 	margin-top: var(--margin-size);
 	margin-bottom: var(--margin-size);
 	padding: var(--margin-size);
@@ -204,9 +205,11 @@
 }
 
 #chat-section {
-	height: calc(30%);
+	/*height: calc(30%);*/
 	background-color: #00000073;
 	border-radius: calc(var(--btn-size) / 4);
+	margin-bottom: var(--margin-size);
+	flex-grow: 100;
 }
 
 #chat-bottom {
