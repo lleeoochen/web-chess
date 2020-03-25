@@ -1,6 +1,6 @@
 @media screen and (orientation: portrait) {
 	:root {
-		--util-margin-size:		2vw;
+		--util-margin-size:		1vw;
 		--util-picture-size: 	10vw;
 		--util-icon-size: 		3vw;
 		--util-title-size: 		3vw;
@@ -10,7 +10,7 @@
 
 @media screen and (orientation: landscape) {
 	:root {
-		--util-margin-size:		2vh;
+		--util-margin-size:		1vh;
 		--util-picture-size:	10vh;
 		--util-icon-size:		3vh;
 		--util-title-size:		3vh;
@@ -23,7 +23,6 @@
 /* Player utility panels */
 .player-utility {
 	margin: 0 !important;
-	margin-top: calc(var(--util-margin-size) / 2) !important;
 	margin-bottom: var(--util-margin-size) !important;
 	padding: var(--util-margin-size);
 	background-color: rgba(255, 255, 255, 0.2);

@@ -868,7 +868,7 @@ function updateStats() {
 
 	let w_pos = my_team == TEAM.W ? "bottom" : "top";
 
-	$(".canvas-border.bg-white").css("height", `calc(${w_stat} * (var(--margin-size) * 2 + (8 * var(--cell-size))))`);
+	$(".canvas-border.bg-white").css("height", `calc(${w_stat} * var(--canvas-size))`);
 	$(".canvas-border.bg-white").css(w_pos, '0');
 
 	if (my_team == TEAM.W) {
