@@ -85,4 +85,42 @@ class Util {
 		sec = sec < 10 ? '0' + sec : sec;
 		return min + ":" + sec;
 	}
+
+	static gameFinished(move) {
+		if (move == DB_STALEMATE) {
+			swal('Stalemate.', {button: false });
+			return true;
+		}
+		else if (move == DB_DRAW) {
+			swal('Draw.', {button: false });
+			return true;
+		}
+		else if (move == DB_CHECKMATE_BLACK) {
+			swal('Checkmate. Black Team Wins!', { button: false });
+			return true;
+		}
+		else if (move == DB_CHECKMATE_WHITE) {
+			swal('Checkmate. White Team Wins!', { button: false });
+			return true;
+		}
+		else if (move == DB_TIMESUP_BLACK) {
+			swal('Time\'s Up. Black Team Wins!', { button: false });
+			return true;
+		}
+		else if (move == DB_TIMESUP_WHITE) {
+			swal('Time\'s Up. White Team Wins!', { button: false });
+			return true;
+		}
+		else if (move == DB_RESIGN_BLACK) {
+			swal('White Resigned. Black Team Wins!', { button: false });
+			return true;
+		}
+		else if (move == DB_RESIGN_WHITE) {
+			swal('Black Resigned. White Team Wins!', { button: false });
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
 }

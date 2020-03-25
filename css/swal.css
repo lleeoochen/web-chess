@@ -1,45 +1,54 @@
 @media screen and (orientation: portrait) {
 	:root {
-		--title-size: 3vw;
-		--btn-size: 3vw;
+		--swal-title-size: 4vw;
+		--swal-btn-size: 3vw;
+		--swal-width: 80vw;
+		--swal-border-size: 2vw;
+		--swal-border-radius: 0.5vw;
+		--swal-margin-size: 5vw;
+		--swal-button-margin-size: 2vw;
 	}
 }
 @media screen and (orientation: landscape) {
 	:root {
-		--title-size: 3vh;
-		--btn-size: 3vh;
-	}
-}
-@media (max-width: 176vh) and (orientation: landscape) {
-	:root {
-		--title-size: 3vh;
-		--btn-size: 3vh;
+		--swal-title-size: 4vh;
+		--swal-btn-size: 3vh;
+		--swal-width: 80vh;
+		--swal-border-size: 2vh;
+		--swal-border-radius: 0.5vh;
+		--swal-margin-size: 5vh;
+		--swal-button-margin-size: 2vh;
 	}
 }
 
 .swal-modal, .modal-body {
-	background-size: cover;
-	border-color: grey;
-	border-width: 5px;
-	border-width: 20px;
-	border-style: ridge;
-	background-color: darkslategrey !important;
+	width: var(--swal-width);
 	font-family: 'Spectral', serif !important;
+	padding: var(--swal-margin-size);
+	background-size: cover;
+	background-color: darkslategrey !important;
+	border-color: grey;
+	border-width: var(--swal-border-size);
+	border-style: ridge;
 }
 
-.swal-text, .swal-title {
-	color: white !important;
+.swal-text, .swal-title, .swal-footer {
 	font-weight: normal !important;
-	font-size: calc(1.2 * var(--title-size));
+	font-size: var(--swal-title-size);
 	text-align: center;
+	margin: 0 !important;
+	padding: 0 !important;
+	color: white !important;
 }
 
 .swal-button {
-	font-size: calc(var(--btn-size) * 0.75) !important;
-	padding: calc(var(--btn-size) / 3) !important;
-	padding-left: calc(var(--btn-size) / 1.5) !important;
-	padding-right: calc(var(--btn-size) / 1.5) !important;
-	border-radius: calc(var(--btn-size) / 4) !important;
+	font-size: var(--swal-title-size) !important;
+	padding: calc(var(--swal-button-margin-size) / 2) var(--swal-button-margin-size) !important;
+	border-radius: var(--swal-border-radius) !important;
+}
+
+.swal-button:focus {
+	box-shadow: unset !important;
 }
 
 .swal-button--confirm {

@@ -1,53 +1,58 @@
 @media screen and (orientation: portrait) {
 	:root {
-		--margin-size: 2vw;
-		--cell-size: 11.5vw;
-		--piece-size: 11.5vw;
+		--margin-size:		2vw;
+		--cell-size: 		11.5vw;
+		--piece-size: 		11.5vw;
 		--eaten-piece-size: 3vw;
-		--picture-size: 10vw;
-		--icon-size: 3vw;
-		--title-size: 3vw;
-		--btn-size: 3vw;
+		--picture-size: 	10vw;
+		--icon-size: 		3vw;
+		--title-size: 		3vw;
+		--btn-size: 		3vw;
 
-		--game-content-display: unset;
-		--layer-margin-auto: auto;
-		--chat-layer-padding-left: var(--margin-size);
-		--scrollbar-size: 1vw;
+		--game-content-display:	unset;
+		--layer-margin-auto:	auto;
+		--scrollbar-size:		1vw;
 	}
 }
+
 @media screen and (orientation: landscape) {
 	:root {
-		--margin-size: 2vh;
-		--cell-size: 10vh;
-		--piece-size: 10vh;
+		--margin-size:		2vh;
+		--cell-size:		10vh;
+		--piece-size:		10vh;
 		--eaten-piece-size: 3vh;
-		--picture-size: 10vh;
-		--icon-size: 3vh;
-		--title-size: 3vh;
-		--btn-size: 3vh;
+		--picture-size:		10vh;
+		--icon-size:		3vh;
+		--title-size:		3vh;
+		--btn-size:			3vh;
 
-		--game-content-display: flex;
-		--layer-margin-auto: unset;
-		--chat-layer-padding-left: unset;
-		--scrollbar-size: 1vh;
+		--game-content-display:	flex;
+		--layer-margin-auto:	unset;
+		--scrollbar-size:		1vh;
 	}
 }
+
+/* 176vh is calculated by computing: 2 * --layer-size */
 @media (max-width: 176vh) and (orientation: landscape) {
 	:root {
-		--margin-size: 2vh;
-		--cell-size: 10vh;
-		--piece-size: 10vh;
+		--margin-size:		2vh;
+		--cell-size:		10vh;
+		--piece-size:		10vh;
 		--eaten-piece-size: 3vh;
-		--picture-size: 10vh;
-		--title-size: 3vh;
-		--btn-size: 3vh;
+		--picture-size:		10vh;
+		--icon-size:		3vh;
+		--title-size:		3vh;
+		--btn-size:			3vh;
 
-		--game-content-display: unset;
-		--layer-margin-auto: auto;
-		--chat-layer-padding-left: var(--margin-size);
-		--chat-layer-width: calc(var(--margin-size) * 4 + (8 * var(--cell-size)));
-		--scrollbar-size: 1vh;
+		--game-content-display:	unset;
+		--layer-margin-auto: 	auto;
+		--scrollbar-size:		1vh;
 	}
+}
+
+:root {
+	--canvas-size: calc(var(--margin-size) * 2 + var(--cell-size) * 8);
+	--layer-size: calc(var(--canvas-size) + var(--margin-size) * 2);
 }
 
 .x0 { left: calc(var(--margin-size) + (0 * var(--cell-size))); }
@@ -109,8 +114,8 @@
 
 .canvas-border {
 	position: absolute;
-	width: calc(var(--margin-size) * 2 + (8 * var(--cell-size)));
-	height: calc(var(--margin-size) * 2 + (8 * var(--cell-size)));
+	width: var(--canvas-size);
+	height: var(--canvas-size);
 	z-index: 0;
 }
 
@@ -153,7 +158,7 @@
 
 #canvas-wrap {
 	position: relative;
-	height: calc(var(--margin-size) * 2 + (8 * var(--cell-size)));
+	height: var(--canvas-size);
 }
 
 #action-layer {
@@ -163,8 +168,7 @@
 	padding-bottom: var(--margin-size);
 	margin-left: auto;
 	margin-right: var(--layer-margin-auto);
-	width: calc(var(--margin-size) * 4 + (8 * var(--cell-size)));
-	min-width: calc(var(--margin-size) * 4 + (8 * var(--cell-size)));
+	width: var(--layer-size);
 }
 
 #home-btn {
@@ -181,22 +185,22 @@
 
 #side-layer {
 	background-image: linear-gradient(rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.2));
-	padding-left: var(--chat-layer-padding-left);
+	padding-left: var(--margin-size);
 	padding-right: var(--margin-size);
 	padding-top: 0;
 	margin-left: var(--layer-margin-auto);
 	margin-right: auto;
-	width: var(--chat-layer-width);
+	width: var(--layer-size);
 	width: calc(var(--margin-size) * 4 + (8 * var(--cell-size)));
 	color: white;
 	text-align: left;
-	height: 100vh;
+	height: calc(var(--margin-size) * 5 + var(--cell-size) * 8 + var(--picture-size));
 	display: flex;
 	flex-direction: column;
 }
 
 #utility-section {
-	/*height: calc(70% - 3 * var(--margin-size));*/
+	height: calc(70% - 3 * var(--margin-size));
 	margin-top: var(--margin-size);
 	margin-bottom: var(--margin-size);
 	padding: var(--margin-size);
@@ -205,106 +209,12 @@
 }
 
 #chat-section {
-	/*height: calc(30%);*/
+	height: 30%;
 	background-color: #00000073;
 	border-radius: calc(var(--btn-size) / 4);
 	margin-bottom: var(--margin-size);
-	flex-grow: 100;
 }
 
-#chat-bottom {
-	display: flex;
-	height: 20%;
-	margin-left: unset;
-	margin-right: unset;
-}
-
-#chat-text-input {
-	font-size: calc(var(--btn-size) * 0.75);
-	height: 100%;
-	border-radius: 0px 0px 0px calc(var(--btn-size) / 4);
-	border-color: grey !important;
-	border-width: 2px !important;
-	border-style: solid !important;
-}
-
-#chat-send-button {
-	font-size: calc(var(--btn-size) * 0.75);
-	padding: calc(var(--btn-size) / 2);
-	height: 100%;
-	display: flex;
-	align-items: center;
-	background-image: unset;
-	background-color: darkslategrey;
-	border: unset;
-	border-radius: 0px 0px calc(var(--btn-size) / 4) 0px;
-}
-
-.chat-message {
-	font-size: calc(var(--title-size) * 0.8) !important;
-	padding: calc(var(--margin-size) * 0.8);
-	margin-right: calc(var(--margin-size) * 0.8) !important;
-	/*margin-bottom: calc(var(--margin-size) * 0.5);*/
-    border-radius: calc(var(--btn-size) / 4 * 0.8);
-    /*background-color: #494949;*/
-    color: white;
-    margin-left: 0 !important;
-	display: flex;
-}
-
-.chat-message-sender {
-	font-weight: bold;
-	margin-right: var(--margin-size);
-	display: block;
-	min-width: 30%;
-}
-
-.chat-message-content {
-	padding-left: calc(var(--margin-size) / 5);
-	margin-bottom: 0;
-}
-
-#chat-messages {
-	padding: var(--margin-size);
-	text-align: left;
-	border-radius: calc(var(--btn-size) / 4) calc(var(--btn-size) / 4) 0px 0px;
-	color: #b3af72;
-	height: 80%;
-}
-
-#chat-messages-content {
-	height: 100%;
-	overflow-y: scroll;
-}
-
-#chat-notification {
-	width: calc(var(--btn-size) * 3);
-	position: fixed;
-	bottom: 0;
-	right: calc( (100% - (var(--margin-size) * 4 + (8 * var(--cell-size)))) / 2 - var(--btn-size) * 3 );
-}
-
-/* width */
-::-webkit-scrollbar {
-	width: var(--scrollbar-size);
-}
-
-/* Track */
-::-webkit-scrollbar-track {
-	box-shadow: inset 0 0 5px grey;
-	border-radius: 5px;
-}
-
-/* Handle */
-::-webkit-scrollbar-thumb {
-	background: darkslategrey;
-	border-radius: 5px;
-}
-
-/* Handle on hover */
-::-webkit-scrollbar-thumb:hover {
-	background: grey;
-}
 
 .player-utility {
 	margin: 0 !important;

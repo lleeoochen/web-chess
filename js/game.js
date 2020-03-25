@@ -80,7 +80,14 @@ Firebase.authenticate((auth_user) => {
 			my_team = TEAM.B; // spectate mode
 		}
 
-		if (match.black && match.white) {
+		if (match.moves.length > 0 && Util.gameFinished(match.moves[match.moves.length - 1])) {
+			$('#invite-btn').addClass('hidden');
+			$('#resign-btn').addClass('hidden');
+			$('#draw-btn').addClass('hidden');
+			$('#undo-btn').addClass('hidden');
+			$('#add-time-btn').addClass('hidden');
+		}
+		else if (match.black && match.white) {
 			$('#invite-btn').addClass('hidden');
 			$('#resign-btn').removeClass('hidden');
 			$('#draw-btn').removeClass('hidden');
@@ -131,43 +138,7 @@ Firebase.authenticate((auth_user) => {
 			}
 
 			for (; match.moves.length != moves_applied;) {
-				if (match.moves[moves_applied] == DB_STALEMATE) {
-					swal('Stalemate.', {button: false });
-					clearInterval(interval);
-					return;
-				}
-				else if (match.moves[moves_applied] == DB_DRAW) {
-					swal('Draw.', {button: false });
-					clearInterval(interval);
-					return;
-				}
-				else if (match.moves[moves_applied] == DB_CHECKMATE_BLACK) {
-					swal('Checkmate. Black Team Wins!', { button: false });
-					clearInterval(interval);
-					return;
-				}
-				else if (match.moves[moves_applied] == DB_CHECKMATE_WHITE) {
-					swal('Checkmate. White Team Wins!', { button: false });
-					clearInterval(interval);
-					return;
-				}
-				else if (match.moves[moves_applied] == DB_TIMESUP_BLACK) {
-					swal('Time\'s Up. Black Team Wins!', { button: false });
-					clearInterval(interval);
-					return;
-				}
-				else if (match.moves[moves_applied] == DB_TIMESUP_WHITE) {
-					swal('Time\'s Up. White Team Wins!', { button: false });
-					clearInterval(interval);
-					return;
-				}
-				else if (match.moves[moves_applied] == DB_RESIGN_BLACK) {
-					swal('White Resigned. Black Team Wins!', { button: false });
-					clearInterval(interval);
-					return;
-				}
-				else if (match.moves[moves_applied] == DB_RESIGN_WHITE) {
-					swal('Black Resigned. White Team Wins!', { button: false });
+				if (Util.gameFinished(match.moves[moves_applied])) {
 					clearInterval(interval);
 					return;
 				}
@@ -200,12 +171,12 @@ Firebase.authenticate((auth_user) => {
 		if (match && match.black_undo != undefined && match.white_undo != undefined) {
 			if (my_team == TEAM.B && match.white_undo == DB_REQUEST_ASK || my_team == TEAM.W && match.black_undo == DB_REQUEST_ASK) {
 				swal({
-					text: `${(my_team == TEAM.B) ? names.white : names.black} is once again asking for your mercy. Undo?`,
+					text: `${(my_team == TEAM.B) ? names.white : names.black} is once again asking for your mercy. Undo move?`,
 					type: "warning",
 					showCancelButton: true,
 					buttons: [
 					  'Cancel',
-					  'Mercy'
+					  'Undo'
 					],
 					closeOnConfirm: false
 				}).then((toResign) => {
@@ -247,6 +218,14 @@ Firebase.authenticate((auth_user) => {
 						Firebase.cancelDraw(match_id, match);
 					}
 				});
+			}
+
+			if ((my_team == TEAM.B && match.black_draw == DB_REQUEST_ASK) ||
+				(my_team == TEAM.W && match.white_draw == DB_REQUEST_ASK)) {
+				$('#draw-btn .btn').attr('disabled', 'disabled');
+			}
+			else {
+				$('#draw-btn .btn').removeAttr('disabled');
 			}
 		}
 
