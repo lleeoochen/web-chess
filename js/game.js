@@ -80,14 +80,7 @@ Firebase.authenticate((auth_user) => {
 			my_team = TEAM.B; // spectate mode
 		}
 
-		if (match.moves.length > 0 && Util.gameFinished(match.moves[match.moves.length - 1])) {
-			$('#invite-btn').addClass('hidden');
-			$('#resign-btn').addClass('hidden');
-			$('#draw-btn').addClass('hidden');
-			$('#undo-btn').addClass('hidden');
-			$('#add-time-btn').addClass('hidden');
-		}
-		else if (match.black && match.white) {
+		if (match.black && match.white) {
 			$('#invite-btn').addClass('hidden');
 			$('#resign-btn').removeClass('hidden');
 			$('#draw-btn').removeClass('hidden');
@@ -140,6 +133,12 @@ Firebase.authenticate((auth_user) => {
 			for (; match.moves.length != moves_applied;) {
 				if (Util.gameFinished(match.moves[moves_applied])) {
 					clearInterval(interval);
+
+					$('#invite-btn').addClass('hidden');
+					$('#resign-btn').addClass('hidden');
+					$('#draw-btn').addClass('hidden');
+					$('#undo-btn').addClass('hidden');
+					$('#add-time-btn').addClass('hidden');
 					return;
 				}
 
