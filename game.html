@@ -62,7 +62,7 @@
 		</div>
 		<div id="side-layer" >
 			<div id="utility-section">
-				<!-- <div class="player-utility-name"> Scoreboard </div> -->
+				<!-- <div class="utility-title"> Scoreboard </div> -->
 				<!-- <div id="black-player-utility-name" class="player-utility-name">&nbsp;</div> -->
 				<div id="black-player-utility" class="player-utility">
 					<div class="player-utility-profile">
@@ -83,7 +83,8 @@
 						<div id="white-timer" class="timer">00:00</div>
 					</div>
 				</div>
-				<!-- <div id="game-utility-title"> Utility </div> -->
+				<!-- <div class="utility-title"> - Tools - </div> -->
+				<!-- <hr class="utility-divider"/> -->
 				<div id="game-utility">
 					<div id="invite-btn" class="utility-btn-wrap hidden">
 						<div class="btn utility-btn" onclick="onInviteClick()">
@@ -113,6 +114,36 @@
 						<div class="btn utility-btn" onclick="onAddTimeClick()">
 							<img class="utility-icon" src="assets/time.png"/>
 							+15 sec
+						</div>
+					</div>
+					<div id="review-btn" class="utility-btn-wrap hidden"> 
+						<div class="btn utility-btn" onclick="onReviewClick()">
+							<img class="utility-icon" src="assets/time.png"/>
+							Review
+						</div>
+					</div>
+				</div>
+				<!-- <div class="utility-title"> - Themes - </div> -->
+				<!-- <hr class="utility-divider"/> -->
+				<div id="theme-utility">
+					<div id="classic-theme-btn" class="theme-btn-wrap"> 
+						<div class="btn theme-btn" onclick="changeTheme(THEME_CLASSIC)">
+							Classic
+						</div>
+					</div>
+					<div id="winter-theme-btn" class="theme-btn-wrap"> 
+						<div class="btn theme-btn" onclick="changeTheme(THEME_WINTER)">
+							Winter
+						</div>
+					</div>
+					<div id="metal-theme-btn" class="theme-btn-wrap"> 
+						<div class="btn theme-btn" onclick="changeTheme(THEME_METAL)">
+							Metal
+						</div>
+					</div>
+					<div id="nature-theme-btn" class="theme-btn-wrap"> 
+						<div class="btn theme-btn" onclick="changeTheme(THEME_NATURE)">
+							Nature
 						</div>
 					</div>
 				</div>

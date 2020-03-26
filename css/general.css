@@ -13,9 +13,9 @@ body {
 	font-family: 'Spectral', serif !important;
 	text-align: center;
 	background-color: black !important;
-	/*background-image: url('assets/background.jpg');*/
 	background-size: cover;
 	background-position: center;
+	transition: .4s all ease;
 }
 
 img {

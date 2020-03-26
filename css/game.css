@@ -7,10 +7,13 @@
 		--picture-size: 	10vw;
 		--icon-size: 		3vw;
 		--title-size: 		3vw;
+		--font-size:		2.25vw;
 		--btn-size: 		3vw;
 
 		--game-content-display:	unset;
-		--layer-margin-auto:	auto;
+		--layer-margin-side:	auto;
+		--side-layer-padding-top:	0;
+		--side-layer-padding-left:	var(--margin-size);
 		--scrollbar-size:		1vw;
 	}
 }
@@ -24,10 +27,13 @@
 		--picture-size:		10vh;
 		--icon-size:		3vh;
 		--title-size:		3vh;
+		--font-size:		2.25vh;
 		--btn-size:			3vh;
 
 		--game-content-display:	flex;
-		--layer-margin-auto:	unset;
+		--layer-margin-side:	unset;
+		--side-layer-padding-top:	var(--margin-size);
+		--side-layer-padding-left:	0;
 		--scrollbar-size:		1vh;
 	}
 }
@@ -42,10 +48,13 @@
 		--picture-size:		10vh;
 		--icon-size:		3vh;
 		--title-size:		3vh;
+		--font-size:		2.25vh;
 		--btn-size:			3vh;
 
 		--game-content-display:	unset;
-		--layer-margin-auto: 	auto;
+		--layer-margin-side: 	auto;
+		--side-layer-padding-top:	0;
+		--side-layer-padding-left:	var(--margin-size);
 		--scrollbar-size:		1vh;
 	}
 }
@@ -84,7 +93,7 @@
 	margin-left: calc(var(--margin-size) / 4);
 	position: absolute;
 	font-weight: bold;
-	font-size: calc(var(--btn-size) * 0.75);
+	font-size: var(--font-size);
 }
 
 .lettering {
@@ -92,7 +101,7 @@
 	margin-top: calc(var(--cell-size) - var(--margin-size) * 1.5);
 	margin-right: calc(var(--margin-size) / 4);
 	font-weight: bold;
-	font-size: calc(var(--btn-size) * 0.75);
+	font-size: var(--font-size);
 }
 
 .grid {
@@ -177,12 +186,12 @@
 	padding-right: var(--margin-size);
 	padding-bottom: var(--margin-size);
 	margin-left: auto;
-	margin-right: var(--layer-margin-auto);
+	margin-right: var(--layer-margin-side);
 	width: var(--layer-size);
 }
 
 #home-btn {
-	font-size: calc(var(--btn-size) * 0.75);
+	font-size: var(--font-size);
 	padding: calc(var(--btn-size) / 3);
 	padding-left: calc(var(--btn-size) / 1.5);
 	padding-right: calc(var(--btn-size) / 1.5);
@@ -195,10 +204,10 @@
 
 #side-layer {
 	background-image: linear-gradient(rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.2));
-	padding-left: var(--margin-size);
+	padding-left: var(--side-layer-padding-left);
 	padding-right: var(--margin-size);
-	padding-top: 0;
-	margin-left: var(--layer-margin-auto);
+	padding-top: var(--side-layer-padding-top);
+	margin-left: var(--layer-margin-side);
 	margin-right: auto;
 	width: var(--layer-size);
 	color: white;
@@ -209,17 +218,16 @@
 }
 
 #utility-section {
-	height: calc(70% - 3 * var(--margin-size));
-	margin-top: var(--margin-size);
-	margin-bottom: var(--margin-size);
-	padding: calc(var(--margin-size) / 2);
-	background-color: #00000073;
+	height: calc(70% - 1.5 * var(--margin-size));
+	margin-bottom: calc(var(--margin-size) / 2);
+	padding: calc(var(--margin-size));
+	background-color: #000000db;
 	border-radius: calc(var(--btn-size) / 4);
 }
 
 #chat-section {
 	height: 30%;
-	background-color: #00000073;
+	background-color: #000000db;
 	border-radius: calc(var(--btn-size) / 4);
 	margin-bottom: var(--margin-size);
 }

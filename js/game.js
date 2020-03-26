@@ -25,6 +25,8 @@ var interval = null;
 var white_timer = MAX_TIME;
 var black_timer = MAX_TIME;
 
+var theme = null;
+
 var id = 0;
 var stats = {
 	black: STATS_MAX,
@@ -86,6 +88,7 @@ Firebase.authenticate((auth_user) => {
 			$('#draw-btn').removeClass('hidden');
 			$('#undo-btn').removeClass('hidden');
 			$('#add-time-btn').removeClass('hidden');
+			$('#review-btn').addClass('hidden');
 		}
 		else {
 			$('#invite-btn').removeClass('hidden');
@@ -93,6 +96,7 @@ Firebase.authenticate((auth_user) => {
 			$('#draw-btn').addClass('hidden');
 			$('#undo-btn').addClass('hidden');
 			$('#add-time-btn').addClass('hidden');
+			$('#review-btn').addClass('hidden');
 		}
 
 		setTitleBar(auth_user);
@@ -139,6 +143,7 @@ Firebase.authenticate((auth_user) => {
 					$('#draw-btn').addClass('hidden');
 					$('#undo-btn').addClass('hidden');
 					$('#add-time-btn').addClass('hidden');
+					$('#review-btn').removeClass('hidden');
 					return;
 				}
 
@@ -277,6 +282,8 @@ function initGame() {
 	initPieces();
 	initToolbar();
 	initChat();
+
+	changeTheme(THEME_CLASSIC);
 }
 
 function showTimer() {
@@ -368,21 +375,16 @@ function setTitleBar(auth_user) {
 
 //Intialize chessboard background
 function initBoard(){
-	let color1 = my_team == TEAM.W ? COLOR_BOARD_DARK : COLOR_BOARD_LIGHT;
-	let color2 = my_team == TEAM.W ? COLOR_BOARD_LIGHT : COLOR_BOARD_DARK;
-
 	for (var x = 0; x < BOARD_SIZE; x++) {
 		for (var y = 0; y < BOARD_SIZE; y++) {
-			color = (y % 2 != 0) ^ (x % 2 == 0) ? color1 : color2;
-			chessboard[x][y] = new Grid(x, y, -1, color);
+			//Grid instance
+			chessboard[x][y] = new Grid(x, y, -1, null);
 
 			//Grid Background
 			let backgroundGrid = document.createElement("div");
 			backgroundGrid.setAttribute("class", "grid x" + x + " y" + y);
 			canvasLayer.append(backgroundGrid);
 			background[x][y] = backgroundGrid;
-
-			fillGrid(chessboard[x][y], color);
 
 			//Grid Listener for onclick event
 			let gridListener = document.createElement("div");
@@ -1042,6 +1044,23 @@ function copyBoard(board) {
 		}
 	}
 	return newBoard;
+}
+
+
+function changeTheme(newTheme) {
+	theme = newTheme;
+	let color1 = my_team == TEAM.W ? theme.COLOR_BOARD_DARK : theme.COLOR_BOARD_LIGHT;
+	let color2 = my_team == TEAM.W ? theme.COLOR_BOARD_LIGHT : theme.COLOR_BOARD_DARK;
+
+	for (let x = 0; x < BOARD_SIZE; x++) {
+		for (let y = 0; y < BOARD_SIZE; y++) {
+			chessboard[x][y].color = (y % 2 != 0) ^ (x % 2 == 0) ? color1 : color2;
+			fillGrid(chessboard[x][y], chessboard[x][y].color);
+		}
+	}
+
+	$('body').css('background-image', `url(${theme.BACKGROUND_IMAGE})`);
+	$('.player-name').css('color', theme.NAME_TITLE_COLOR);
 }
 
 

@@ -1,4 +1,5 @@
 const CANVAS_LAYER = document.getElementById("canvas-layer");
+const CHESS_URL = (location.hostname == "localhost") ? "" : "/web-chess"
 
 const CHESS = {King: "King", Queen: "Queen", Rook: "Rook", Bishop: "Bishop", Knight: "Knight", Pawn: "Pawn", None: "None"};
 const VALUE = {King: 200, Queen: 9, Rook: 5, Bishop: 3, Knight: 3, Pawn: 1, None: 0};
@@ -10,17 +11,53 @@ const BOARD_SIZE = 8;
 const GRID_SIZE_P = SCREEN_PORTRAIT ? Util.vw2px(11.5) : Util.vh2px(10);
 const HIGHLIGHT_P = 3;
 
-const COLOR_ORIGINAL = "ORIGINAL";
-const COLOR_BOARD_LIGHT = "#E6BF83";
-const COLOR_BOARD_DARK = "#8B4513";
+const THEME_CLASSIC = {
+	COLOR_BOARD_LIGHT: 		"#E6BF83",
+	COLOR_BOARD_DARK: 		"#8B4513",
+	COLOR_HIGHLIGHT_LIGHT: 	"#9e93e1",
+	COLOR_HIGHLIGHT_DARK: 	"#7B68EE",
+	COLOR_LAST_MOVE_LIGHT: 	"#FDFD84",
+	COLOR_LAST_MOVE_DARK: 	"#EFEF6E",
+	BACKGROUND_IMAGE: 		"./assets/background.jpg",
+	NAME_TITLE_COLOR: 		"white"
+};
 
-const COLOR_HIGHLIGHT = "HIGHLIGHT";
-const COLOR_HIGHLIGHT_LIGHT = "#9e93e1";
-const COLOR_HIGHLIGHT_DARK = "#7B68EE";
+const THEME_WINTER = {
+	COLOR_BOARD_LIGHT: 		"#00B3DE",
+	COLOR_BOARD_DARK: 		"#3D507B",
+	COLOR_HIGHLIGHT_LIGHT: 	"#9e93e1",
+	COLOR_HIGHLIGHT_DARK: 	"#7B68EE",
+	COLOR_LAST_MOVE_LIGHT: 	"#FDFD84",
+	COLOR_LAST_MOVE_DARK: 	"#EFEF6E",
+	BACKGROUND_IMAGE: 		"./assets/background_winter.jpg",
+	NAME_TITLE_COLOR: 		"white"
+};
 
-const COLOR_LAST_MOVE = "LAST_MOVE";
-const COLOR_LAST_MOVE_LIGHT = "#FDFD84";
-const COLOR_LAST_MOVE_DARK = "#EFEF6E";
+const THEME_METAL = {
+	COLOR_BOARD_LIGHT: 		"#d2d2d2",
+	COLOR_BOARD_DARK: 		"#5a5858",
+	COLOR_HIGHLIGHT_LIGHT: 	"#9e93e1",
+	COLOR_HIGHLIGHT_DARK: 	"#7B68EE",
+	COLOR_LAST_MOVE_LIGHT: 	"#FDFD84",
+	COLOR_LAST_MOVE_DARK: 	"#EFEF6E",
+	BACKGROUND_IMAGE: 		"./assets/background_metal.jpg",
+	NAME_TITLE_COLOR: 		"white"
+};
+
+const THEME_NATURE = {
+	COLOR_BOARD_LIGHT: 		"#c7da61",
+	COLOR_BOARD_DARK: 		"#437149",
+	COLOR_HIGHLIGHT_LIGHT: 	"#9e93e1",
+	COLOR_HIGHLIGHT_DARK: 	"#7B68EE",
+	COLOR_LAST_MOVE_LIGHT: 	"#FDFD84",
+	COLOR_LAST_MOVE_DARK: 	"#EFEF6E",
+	BACKGROUND_IMAGE: 		"./assets/background_nature.jpg",
+	NAME_TITLE_COLOR: 		"black"
+};
+
+const COLOR_ORIGINAL = 0;
+const COLOR_HIGHLIGHT = 1;
+const COLOR_LAST_MOVE = 2;
 
 const STATUS_NONE = 0;
 const STATUS_CHECKMATE = 1;
@@ -49,5 +86,3 @@ if (CANVAS_LAYER) {
 	CANVAS_LAYER.style.width = GRID_SIZE_P * BOARD_SIZE;
 	CANVAS_LAYER.style.height = GRID_SIZE_P * BOARD_SIZE;
 }
-
-const CHESS_URL = (location.hostname == "localhost") ? "" : "/web-chess"
