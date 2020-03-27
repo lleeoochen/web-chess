@@ -101,7 +101,11 @@ Firebase.authenticate((auth_user) => {
 
 		setTitleBar(auth_user);
 
-		if (match && match.chat) {
+		if (match !== undefined && match.theme !== undefined) {
+			changeTheme(Util.unpackTheme(match.theme));
+		}
+
+		if (match !== undefined && match.chat !== undefined) {
 			for (; match.chat.length != chats_applied; chats_applied++) {
 				let chat = Util.unpackMessage(match.chat[chats_applied]);
 
@@ -129,7 +133,7 @@ Firebase.authenticate((auth_user) => {
 			}
 		}
 
-		if (match && match.moves) {
+		if (match !== undefined && match.moves !== undefined) {
 			if (match.moves.length < moves_applied) {
 				location.reload();
 			}
@@ -172,7 +176,7 @@ Firebase.authenticate((auth_user) => {
 			}
 		}
 
-		if (match && match.black_undo != undefined && match.white_undo != undefined) {
+		if (match !== undefined && match.black_undo != undefined && match.white_undo != undefined) {
 			if (my_team == TEAM.B && match.white_undo == DB_REQUEST_ASK || my_team == TEAM.W && match.black_undo == DB_REQUEST_ASK) {
 				swal({
 					text: `${(my_team == TEAM.B) ? names.white : names.black} is once again asking for your mercy. Undo move?`,
@@ -203,7 +207,7 @@ Firebase.authenticate((auth_user) => {
 			}
 		}
 
-		if (match && match.black_draw != undefined && match.white_draw != undefined) {
+		if (match !== undefined && match.black_draw != undefined && match.white_draw != undefined) {
 			if (my_team == TEAM.B && match.white_draw == DB_REQUEST_ASK || my_team == TEAM.W && match.black_draw == DB_REQUEST_ASK) {
 				swal({
 					text: `${(my_team == TEAM.B) ? names.white : names.black} is asking for a draw. Confirm?`,
@@ -233,7 +237,7 @@ Firebase.authenticate((auth_user) => {
 			}
 		}
 
-		if (match && match.black && match.white && match.white_timer && match.black_timer) {
+		if (match !== undefined && match.black !== undefined && match.white !== undefined && match.white_timer !== undefined && match.black_timer !== undefined) {
 			let t1 = match_data.updated.toDate();
 			let t2 = new Date();
 			let diff = t2.getTime() - t1.getTime();
@@ -282,8 +286,6 @@ function initGame() {
 	initPieces();
 	initToolbar();
 	initChat();
-
-	changeTheme(THEME_CLASSIC);
 }
 
 function showTimer() {

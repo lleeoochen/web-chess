@@ -54,6 +54,38 @@ class Util {
 		};
 	}
 
+	static packTheme(theme) {
+		if (theme == THEME_CLASSIC) {
+			return DB_THEME_CLASSIC;
+		}
+		else if (theme == THEME_WINTER) {
+			return DB_THEME_WINTER;
+		}
+		else if (theme == THEME_METAL) {
+			return DB_THEME_METAL;
+		}
+		else if (theme == THEME_NATURE) {
+			return DB_THEME_NATURE;
+		}
+		return DB_THEME_CLASSIC;
+	}
+
+	static unpackTheme(data) {
+		if (data == DB_THEME_CLASSIC) {
+			return THEME_CLASSIC;
+		}
+		else if (data == DB_THEME_WINTER) {
+			return THEME_WINTER;
+		}
+		else if (data == DB_THEME_METAL) {
+			return THEME_METAL;
+		}
+		else if (data == DB_THEME_NATURE) {
+			return THEME_NATURE;
+		}
+		return THEME_CLASSIC;
+	}
+
 	static packMessage(message, my_team) {
 		return my_team + message;
 	}

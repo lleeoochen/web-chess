@@ -134,6 +134,7 @@ class Firebase {
 			black: auth_user.uid,
 			white: null,
 			moves: [],
+			theme: DB_THEME_CLASSIC,
 			updated: new Date(),
 			black_timer: MAX_TIME,
 			white_timer: MAX_TIME,
@@ -307,6 +308,12 @@ class Firebase {
 		db.collection(MATCHES_TABLE).doc(match_id).set({
 			chat: chat,
 			updated: new Date()
+		}, { merge: true });
+	}
+
+	static changeTheme(match_id, match, theme) {
+		db.collection(MATCHES_TABLE).doc(match_id).set({
+			theme: Util.packTheme(theme),
 		}, { merge: true });
 	}
 

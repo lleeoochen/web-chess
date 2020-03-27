@@ -76,6 +76,11 @@ const DB_REQUEST_NONE = 0;
 const DB_REQUEST_ASK = 1;
 const DB_REQUEST_DONE = 2;
 
+const DB_THEME_CLASSIC = 0;
+const DB_THEME_WINTER = 1;
+const DB_THEME_METAL = 2;
+const DB_THEME_NATURE = 3;
+
 const MAX_TIME = 15 * 60; // 15 min in seconds
 
 const STATS_MAX = 42; // treat king as 3 score
