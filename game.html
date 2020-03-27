@@ -62,7 +62,6 @@
 		</div>
 		<div id="side-layer" >
 			<div id="utility-section">
-				<!-- <div class="utility-title"> Scoreboard </div> -->
 				<!-- <div id="black-player-utility-name" class="player-utility-name">&nbsp;</div> -->
 				<div id="black-player-utility" class="player-utility">
 					<div class="player-utility-profile">
@@ -83,9 +82,8 @@
 						<div id="white-timer" class="timer">00:00</div>
 					</div>
 				</div>
-				<!-- <div class="utility-title"> - Tools - </div> -->
-				<!-- <hr class="utility-divider"/> -->
-				<div id="game-utility">
+				<!-- <div id="game-utility-title" class="utility-divider hidden"> Utility </div> -->
+				<div class="utility-panel">
 					<div id="invite-btn" class="utility-btn-wrap hidden">
 						<div class="btn utility-btn" onclick="onInviteClick()">
 							<img class="utility-icon" src="assets/invite.png"/>
@@ -110,40 +108,25 @@
 							Mercy
 						</div>
 					</div>
-					<div id="add-time-btn" class="utility-btn-wrap hidden"> 
+					<div id="add-time-btn" class="utility-btn-wrap hidden">
 						<div class="btn utility-btn" onclick="onAddTimeClick()">
 							<img class="utility-icon" src="assets/time.png"/>
 							+15 sec
 						</div>
 					</div>
-					<div id="review-btn" class="utility-btn-wrap hidden"> 
+					<div id="review-btn" class="utility-btn-wrap hidden">
 						<div class="btn utility-btn" onclick="onReviewClick()">
 							<img class="utility-icon" src="assets/time.png"/>
 							Review
 						</div>
 					</div>
 				</div>
-				<!-- <div class="utility-title"> - Themes - </div> -->
-				<!-- <hr class="utility-divider"/> -->
-				<div id="theme-utility">
-					<div id="classic-theme-btn" class="theme-btn-wrap"> 
-						<div class="btn theme-btn" onclick="Firebase.changeTheme(match_id, match, THEME_CLASSIC)">
-							Classic
-						</div>
-					</div>
-					<div id="winter-theme-btn" class="theme-btn-wrap"> 
-						<div class="btn theme-btn" onclick="Firebase.changeTheme(match_id, match, THEME_WINTER)">
-							Winter
-						</div>
-					</div>
-					<div id="metal-theme-btn" class="theme-btn-wrap"> 
-						<div class="btn theme-btn" onclick="Firebase.changeTheme(match_id, match, THEME_METAL)">
-							Metal
-						</div>
-					</div>
-					<div id="nature-theme-btn" class="theme-btn-wrap"> 
-						<div class="btn theme-btn" onclick="Firebase.changeTheme(match_id, match, THEME_NATURE)">
-							Nature
+				<!-- <div class="utility-divider">Theme</div> -->
+				<div class="utility-panel">
+					<div class="utility-btn-wrap">
+						<div class="btn utility-btn" onclick="onThemeClick()">
+							<img class="utility-icon" src="assets/theme.png"/>
+							Theme
 						</div>
 					</div>
 				</div>

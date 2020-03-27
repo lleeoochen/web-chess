@@ -5,6 +5,7 @@
 		--chat-btn-size: 		3vw;
 		--chat-scrollbar-size:	1vw;
 		--chat-border-radius:	0.75vw;
+		--chat-border-size:		0.25vw;
 	}
 }
 
@@ -15,6 +16,7 @@
 		--chat-btn-size:		3vh;
 		--chat-scrollbar-size:	1vh;
 		--chat-border-radius:	0.75vh;
+		--chat-border-size:		0.25vh;
 	}
 }
 
@@ -96,10 +98,11 @@
 #chat-text-input {
 	font-size: var(--chat-font-size);
 	height: 100%;
-	border-radius: 0px 0px 0px var(--chat-border-radius);
+	border-radius: 0 0 0 var(--chat-border-radius);
 	border-color: grey !important;
-	border-width: 2px !important;
+	border-width: var(--chat-border-size) !important;
 	border-style: solid !important;
+	padding: calc(var(--chat-margin-size) / 2) var(--chat-margin-size) !important;
 }
 
 #chat-send-button {
@@ -109,6 +112,8 @@
 	background-color: darkslategrey;
 	border: unset;
 	border-radius: 0px 0px var(--chat-border-radius) 0px;
+	padding: calc(var(--chat-margin-size) / 2) var(--chat-margin-size) !important;
+	box-shadow: unset;
 }
 
 #chat-send-button img {

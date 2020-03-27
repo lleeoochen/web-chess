@@ -82,6 +82,7 @@ Firebase.authenticate((auth_user) => {
 			my_team = TEAM.B; // spectate mode
 		}
 
+		$('#game-utility-title').removeClass('hidden');
 		if (match.black && match.white) {
 			$('#invite-btn').addClass('hidden');
 			$('#resign-btn').removeClass('hidden');
@@ -101,11 +102,9 @@ Firebase.authenticate((auth_user) => {
 
 		setTitleBar(auth_user);
 
-		if (match !== undefined && match.theme !== undefined) {
-			changeTheme(Util.unpackTheme(match.theme));
-		}
+		changeTheme(Util.unpackTheme(match.theme));
 
-		if (match !== undefined && match.chat !== undefined) {
+		if (match && match.chat) {
 			for (; match.chat.length != chats_applied; chats_applied++) {
 				let chat = Util.unpackMessage(match.chat[chats_applied]);
 
@@ -133,7 +132,7 @@ Firebase.authenticate((auth_user) => {
 			}
 		}
 
-		if (match !== undefined && match.moves !== undefined) {
+		if (match && match.moves) {
 			if (match.moves.length < moves_applied) {
 				location.reload();
 			}
@@ -176,7 +175,7 @@ Firebase.authenticate((auth_user) => {
 			}
 		}
 
-		if (match !== undefined && match.black_undo != undefined && match.white_undo != undefined) {
+		if (match && match.black_undo != undefined && match.white_undo != undefined) {
 			if (my_team == TEAM.B && match.white_undo == DB_REQUEST_ASK || my_team == TEAM.W && match.black_undo == DB_REQUEST_ASK) {
 				swal({
 					text: `${(my_team == TEAM.B) ? names.white : names.black} is once again asking for your mercy. Undo move?`,
@@ -207,7 +206,7 @@ Firebase.authenticate((auth_user) => {
 			}
 		}
 
-		if (match !== undefined && match.black_draw != undefined && match.white_draw != undefined) {
+		if (match && match.black_draw != undefined && match.white_draw != undefined) {
 			if (my_team == TEAM.B && match.white_draw == DB_REQUEST_ASK || my_team == TEAM.W && match.black_draw == DB_REQUEST_ASK) {
 				swal({
 					text: `${(my_team == TEAM.B) ? names.white : names.black} is asking for a draw. Confirm?`,
@@ -237,7 +236,7 @@ Firebase.authenticate((auth_user) => {
 			}
 		}
 
-		if (match !== undefined && match.black !== undefined && match.white !== undefined && match.white_timer !== undefined && match.black_timer !== undefined) {
+		if (match && match.black && match.white && match.white_timer && match.black_timer) {
 			let t1 = match_data.updated.toDate();
 			let t2 = new Date();
 			let diff = t2.getTime() - t1.getTime();
@@ -917,10 +916,10 @@ function fillGrid(grid, color) {
 		color = grid.color;
 
 	if (color == COLOR_HIGHLIGHT)
-		color = (grid.color == COLOR_BOARD_DARK) ? COLOR_HIGHLIGHT_DARK : COLOR_HIGHLIGHT_LIGHT;
+		color = (grid.color == theme.COLOR_BOARD_DARK) ? theme.COLOR_HIGHLIGHT_DARK : theme.COLOR_HIGHLIGHT_LIGHT;
 
 	if (color == COLOR_LAST_MOVE)
-		color = (grid.color == COLOR_BOARD_DARK) ? COLOR_LAST_MOVE_DARK : COLOR_LAST_MOVE_LIGHT;
+		color = (grid.color == theme.COLOR_BOARD_DARK) ? theme.COLOR_LAST_MOVE_DARK : theme.COLOR_LAST_MOVE_LIGHT;
 
 	background[grid.x][grid.y].setAttribute("style", `background-color: ${color};`);
 }
@@ -933,7 +932,6 @@ function fillNumbering(x, y) {
 		color = (y % 2 == 0) ? "black" : "white";
 	else
 		color = (y % 2 != 0) ? "black" : "white";
-
 
 	if (x == 0) {
 		let number = document.createElement("div");
@@ -1169,4 +1167,23 @@ function onAddTimeClick() {
 	}
 	showTimer();
 	$('#add-time-btn .btn').attr('disabled', 'disabled');
+}
+
+function onThemeClick() {
+	swal("", { button: false });
+	$(".swal-modal").prepend('<div></div>');
+
+	$(".swal-modal div").load('html/theme_selector.html', () => {
+		$('.utility-btn').removeClass('outline');
+		if (theme == THEME_CLASSIC) $('#classic-theme-btn .btn').addClass('outline');
+		else if (theme == THEME_WINTER) $('#winter-theme-btn .btn').addClass('outline');
+		else if (theme == THEME_METAL) $('#metal-theme-btn .btn').addClass('outline');
+		else if (theme == THEME_NATURE) $('#nature-theme-btn .btn').addClass('outline');
+	});
+}
+
+function onThemeSelect(event, newTheme) {
+	$('.utility-btn').removeClass('outline');
+	$(event.target).addClass('outline');
+	Firebase.changeTheme(match_id, match, newTheme);
 }

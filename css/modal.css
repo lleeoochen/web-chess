@@ -1,6 +1,6 @@
 @media screen and (orientation: portrait) {
 	:root {
-		--modal-title-size:         4vw;
+		--modal-title-size:         3vw;
 		--modal-btn-size:           3vw;
 		--modal-width:              80vw;
 		--modal-height:             25vw;
@@ -13,7 +13,7 @@
 
 @media screen and (orientation: landscape) {
 	:root {
-		--modal-title-size:         4vh;
+		--modal-title-size:         3vh;
 		--modal-btn-size:           3vh;
 		--modal-width:              80vh;
 		--modal-height:             25vh;

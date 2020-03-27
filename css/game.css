@@ -136,8 +136,9 @@
 .eaten-panel {
 	height: calc(var(--eaten-piece-size) * 2);
 	width: calc(var(--eaten-piece-size) * 9);
-	padding-left: 10px;
-	padding-right: 10px;
+	padding-left: var(--margin-size);
+	padding-right: var(--margin-size);
+	width: unset !important;
 }
 
 
@@ -200,6 +201,7 @@
 	background-image: unset;
 	background-color: black;
 	border: unset;
+	box-shadow: unset;
 }
 
 #side-layer {
