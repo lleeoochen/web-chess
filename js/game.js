@@ -875,12 +875,12 @@ function updateStats() {
 	$(".canvas-border.bg-white").css(w_pos, '0');
 
 	if (my_team == TEAM.W) {
-		$(".canvas-border.bg-white").css('border-radius', '0px 0px 5px 5px');
-		$(".canvas-border.bg-black").css('border-radius', '5px 5px 5px 5px');
+		$(".canvas-border.bg-white").css('border-radius', '0 0 var(--border-radius) var(--border-radius)');
+		$(".canvas-border.bg-black").css('border-radius', 'var(--border-radius) var(--border-radius) var(--border-radius) var(--border-radius)');
 	}
 	else {
-		$(".canvas-border.bg-white").css('border-radius', '5px 5px 0px 0px');
-		$(".canvas-border.bg-black").css('border-radius', '5px 5px 5px 5px');
+		$(".canvas-border.bg-white").css('border-radius', 'var(--border-radius) var(--border-radius) 0 0');
+		$(".canvas-border.bg-black").css('border-radius', 'var(--border-radius) var(--border-radius) var(--border-radius) var(--border-radius)');
 	}
 
 	if (stats.white > stats.black) {
@@ -1186,4 +1186,5 @@ function onThemeSelect(event, newTheme) {
 	$('.utility-btn').removeClass('outline');
 	$(event.target).addClass('outline');
 	Firebase.changeTheme(match_id, match, newTheme);
+	swal.close();
 }
