@@ -39,7 +39,8 @@ var names = {
 var pictures = {
 	black: null,
 	white: null,
-}
+};
+var passant_pawn = null;
 
 
 Firebase.authenticate((auth_user) => {
@@ -146,6 +147,7 @@ Firebase.authenticate((auth_user) => {
 					$('#draw-btn').addClass('hidden');
 					$('#undo-btn').addClass('hidden');
 					$('#add-time-btn').addClass('hidden');
+					$('#change-theme-btn').addClass('hidden');
 					$('#review-btn').removeClass('hidden');
 					return;
 				}
@@ -754,6 +756,7 @@ function isCheckmate() {
 function moveChess(oldGrid, newGrid) {
 	if (oldGrid.get_piece() == null) return;
 
+	//Play sound
 	if (!first_move) {
 		if (!newGrid.get_piece())
 			playSound("doo");
@@ -768,7 +771,6 @@ function moveChess(oldGrid, newGrid) {
 
 	//Remove chess piece being eaten
 	if (newGrid.get_piece() != null) {
-
 		if (newGrid.get_piece().team == TEAM.B)
 			stats.black -= VALUE[newGrid.get_piece().type];
 		else
@@ -791,9 +793,10 @@ function moveChess(oldGrid, newGrid) {
 			else {
 				$('#whitesEaten').append(new_img);
 			}
-		}, 300);
+		}, 300); //TODO: delay depends on the pieces' distance
 	}
 
+	movePassantPawn(oldGrid, newGrid);
 
 	//Castle move
 	if (my_team == oldGrid.get_piece().team && !king_moved || my_team != oldGrid.get_piece().team && !other_king_moved) {
@@ -817,6 +820,7 @@ function moveChess(oldGrid, newGrid) {
 		king_moved = true;
 	}
 
+	//Other King has moved, cannot castle anymore
 	if (my_team != oldGrid.get_piece().team && oldGrid.get_piece().type == CHESS.King) {
 		other_king_moved = true;
 	}
@@ -842,24 +846,99 @@ function moveChess(oldGrid, newGrid) {
 		}
 	}
 
+	//Update king position
 	if (oldGrid == king_grid)
 		king_grid = newGrid;
 
+	//Clear old grid
 	oldGrid.piece = -1;
+
+	//Update move counter and switch turn
 	moves_applied += 1;
 	switchTurn();
 	updateStats();
 }
 
 
+function movePassantPawn(oldGrid, newGrid) {
+	let kill_passant_pawn = false;
+
+	// Check passant pawn can be killed
+	if (passant_pawn) {
+		if (oldGrid.get_piece().team == my_team && passant_pawn.get_piece().team != my_team) {
+			if (newGrid.x == passant_pawn.x && newGrid.y == passant_pawn.y - 1) {
+				kill_passant_pawn = true;
+			}
+		}
+		else if (oldGrid.get_piece().team != my_team && passant_pawn.get_piece().team == my_team) {
+			if (newGrid.x == passant_pawn.x && newGrid.y == passant_pawn.y + 1) {
+				kill_passant_pawn = true;
+			}
+		}
+	}
+
+	// Kill passant pawn
+	if (kill_passant_pawn && passant_pawn) {
+		if (passant_pawn.get_piece().team == TEAM.B)
+			stats.black -= VALUE[passant_pawn.get_piece().type];
+		else
+			stats.white -= VALUE[passant_pawn.get_piece().type];
+
+		let pawn_img = passant_pawn.get_piece().image;
+		let pawn_team = passant_pawn.get_piece().team;
+
+		piecesLayer.removeChild(pawn_img);
+		pawn_img.setAttribute("class", "eaten-piece");
+
+		if (pawn_team == TEAM.B) {
+			$('#blacksEaten').append(pawn_img);
+		}
+		else {
+			$('#whitesEaten').append(pawn_img);
+		}
+		passant_pawn.piece = -1;
+	}
+
+	//Update en passant pawns
+	passant_pawn = undefined;
+	if (oldGrid.get_piece().type == CHESS.Pawn) {
+		if (oldGrid.get_piece().team == my_team) {
+			if (oldGrid.y - newGrid.y == 2) {
+				passant_pawn = newGrid;
+			}
+		}
+		else {
+			if (newGrid.y - oldGrid.y == 2) {
+				passant_pawn = newGrid;
+			}
+		}
+	}
+}
+
+
 //Update and show all possible moves based on a specific grid
 function updateMoves(grid) {
 	moves = grid.get_piece().getPossibleMoves(chessboard, grid);
+
+	//Show left castle move for king
 	if (!king_moved && grid == king_grid && canCastle(grid, chessboard[grid.x - 2][grid.y]))
 		moves.push(chessboard[grid.x - 2][grid.y]);
 
-	if (!king_moved && grid == king_grid &&canCastle(grid, chessboard[grid.x + 2][grid.y]))
+	//Show right castle move for king
+	if (!king_moved && grid == king_grid && canCastle(grid, chessboard[grid.x + 2][grid.y]))
 		moves.push(chessboard[grid.x + 2][grid.y]);
+
+	//Show en passant move for pawn
+	if (passant_pawn) {
+		if (grid.get_piece().team != passant_pawn.get_piece().team) {
+			if (Math.abs(grid.x - passant_pawn.x) == 1 && grid.y == passant_pawn.y) {
+				if (grid.get_piece().team == my_team)
+					moves.push(chessboard[passant_pawn.x][passant_pawn.y - 1]);
+				else
+					moves.push(chessboard[passant_pawn.x][passant_pawn.y + 1]);
+			}
+		}
+	}
 
 	setMovesColor(COLOR_HIGHLIGHT);
 }
