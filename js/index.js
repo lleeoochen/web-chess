@@ -1,15 +1,16 @@
 var user = null;
 var auth_user = null;
+var database = new Firebase();
 
-Firebase.authenticate((auth_user1) => {
+database.authenticate((auth_user1) => {
 	initToolbar();
 	auth_user = auth_user1;
-	Firebase.getUser(auth_user1.uid, (user_data) => {
+	database.getUser(auth_user1.uid, (user_data) => {
 		user = user_data;
 		showMatches();
 	});
 
-	// Firebase.listenUser(auth_user.uid, (user_data) => {
+	// database.listenUser(auth_user.uid, (user_data) => {
 	// 	user = user_data;
 	// })
 });
@@ -17,7 +18,7 @@ Firebase.authenticate((auth_user1) => {
 function showMatches() {
 	if (!user || !user.matches) return
 
-	Firebase.getMatches(user.matches, user, async matches_data => {
+	database.getMatches(user.matches, user, async matches_data => {
 		var elements = $();
 		matches_data.sort((a, b) => b[1].updated.toDate().getTime() - a[1].updated.toDate().getTime());
 		await matches_data.forEach(match => {
@@ -56,13 +57,13 @@ function showMatches() {
 function initToolbar() {
 	// Signout button
 	$('#signout-btn').on('click', (e) => {
-		firebase.auth().signOut();
+		database.auth().signOut();
 		location.reload();
 	});
 
 	// New match button
 	$('#new-match-btn').on('click', (e) => {
-		Firebase.createMatch(user, match_id => {
+		database.createMatch(user, match_id => {
 			window.location = `${ CHESS_URL }/game.html?match=${ match_id }`;
 		});
 	});

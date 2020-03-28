@@ -41,64 +41,45 @@ var pictures = {
 	white: null,
 };
 var passant_pawn = null;
+var database = new GameFirebase();
 
 
-Firebase.authenticate((auth_user) => {
 
-	Firebase.getMatch(match_id, (match_data) => {
-		match = match_data;
 
-		// Register second user if not exists
-		if (!match.white && auth_user.uid != match.black) {
-			Firebase.registerOpponent(match_id, auth_user.uid);
-			my_team = TEAM.W;
-		}
-		else if (auth_user.uid == match.black) {
-			my_team = TEAM.B;
-		}
-		else if (auth_user.uid == match.white) {
-			my_team = TEAM.W;
-		}
-		else {
-			my_team = TEAM.B; // spectate mode
-		}
+database.authenticate((auth_user_1) => {
+	auth_user = auth_user_1;
+
+	database.initMatch(match_id, (match_1, my_team_1) => {
+		match = match_1;
+		my_team = my_team_1;
 
 		if (my_team) {
 			initGame();
 		}
 	});
 
-	Firebase.listenMatch(match_id, async (match_data) => {
-		// if (!my_team) return;
-
-		match = match_data;
-
-		if (auth_user.uid == match.black) {
-			my_team = TEAM.B;
-		}
-		else if (auth_user.uid == match.white) {
-			my_team = TEAM.W;
-		}
-		else {
-			my_team = TEAM.B; // spectate mode
-		}
+	database.listenMatch(async (match_1, my_team_1) => {
+		match = match_1;
+		my_team = my_team_1;
 
 		$('#game-utility-title').removeClass('hidden');
 		if (match.black && match.white) {
 			$('#invite-btn').addClass('hidden');
+			$('#review-btn').addClass('hidden');
 			$('#resign-btn').removeClass('hidden');
 			$('#draw-btn').removeClass('hidden');
 			$('#undo-btn').removeClass('hidden');
 			$('#add-time-btn').removeClass('hidden');
-			$('#review-btn').addClass('hidden');
+			$('#change-theme-btn').removeClass('hidden');
 		}
 		else {
 			$('#invite-btn').removeClass('hidden');
+			$('#review-btn').addClass('hidden');
 			$('#resign-btn').addClass('hidden');
 			$('#draw-btn').addClass('hidden');
 			$('#undo-btn').addClass('hidden');
 			$('#add-time-btn').addClass('hidden');
-			$('#review-btn').addClass('hidden');
+			$('#change-theme-btn').addClass('hidden');
 		}
 
 		setTitleBar(auth_user);
@@ -168,11 +149,11 @@ Firebase.authenticate((auth_user) => {
 			}
 			switch(isCheckmate()) {
 				case STATUS_CHECKMATE:
-					Firebase.checkmate(match_id, match, my_team == TEAM.W ? TEAM.B : TEAM.W);
+					database.checkmate(my_team == TEAM.W ? TEAM.B : TEAM.W);
 					playSound("omgwow");
 					break;
 				case STATUS_STALEMATE:
-					Firebase.stalemate(match_id, match);
+					database.stalemate();
 					break;
 			}
 		}
@@ -190,10 +171,10 @@ Firebase.authenticate((auth_user) => {
 					closeOnConfirm: false
 				}).then((toResign) => {
 					if (toResign) {
-						Firebase.undoMove(match_id, match);
+						database.undoMove();
 					}
 					else {
-						Firebase.cancelUndo(match_id, match);
+						database.cancelUndo();
 					}
 				});
 			}
@@ -221,10 +202,10 @@ Firebase.authenticate((auth_user) => {
 					closeOnConfirm: false
 				}).then((toResign) => {
 					if (toResign) {
-						Firebase.draw(match_id, match);
+						database.draw();
 					}
 					else {
-						Firebase.cancelDraw(match_id, match);
+						database.cancelDraw();
 					}
 				});
 			}
@@ -239,7 +220,7 @@ Firebase.authenticate((auth_user) => {
 		}
 
 		if (match && match.black && match.white && match.white_timer && match.black_timer) {
-			let t1 = match_data.updated.toDate();
+			let t1 = match.updated.toDate();
 			let t2 = new Date();
 			let diff = t2.getTime() - t1.getTime();
 			let sec = Math.floor(diff / 1000);
@@ -309,7 +290,7 @@ function countDown() {
 
 	if (turn == TEAM.W && white_timer >= 0) {
 		if (white_timer <= 0) {
-			Firebase.timesup(match_id, match, TEAM.B);
+			database.timesup(TEAM.B);
 			clearInterval(interval);
 		}
 		else {
@@ -319,7 +300,7 @@ function countDown() {
 
 	if (turn == TEAM.B && black_timer >= 0) {
 		if (black_timer <= 0) {
-			Firebase.timesup(match_id, match, TEAM.W);
+			database.timesup(TEAM.W);
 			clearInterval(interval);
 		}
 		else {
@@ -332,7 +313,7 @@ function countDown() {
 function initToolbar() {
 	// Signout button
 	$('#signout-btn').on('click', (e) => {
-		firebase.auth().signOut();
+		database.auth().signOut();
 		location.reload();
 	});
 
@@ -346,7 +327,7 @@ function initToolbar() {
 function setTitleBar(auth_user) {
 
 	if (!black_title_set && match.black) {
-		Firebase.getUser(match.black, (user_data) => {
+		database.getUser(match.black, (user_data) => {
 			$('#black-player-image').attr('src', user_data.photoURL);
 			$('#black-player-name').text(user_data.displayName);
 			$('#black-player-utility-image').attr('src', user_data.photoURL);
@@ -361,7 +342,7 @@ function setTitleBar(auth_user) {
 	}
 
 	if (!white_title_set && match.white) {
-		Firebase.getUser(match.white, (user_data) => {
+		database.getUser(match.white, (user_data) => {
 			$('#white-player-image').attr('src', user_data.photoURL);
 			$('#white-player-name').text(user_data.displayName);
 			$('#white-player-utility-image').attr('src', user_data.photoURL);
@@ -464,13 +445,13 @@ function initChat() {
 	$("#side-layer").on('keyup', function (e) {
 		if (e.keyCode === 13) {
 			let message = $("#chat-text-input").val();
-			Firebase.message(match_id, match, message, my_team);
+			database.message(message);
 			$("#chat-text-input").val("");
 		}
 	});
 	$("#chat-send-button").on('click', function (e) {
 		let message = $("#chat-text-input").val();
-		Firebase.message(match_id, match, message, my_team);
+		database.message(message);
 		$("#chat-text-input").val("");
 	});
 }
@@ -505,7 +486,7 @@ function handleChessEvent(x, y) {
 	//Action0 - Castle
 	if (canCastle(oldGrid, newGrid)) {
 		moveChess(oldGrid, newGrid);
-		Firebase.updateChessboard(match_id, match, oldGrid, newGrid, turn, black_timer, white_timer);
+		database.updateChessboard(oldGrid, newGrid, turn, black_timer, white_timer);
 		oldGrid = null;
 		return;
 	}
@@ -533,7 +514,7 @@ function handleChessEvent(x, y) {
 		else
 			white_timer += 1
 
-		Firebase.updateChessboard(match_id, match, oldGrid, newGrid, turn, black_timer, white_timer);
+		database.updateChessboard(oldGrid, newGrid, turn, black_timer, white_timer);
 		oldGrid = null;
 
 		//Thinking...
@@ -1213,7 +1194,7 @@ function onResignClick() {
 		closeOnConfirm: false
 	}).then((toResign) => {
 		if (toResign) {
-			Firebase.resign(match_id, match, my_team == TEAM.W ? TEAM.B : TEAM.W);
+			database.resign(my_team == TEAM.W ? TEAM.B : TEAM.W);
 		}
 	});
 }
@@ -1222,14 +1203,14 @@ function onDrawClick() {
 	if ($('#draw-btn .btn').attr('disabled') == 'disabled')
 		return;
 
-	Firebase.askDraw(match_id, match, my_team);
+	database.askDraw();
 }
 
 function onUndoClick() {
 	if ($('#undo-btn .btn').attr('disabled') == 'disabled')
 		return;
 
-	Firebase.askUndo(match_id, match, my_team);
+	database.askUndo();
 }
 
 function onAddTimeClick() {
@@ -1238,11 +1219,11 @@ function onAddTimeClick() {
 
 	if (my_team == TEAM.W) {
 		black_timer += 16;
-		Firebase.updateTimer(match_id, match, match.black_timer + 15, match.white_timer);
+		database.updateTimer(match.black_timer + 15, match.white_timer);
 	}
 	else {
 		white_timer += 16;
-		Firebase.updateTimer(match_id, match, match.black_timer, match.white_timer + 15);
+		database.updateTimer(match.black_timer, match.white_timer + 15);
 	}
 	showTimer();
 	$('#add-time-btn .btn').attr('disabled', 'disabled');
@@ -1264,6 +1245,6 @@ function onThemeClick() {
 function onThemeSelect(event, newTheme) {
 	$('.utility-btn').removeClass('outline');
 	$(event.target).addClass('outline');
-	Firebase.changeTheme(match_id, match, newTheme);
+	database.changeTheme(newTheme);
 	swal.close();
 }
