@@ -43,8 +43,8 @@ class Firebase {
 
 				self.db.collection(USERS_TABLE).doc(self.auth_user.uid).set({
 					email: self.auth_user.email,
-					photoURL: self.auth_user.photoURL,
-					displayName: self.auth_user.displayName
+					photo: self.auth_user.photoURL,
+					name: self.auth_user.displayName
 				}, { merge: true });
 				callback(self.auth_user);
 			}
@@ -109,10 +109,10 @@ class Firebase {
 		}
 	}
 
-	getUser(id, callback) {
-		this.db.collection(USERS_TABLE).doc(id).get().then(doc => {
+	getUser(id) {
+		return this.db.collection(USERS_TABLE).doc(id).get().then(doc => {
 			console.log("User get: ", doc.data());
-			callback(doc.data());
+			return doc.data();
 		});
 	}
 
@@ -137,6 +137,7 @@ class Firebase {
 			black: this.auth_user.uid,
 			white: null,
 			moves: [],
+			chat: [],
 			theme: DB_THEME_CLASSIC,
 			updated: new Date(),
 			black_timer: MAX_TIME,

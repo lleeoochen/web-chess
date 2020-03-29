@@ -1,6 +1,5 @@
 //Intialize global variables
 var canvasLayer = document.getElementById("canvas-layer");
-var actionLayer = document.getElementById("action-layer");
 var gridsLayer = document.getElementById("grids-layer");
 var piecesLayer = document.getElementById("pieces-layer");
 var chessboard = [[],[],[],[],[],[],[],[]];
@@ -11,6 +10,7 @@ var turn = TEAM.W;
 var match = null;
 var match_id = Util.getParam("match");
 var my_team = null;
+var enemy_team = null;
 var moves_applied = 0;
 var chats_applied = 0;
 var king_grid = null;
@@ -32,263 +32,268 @@ var stats = {
 	black: STATS_MAX,
 	white: STATS_MAX
 };
-var names = {
-	black: null,
-	white: null
+
+var players = {
+	B: null,
+	W: null
 };
-var pictures = {
-	black: null,
-	white: null,
-};
+
 var passant_pawn = null;
 var database = new GameFirebase();
+var game_reset = true;
 
 
+database.authenticate((_auth_user) => {
+	auth_user = _auth_user;
 
+	database.listenMatch(match_id, async (_match, _my_team) => {
+		match = _match;
+		my_team = _my_team;
+		enemy_team = my_team == TEAM.B ? TEAM.W : TEAM.B;
 
-database.authenticate((auth_user_1) => {
-	auth_user = auth_user_1;
-
-	database.initMatch(match_id, (match_1, my_team_1) => {
-		match = match_1;
-		my_team = my_team_1;
-
-		if (my_team) {
+		if (game_reset) {
 			initGame();
 		}
-	});
 
-	database.listenMatch(async (match_1, my_team_1) => {
-		match = match_1;
-		my_team = my_team_1;
+		updateTheme(Util.unpackTheme(match.theme));
 
-		$('#game-utility-title').removeClass('hidden');
-		if (match.black && match.white) {
-			$('#invite-btn').addClass('hidden');
-			$('#review-btn').addClass('hidden');
-			$('#resign-btn').removeClass('hidden');
-			$('#draw-btn').removeClass('hidden');
-			$('#undo-btn').removeClass('hidden');
-			$('#add-time-btn').removeClass('hidden');
-			$('#change-theme-btn').removeClass('hidden');
-		}
-		else {
-			$('#invite-btn').removeClass('hidden');
-			$('#review-btn').addClass('hidden');
-			$('#resign-btn').addClass('hidden');
-			$('#draw-btn').addClass('hidden');
-			$('#undo-btn').addClass('hidden');
-			$('#add-time-btn').addClass('hidden');
-			$('#change-theme-btn').addClass('hidden');
-		}
+		updateUtilityButtons();
 
-		setTitleBar(auth_user);
+		await updatePlayerData();
 
-		changeTheme(Util.unpackTheme(match.theme));
+		updateMatchChat();
 
-		if (match && match.chat) {
-			for (; match.chat.length != chats_applied; chats_applied++) {
-				let chat = Util.unpackMessage(match.chat[chats_applied]);
+		let gameProceed = await updateMatchMoves();
+		if (!gameProceed) return;
 
-				let team_name = "";
-				if (chat.team == TEAM.W) team_name = names.white ? names.white : `[${chat.team}]`;
-				else 					 team_name = names.black ? names.black : `[${chat.team}]`;
+		updateMatchUndo();
+		
+		updateMatchDraw();
 
-				if (chats_applied != 0 && chat.team == Util.unpackMessage(match.chat[chats_applied - 1]).team) {
-					let message = $('#chat-messages-content').children().last().find('.chat-message-content');
-					message.html(message.html() + "<br>" + chat.message);
-				}
-				else {
-					$("#chat-messages-content").append(`
-						<div class="chat-message row">
-							<div class="chat-message-sender">${ team_name }</div>
-							<p class="chat-message-content">${ chat.message }</p>
-						</div>`);
-				}
-
-				$("#chat-messages-content").scrollTop($("#chat-messages-content")[0].scrollHeight);
-				let offset = 10;
-				if (!SCREEN_PORTRAIT && (window.innerHeight + window.scrollY + offset) < document.body.offsetHeight) {
-					$('#chat-notification').removeAttr('hidden');
-				}
-			}
-		}
-
-		if (match && match.moves) {
-			if (match.moves.length < moves_applied) {
-				location.reload();
-			}
-
-			for (; match.moves.length != moves_applied;) {
-				if (Util.gameFinished(match.moves[moves_applied])) {
-					clearInterval(interval);
-
-					$('#invite-btn').addClass('hidden');
-					$('#resign-btn').addClass('hidden');
-					$('#draw-btn').addClass('hidden');
-					$('#undo-btn').addClass('hidden');
-					$('#add-time-btn').addClass('hidden');
-					$('#change-theme-btn').addClass('hidden');
-					$('#review-btn').removeClass('hidden');
-					return;
-				}
-
-				let move = Util.unpack(match.moves[moves_applied]);
-				if (turn != my_team) {
-					move.old_y = BOARD_SIZE - move.old_y - 1;
-					move.new_y = BOARD_SIZE - move.new_y - 1;
-				}
-
-				await new Promise((resolve, reject) => {
-				  setTimeout(() => {
-					moveChess(chessboard[move.old_x][move.old_y], chessboard[move.new_x][move.new_y]);
-					resolve('Promise A win!');
-				  }, 50);
-				})
-				turn = move.turn;
-			}
-			switch(isCheckmate()) {
-				case STATUS_CHECKMATE:
-					database.checkmate(my_team == TEAM.W ? TEAM.B : TEAM.W);
-					playSound("omgwow");
-					break;
-				case STATUS_STALEMATE:
-					database.stalemate();
-					break;
-			}
-		}
-
-		if (match && match.black_undo != undefined && match.white_undo != undefined) {
-			if (my_team == TEAM.B && match.white_undo == DB_REQUEST_ASK || my_team == TEAM.W && match.black_undo == DB_REQUEST_ASK) {
-				swal({
-					text: `${(my_team == TEAM.B) ? names.white : names.black} is once again asking for your mercy. Undo move?`,
-					type: "warning",
-					showCancelButton: true,
-					buttons: [
-					  'Cancel',
-					  'Undo'
-					],
-					closeOnConfirm: false
-				}).then((toResign) => {
-					if (toResign) {
-						database.undoMove();
-					}
-					else {
-						database.cancelUndo();
-					}
-				});
-			}
-
-			if (match.moves.length == 0 || turn == my_team ||
-				(my_team == TEAM.B && match.black_undo == DB_REQUEST_ASK) ||
-				(my_team == TEAM.W && match.white_undo == DB_REQUEST_ASK)) {
-				$('#undo-btn .btn').attr('disabled', 'disabled');
-			}
-			else {
-				$('#undo-btn .btn').removeAttr('disabled');
-			}
-		}
-
-		if (match && match.black_draw != undefined && match.white_draw != undefined) {
-			if (my_team == TEAM.B && match.white_draw == DB_REQUEST_ASK || my_team == TEAM.W && match.black_draw == DB_REQUEST_ASK) {
-				swal({
-					text: `${(my_team == TEAM.B) ? names.white : names.black} is asking for a draw. Confirm?`,
-					type: "warning",
-					showCancelButton: true,
-					buttons: [
-					  'Cancel',
-					  'Draw'
-					],
-					closeOnConfirm: false
-				}).then((toResign) => {
-					if (toResign) {
-						database.draw();
-					}
-					else {
-						database.cancelDraw();
-					}
-				});
-			}
-
-			if ((my_team == TEAM.B && match.black_draw == DB_REQUEST_ASK) ||
-				(my_team == TEAM.W && match.white_draw == DB_REQUEST_ASK)) {
-				$('#draw-btn .btn').attr('disabled', 'disabled');
-			}
-			else {
-				$('#draw-btn .btn').removeAttr('disabled');
-			}
-		}
-
-		if (match && match.black && match.white && match.white_timer && match.black_timer) {
-			let t1 = match.updated.toDate();
-			let t2 = new Date();
-			let diff = t2.getTime() - t1.getTime();
-			let sec = Math.floor(diff / 1000);
-
-			if (turn == TEAM.B) {
-				white_timer = match.white_timer;
-				black_timer = match.black_timer - sec;
-			}
-			else {
-				black_timer = match.black_timer;
-				white_timer = match.white_timer - sec;
-			}
-
-			let network_delay = 1000 - new Date().getMilliseconds();
-
-			if (network_delay > 270) {
-				if (turn == TEAM.B) {
-					black_timer --;
-				}
-				else {
-					white_timer --;
-				}
-			}
-
-			setTimeout(() => {
-				clearInterval(interval);
-				countDown();
-				$('#add-time-btn .btn').removeAttr('disabled');
-				interval = setInterval(function() {
-					countDown();
-				}, 1000);
-			}, network_delay);
-		}
+		updateMatchTimer();
 	});
 });
 
+function updateMatchChat() {
+	for (; match.chat.length != chats_applied; chats_applied++) {
+		let chat = Util.unpackMessage(match.chat[chats_applied]);
+		let team_name = players[chat.team].name;
+
+		if (chats_applied != 0 && chat.team == Util.unpackMessage(match.chat[chats_applied - 1]).team) {
+			let message = $('#chat-messages-content').children().last().find('.chat-message-content');
+			message.html(message.html() + "<br>" + chat.message);
+		}
+		else {
+			$("#chat-messages-content").append(`
+				<div class="chat-message row">
+					<div class="chat-message-sender">${ team_name }</div>
+					<p class="chat-message-content">${ chat.message }</p>
+				</div>`);
+		}
+
+		$("#chat-messages-content").scrollTop($("#chat-messages-content")[0].scrollHeight);
+
+		let offset = 10;
+		if (!SCREEN_PORTRAIT && (window.innerHeight + window.scrollY + offset) < document.body.offsetHeight) {
+			showHtml('#chat-notification', true);
+		}
+	}
+}
+
+async function updateMatchMoves() {
+	if (moves_applied > match.moves.length) {
+		location.reload();
+	}
+
+	for (; moves_applied < match.moves.length;) {
+		if (Util.gameFinished(match.moves[moves_applied])) {
+			clearInterval(interval);
+
+			showHtml('#invite-btn',       false);
+			showHtml('#resign-btn',       false);
+			showHtml('#draw-btn',         false);
+			showHtml('#undo-btn',         false);
+			showHtml('#add-time-btn',     false);
+			showHtml('#change-theme-btn', false);
+			showHtml('#review-btn',       true);
+			return false;
+		}
+
+		let move = Util.unpack(match.moves[moves_applied]);
+		if (turn != my_team) {
+			move.old_y = BOARD_SIZE - move.old_y - 1;
+			move.new_y = BOARD_SIZE - move.new_y - 1;
+		}
+
+		await new Promise((resolve, reject) => {
+		  setTimeout(() => {
+			moveChess(chessboard[move.old_x][move.old_y], chessboard[move.new_x][move.new_y]);
+			resolve('Promise A win!');
+		  }, 50);
+		})
+		turn = move.turn;
+	}
+
+	switch(isCheckmate()) {
+		case STATUS_CHECKMATE:
+			database.checkmate(my_team == TEAM.W ? TEAM.B : TEAM.W);
+			playSound("omgwow");
+			break;
+		case STATUS_STALEMATE:
+			database.stalemate();
+			break;
+	}
+	return true;
+}
+
+function updateMatchUndo() {
+	if (my_team == TEAM.B && match.white_undo == DB_REQUEST_ASK || my_team == TEAM.W && match.black_undo == DB_REQUEST_ASK) {
+		swal({
+			text: `${players[enemy_team].name} is once again asking for your mercy. Undo move?`,
+			type: "warning",
+			showCancelButton: true,
+			buttons: [
+			  'Cancel',
+			  'Undo'
+			],
+			closeOnConfirm: false
+		}).then((toResign) => {
+			if (toResign) {
+				database.undoMove();
+			}
+			else {
+				database.cancelUndo();
+			}
+		});
+	}
+
+	if (match.moves.length == 0 || turn == my_team ||
+		(my_team == TEAM.B && match.black_undo == DB_REQUEST_ASK) ||
+		(my_team == TEAM.W && match.white_undo == DB_REQUEST_ASK)) {
+		enableHtml('#undo-btn .btn', false);
+	}
+	else {
+		enableHtml('#undo-btn .btn', true);
+	}
+}
+
+function updateMatchDraw() {
+	if (my_team == TEAM.B && match.white_draw == DB_REQUEST_ASK ||
+		my_team == TEAM.W && match.black_draw == DB_REQUEST_ASK) {
+		swal({
+			text: `${players[enemy_team].name} is asking for a draw. Confirm?`,
+			type: "warning",
+			showCancelButton: true,
+			buttons: [
+			  'Cancel',
+			  'Draw'
+			],
+			closeOnConfirm: false
+		}).then((toResign) => {
+			if (toResign) {
+				database.draw();
+			}
+			else {
+				database.cancelDraw();
+			}
+		});
+	}
+
+	if ((my_team == TEAM.B && match.black_draw == DB_REQUEST_ASK) ||
+		(my_team == TEAM.W && match.white_draw == DB_REQUEST_ASK)) {
+		enableHtml('#draw-btn .btn', false);
+	}
+	else {
+		enableHtml('#draw-btn .btn', true);
+	}
+}
+
+
+function updateMatchTimer() {
+	let t1 = match.updated.toDate();
+	let t2 = new Date();
+	let time_since_last_move = Math.floor((t2.getTime() - t1.getTime()) / 1000);
+
+	if (turn == TEAM.B) {
+		white_timer = match.white_timer;
+		black_timer = match.black_timer - time_since_last_move;
+	}
+	else {
+		black_timer = match.black_timer;
+		white_timer = match.white_timer - time_since_last_move;
+	}
+
+	// Many magic numbers.. please fix in the future.
+	let network_delay = 1000 - new Date().getMilliseconds();
+	if (network_delay > 270) {
+		if (turn == TEAM.B) {
+			black_timer --;
+		}
+		else {
+			white_timer --;
+		}
+	}
+
+	setTimeout(() => {
+		clearInterval(interval);
+		countDown();
+		enableHtml('#add-time-btn .btn', true);
+
+		interval = setInterval(function() {
+			countDown();
+		}, 1000);
+	}, network_delay);
+}
+
+function updateUtilityButtons() {
+	showHtml('#game-utility-title',	true);
+
+	if (match.black && match.white) {
+		showHtml('#invite-btn',       false);
+		showHtml('#review-btn',	      false);
+		showHtml('#resign-btn',       true);
+		showHtml('#draw-btn',         true);
+		showHtml('#undo-btn',         true);
+		showHtml('#add-time-btn',     true);
+		showHtml('#change-theme-btn', true);
+	}
+	else {
+		showHtml('#invite-btn',       true);
+		showHtml('#review-btn',       false);
+		showHtml('#resign-btn',       false);
+		showHtml('#draw-btn',         false);
+		showHtml('#undo-btn',         false);
+		showHtml('#add-time-btn',     false);
+		showHtml('#change-theme-btn', false);
+	}
+}
 
 //Game
 function initGame() {
 	canvasLayer.addEventListener("click", onClick, false);
-	$("#white-player-icon").css("background-color", "#008640");
+	$("#W-player-icon").css("background-color", "#008640");
 
 	updateStats();
 	initBoard();
 	initPieces();
 	initToolbar();
 	initChat();
+
+	game_reset = false;
 }
 
 function showTimer() {
 	$('#white-timer').text(Util.formatTimer(white_timer));
 	$('#black-timer').text(Util.formatTimer(black_timer));
 
-	if (turn == TEAM.W && white_timer >= 0)
-		$('#white-timer').addClass('ticking');
-	else
-		$('#white-timer').removeClass('ticking');
-
-	if (turn == TEAM.B && black_timer >= 0)
-		$('#black-timer').addClass('ticking');
-	else
-		$('#black-timer').removeClass('ticking');
+	$('#white-timer').toggleClass('ticking', turn == TEAM.W && white_timer >= 0);
+	$('#black-timer').toggleClass('ticking', turn == TEAM.B && black_timer >= 0);
 }
 
 function countDown() {
 	showTimer();
 
-	if (turn == TEAM.W && white_timer >= 0) {
+	if (turn == TEAM.W) {
 		if (white_timer <= 0) {
 			database.timesup(TEAM.B);
 			clearInterval(interval);
@@ -298,7 +303,7 @@ function countDown() {
 		}
 	}
 
-	if (turn == TEAM.B && black_timer >= 0) {
+	if (turn == TEAM.B) {
 		if (black_timer <= 0) {
 			database.timesup(TEAM.W);
 			clearInterval(interval);
@@ -322,39 +327,33 @@ function initToolbar() {
 	});
 }
 
+async function updatePlayerData() {
+	if (!players[TEAM.B] && match.black) {
+		await database.getUser(match.black).then((user_data) => {
+			players[TEAM.B] = user_data;
+			setPlayerHTML(TEAM.B);
+		});
+	}
+	if (!players[TEAM.W] && match.white) {
+		await database.getUser(match.white).then((user_data) => {
+			players[TEAM.W] = user_data;
+			setPlayerHTML(TEAM.W);
+		});
+	}
+}
 
 //Set player info
-function setTitleBar(auth_user) {
+function setPlayerHTML(team) {
+	let player = players[team];
+	let regex = team == TEAM.B ? /\[B\]/g : /\[W\]/g;
 
-	if (!black_title_set && match.black) {
-		database.getUser(match.black, (user_data) => {
-			$('#black-player-image').attr('src', user_data.photoURL);
-			$('#black-player-name').text(user_data.displayName);
-			$('#black-player-utility-image').attr('src', user_data.photoURL);
-			$('#black-player-utility-name').text(user_data.displayName);
-			black_title_set = true;
-			names.black = user_data.displayName;
-			pictures.black = user_data.photoURL;
+	$(`#${team}-player-image`).attr('src', player.photo);
+	$(`#${team}-player-name`).text(player.name);
+	$(`#${team}-player-utility-image`).attr('src', player.photo);
+	$(`#${team}-player-utility-name`).text(player.name);
 
-			$('#chat-messages-content').replaceWith($.parseHTML($('#chat-messages-content').prop('outerHTML').replace(/\[B\]/g, names.black)));
-			$("#chat-messages-content").scrollTop($("#chat-messages-content")[0].scrollHeight);
-		});
-	}
-
-	if (!white_title_set && match.white) {
-		database.getUser(match.white, (user_data) => {
-			$('#white-player-image').attr('src', user_data.photoURL);
-			$('#white-player-name').text(user_data.displayName);
-			$('#white-player-utility-image').attr('src', user_data.photoURL);
-			$('#white-player-utility-name').text(user_data.displayName);
-			white_title_set = true;
-			names.white = user_data.displayName;
-			pictures.white = user_data.photoURL;
-
-			$('#chat-messages-content').replaceWith($.parseHTML($('#chat-messages-content').prop('outerHTML').replace(/\[W\]/g, names.white)));
-			$("#chat-messages-content").scrollTop($("#chat-messages-content")[0].scrollHeight);
-		});
-	}
+	$('#chat-messages-content').replaceWith($.parseHTML($('#chat-messages-content').prop('outerHTML').replace(regex, player.name)));
+	$("#chat-messages-content").scrollTop($("#chat-messages-content")[0].scrollHeight);
 }
 
 //Intialize chessboard background
@@ -469,13 +468,6 @@ function handleChessEvent(x, y) {
 	if ((auth_user.uid != match.black && auth_user.uid != match.white) || my_team != turn)
 		return;
 
-	// //Thinking...
-	// canvasLayer.removeAttribute("onclick");
-	// setTimeout(function(){
-	// 	moveChessAI();
-	// 	canvasLayer.addEventListener("click", onClick, false);
-	// },500);
-
 	//Initalize important variables
 	let newGrid = chessboard[x][y];
 	let isLegal = isLegalMove(newGrid);
@@ -516,163 +508,9 @@ function handleChessEvent(x, y) {
 
 		database.updateChessboard(oldGrid, newGrid, turn, black_timer, white_timer);
 		oldGrid = null;
-
-		//Thinking...
-		// canvasLayer.removeAttribute("onclick");
-		// setTimeout(function(){
-		// 	moveChessAI();
-		// 	canvasLayer.addEventListener("click", onClick, false);
-		// },500);
 	}
 }
 
-// //Move chess from oldGrid to newGrid
-// function moveChessAI() {
-// 	let moved = false;
-// 	let bestMoves = [];
-// 	let worstCost = [];
-
-// 	for (let i = 0; i < chessboard.length; i++) {
-// 		for (let j = 0; j < chessboard.length; j++) {
-
-// 			let grid = chessboard[i][j];
-// 			if (grid.piece != null && grid.piece.team == turn) {
-
-// 				let moves = grid.piece.getPossibleMoves(chessboard, grid);
-// 				let tempBoard = copyBoard(chessboard);
-// 				let chosenMove = getBestMoves(tempBoard, grid, moves, turn);
-
-// 				// Keeps track of best move(s)
-// 				if (chosenMove.bestMove != null) {
-// 					if (bestMoves.length == 0 || chosenMove.bestValue > bestMoves[0].bestValue)
-// 						bestMoves = [chosenMove];
-// 					else if (chosenMove.bestValue == bestMoves[0].bestValue)
-// 						bestMoves.push(chosenMove);
-// 				}
-
-// 				// Keeps track of worst opportunity cost move(s)
-// 				if (chosenMove.worstMove != null) {
-// 					if (worstCost.length == 0 || chosenMove.worstValue < worstCost[0].worstValue)
-// 						worstCost = [chosenMove];
-// 					else if (chosenMove.worstValue == worstCost[0].worstValue)
-// 						worstCost.push(chosenMove);
-// 				}
-
-// 			}
-// 		}
-// 	}
-
-// 	// Chose moves from worst cost list if the cost is larger than best mvoe list
-// 	// bestMoves = bestMoves.sort(worseValueSortReverse);
-// 	// worstCost = worstCost.sort(worseValueSortReverse);
-// 	// let chosenMoves = (bestMoves.length > 0 && worstCost.length > 0 && -worstCost[0].worstValue > bestMoves[0].bestValue) ? worstCost : bestMoves;
-
-// 	// Select best moves that have the lowest worst value
-// 	let chosenMoves = bestMoves.sort(worseValueSort);
-// 	let lastBestIndex = 0;
-// 	for (; lastBestIndex < chosenMoves.length; lastBestIndex++)
-// 		if (chosenMoves[lastBestIndex].worstValue > chosenMoves[0].worstValue)
-// 			break;
-
-// 	// Select a random move from an equally good move
-// 	let randomIndex = Math.floor(Math.random() * lastBestIndex);
-// 	let bestMove = bestMoves[randomIndex];
-
-// 	// Start a move or throw an error
-// 	if (bestMove != undefined && bestMove.bestMove != null)
-// 		moveChess(bestMove.grid, chessboard[bestMove.bestMove.x][bestMove.bestMove.y]);
-// 	else
-// 		swal("Stalemate. No body wins.");
-	
-// 	switchTurn();
-// 	return;
-// }
-
-
-// //Get best moves
-// function getBestMoves(board, curGrid, moves, team) {
-
-// 	let enemyTeam = team == TEAM.B ? TEAM.W : TEAM.B;
-// 	let stayingCost = getMoveScore(board, curGrid, team, 2);
-// 	let bestValue = undefined;
-// 	let bestMove = null;
-// 	let worstValue = undefined;
-// 	let worstMove = null;
-
-// 	for (let count = 0; count < moves.length; count++) {
-
-// 		let tempBoard = copyBoard(board);
-// 		let keyGrid = board[moves[count].x][moves[count].y];
-
-// 		// Simulate a test move
-// 		tempBoard[keyGrid.x][keyGrid.y].piece = curGrid.piece;
-// 		tempBoard[curGrid.x][curGrid.y].piece = keyGrid.piece;
-
-// 		// Calculate move score up to next 3 steps. The multiplier makes AI more aggressive.
-// 		let steps = 3;
-// 		let curValue = getMoveScore(tempBoard, tempBoard[keyGrid.x][keyGrid.y], team, steps) + (keyGrid.piece ? keyGrid.piece.value : 0) * Math.pow(2, steps);
-
-// 		// Revert back the test move
-// 		tempBoard[keyGrid.x][keyGrid.y].piece = keyGrid.piece;
-// 		tempBoard[curGrid.x][curGrid.y].piece = curGrid.piece;
-
-// 		if (bestValue == undefined || curValue > bestValue) {
-// 			bestValue = curValue;
-// 			bestMove = moves[count];
-// 		}
-
-// 		if (worstValue == undefined || curValue < worstValue) {
-// 			worstValue = curValue;
-// 			worstMove = moves[count];
-// 		}
-// 	}
-
-// 	if (bestValue == undefined)
-// 		bestValue = 0;
-
-// 	if (worstValue == undefined)
-// 		worstValue = bestValue;
-
-// 	if (stayingCost - bestValue >= 2)
-// 		bestMove = null;
-
-// 	worstValue += bestValue;
-// 	return {worstValue:worstValue, bestValue: bestValue, bestMove:bestMove, grid:curGrid};
-// }
-
-// // Get overall score after a move is made
-// function getMoveScore(board, grid, team, steps) {
-// 	let enemies = getValidPieces(board, grid, team).enemies.sort(gridSortReverse);
-
-// 	// Base case: if opponent team has no enemy left or recursive steps reaches 0
-// 	if (steps <= 0 || enemies.length <= 0) return 0;
-
-// 	// Make a board copy for move simulation
-// 	let tempBoard = copyBoard(board);
-// 	let bestScore = -9999;
-
-// 	// Calculate the best score when enemies eat you at @grid
-// 	for (let i in enemies) {
-// 		let enemy = enemies[i];
-// 		let baseValue = grid.piece ? grid.piece.value : 0;
-
-// 		// Simulate enemy move to eat you
-// 		tempBoard[grid.x][grid.y].piece = enemy.piece;
-// 		tempBoard[enemy.x][enemy.y].piece = null;
-
-// 		// Base value: the score enemy earns by eating your current piece
-// 		// Recursion:  the score enemy gets in consequence of eating you
-// 		// Minue one:  penalizes simulation that goes too deep into the future (less likely to be adopted)
-// 		let score = - baseValue - getMoveScore(tempBoard, tempBoard[grid.x][grid.y], enemy.piece.team, steps - 1) - 1;
-// 		if (score > bestScore) bestScore = score;
-
-// 		// Revert back move simulation
-// 		tempBoard[enemy.x][enemy.y].piece = enemy.piece;
-// 		tempBoard[grid.x][grid.y].piece = grid.piece;
-// 	}
-
-// 	return bestScore;
-// }
 
 //Get all valid friends and enemies that can eat keyGrid
 function getValidPieces(board, keyGrid, team) {
@@ -931,6 +769,7 @@ function updateStats() {
 
 	let w_pos = my_team == TEAM.W ? "bottom" : "top";
 
+	showHtml('.canvas-border', true);
 	$(".canvas-border.bg-white").css("height", `calc(${w_stat} * var(--canvas-size))`);
 	$(".canvas-border.bg-white").css(w_pos, '0');
 
@@ -1085,13 +924,13 @@ function canCastle(oldGrid, newGrid) {
 function switchTurn() {
 	if (turn == TEAM.B) {
 		turn = TEAM.W;
-		$("#white-player-image").css("border", "calc(var(--picture-size) / 15) solid #008640");
-		$("#black-player-image").css("border", "calc(var(--picture-size) / 15) solid #000000");
+		$("#W-player-image").css("border", "calc(var(--picture-size) / 15) solid #008640");
+		$("#B-player-image").css("border", "calc(var(--picture-size) / 15) solid #000000");
 	}
 	else {
 		turn = TEAM.B;
-		$("#black-player-image").css("border", "calc(var(--picture-size) / 15) solid #008640");
-		$("#white-player-image").css("border", "calc(var(--picture-size) / 15) solid #ffffff");
+		$("#B-player-image").css("border", "calc(var(--picture-size) / 15) solid #008640");
+		$("#W-player-image").css("border", "calc(var(--picture-size) / 15) solid #ffffff");
 	}
 }
 
@@ -1107,7 +946,7 @@ function copyBoard(board) {
 }
 
 
-function changeTheme(newTheme) {
+function updateTheme(newTheme) {
 	theme = newTheme;
 	let color1 = my_team == TEAM.W ? theme.COLOR_BOARD_DARK : theme.COLOR_BOARD_LIGHT;
 	let color2 = my_team == TEAM.W ? theme.COLOR_BOARD_LIGHT : theme.COLOR_BOARD_DARK;
@@ -1161,12 +1000,12 @@ function gridToString(grid) {
 window.onscroll = function(ev) {
 	let offset = 10;
 	if (!SCREEN_PORTRAIT && (window.innerHeight + window.scrollY + offset) >= document.body.offsetHeight) {
-		$('#chat-notification').attr('hidden', 'hidden');
+		showHtml('#chat-notification', false);
 	}
 };
 
 function onInviteClick() {
-	if ($('#invite-btn .btn').attr('disabled') == 'disabled')
+	if (!htmlEnabled('#invite-btn .btn'))
 		return;
 
 	let e = document.createElement('textarea');
@@ -1180,7 +1019,7 @@ function onInviteClick() {
 }
 
 function onResignClick() {
-	if ($('#resign-btn .btn').attr('disabled') == 'disabled')
+	if (!htmlEnabled('#resign-btn .btn'))
 		return;
 
 	swal({
@@ -1200,21 +1039,21 @@ function onResignClick() {
 }
 
 function onDrawClick() {
-	if ($('#draw-btn .btn').attr('disabled') == 'disabled')
+	if (!htmlEnabled('#draw-btn .btn'))
 		return;
 
 	database.askDraw();
 }
 
 function onUndoClick() {
-	if ($('#undo-btn .btn').attr('disabled') == 'disabled')
+	if (!htmlEnabled('#undo-btn .btn'))
 		return;
 
 	database.askUndo();
 }
 
 function onAddTimeClick() {
-	if ($('#add-time-btn .btn').attr('disabled') == 'disabled')
+	if (!htmlEnabled('#add-time-btn .btn'))
 		return;
 
 	if (my_team == TEAM.W) {
@@ -1226,25 +1065,40 @@ function onAddTimeClick() {
 		database.updateTimer(match.black_timer, match.white_timer + 15);
 	}
 	showTimer();
-	$('#add-time-btn .btn').attr('disabled', 'disabled');
+	enableHtml('#add-time-btn .btn', false);
 }
 
 function onThemeClick() {
-	swal("", { button: false });
-	$(".swal-modal").prepend('<div></div>');
+	$('#theme-modal').modal('show');
 
-	$(".swal-modal div").load('html/theme_selector.html', () => {
-		$('.utility-btn').removeClass('outline');
-		if (theme == THEME_CLASSIC) $('#classic-theme-btn .btn').addClass('outline');
-		else if (theme == THEME_WINTER) $('#winter-theme-btn .btn').addClass('outline');
-		else if (theme == THEME_METAL) $('#metal-theme-btn .btn').addClass('outline');
-		else if (theme == THEME_NATURE) $('#nature-theme-btn .btn').addClass('outline');
-	});
+	if (theme == THEME_CLASSIC) $('#classic-theme-btn .btn').addClass('outline');
+	else if (theme == THEME_WINTER) $('#winter-theme-btn .btn').addClass('outline');
+	else if (theme == THEME_METAL) $('#metal-theme-btn .btn').addClass('outline');
+	else if (theme == THEME_NATURE) $('#nature-theme-btn .btn').addClass('outline');
 }
 
 function onThemeSelect(event, newTheme) {
 	$('.utility-btn').removeClass('outline');
 	$(event.target).addClass('outline');
 	database.changeTheme(newTheme);
-	swal.close();
+	// swal.close();
+	$('#theme-modal').modal('hide');
+}
+
+
+function showHtml(button, toShow) {
+	$(button).toggleClass('hidden', !toShow);
+}
+
+function enableHtml(button, toEnable) {
+	if (toEnable) {
+		$(button).removeAttr('disabled');		
+	}
+	else {
+		$(button).attr('disabled', 'disabled');
+	}
+}
+
+function htmlEnabled(button) {
+	return $(button).attr('disabled') != 'disabled';
 }

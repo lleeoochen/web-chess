@@ -5,7 +5,7 @@ var database = new Firebase();
 database.authenticate((auth_user1) => {
 	initToolbar();
 	auth_user = auth_user1;
-	database.getUser(auth_user1.uid, (user_data) => {
+	database.getUser(auth_user1.uid).then((user_data) => {
 		user = user_data;
 		showMatches();
 	});

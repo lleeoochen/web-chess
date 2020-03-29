@@ -3,15 +3,11 @@ class GameFirebase extends Firebase {
 	match_id = null;
 	my_team = null;
 
-	constructor() {
-		super();
-	}
-
-	initMatch(match_id, callback) {
+	listenMatch(match_id, callback) {
 		this.match_id = match_id;
 		var self = this;
 
-		this.getMatch(match_id, (match) => {
+		super.listenMatch(match_id, (match) => {
 			self.match = match;
 
 			// Register second user if not exists
@@ -20,25 +16,6 @@ class GameFirebase extends Firebase {
 				self.my_team = TEAM.W;
 			}
 			else if (self.auth_user.uid == match.black) {
-				self.my_team = TEAM.B;
-			}
-			else if (self.auth_user.uid == match.white) {
-				self.my_team = TEAM.W;
-			}
-			else {
-				self.my_team = TEAM.B; // spectate mode
-			}
-
-			callback(self.match, self.my_team);
-		});
-	}
-
-	listenMatch(callback) {
-		var self = this;
-		super.listenMatch(match_id, (match) => {
-			self.match = match;
-
-			if (self.auth_user.uid == match.black) {
 				self.my_team = TEAM.B;
 			}
 			else if (self.auth_user.uid == match.white) {
@@ -143,14 +120,12 @@ class GameFirebase extends Firebase {
 			this.db.collection(MATCHES_TABLE).doc(this.match_id).set({
 				white_undo: DB_REQUEST_DONE,
 				moves: moves,
-				updated: new Date()
 			}, { merge: true });
 		}
 		else {
 			this.db.collection(MATCHES_TABLE).doc(this.match_id).set({
 				black_undo: DB_REQUEST_DONE,
 				moves: moves,
-				updated: new Date()
 			}, { merge: true });
 		}
 	}

@@ -162,11 +162,11 @@
 	border-radius: calc(var(--picture-size) / 10);
 }
 
-#black-player-image {
+#B-player-image {
 	border: calc(var(--picture-size) / 15) solid black;
 }
 
-#white-player-image {
+#W-player-image {
 	border: calc(var(--picture-size) / 15) solid white;
 }
 

@@ -80,11 +80,11 @@
 	color: white !important;
 }
 
-#black-player-utility-image {
+#B-player-utility-image {
 	border: calc(var(--util-picture-size) / 15) solid black;
 }
 
-#white-player-utility-image {
+#W-player-utility-image {
 	border: calc(var(--util-picture-size) / 15) solid white;
 }
 
