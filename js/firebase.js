@@ -1,9 +1,12 @@
 // Base class of database storage
 class Firebase {
-	db = null;
-	auth_user = null;
+	// db = null;
+	// auth_user = null;
 
 	constructor() {
+		this.db = null;
+		this.auth_user = null;
+
 		// General Init
 		let firebaseConfig = {
 			apiKey: "AIzaSyDGTEzcebCXK3B4e--I2itLD0lBtXTQPYs",
@@ -46,7 +49,7 @@ class Firebase {
 					photo: self.auth_user.photoURL,
 					name: self.auth_user.displayName
 				}, { merge: true });
-				self.callback(self.auth_user);
+				callback(self.auth_user);
 			}
 			else {
 				$('#modal').modal({ backdrop: 'static', keyboard: false })

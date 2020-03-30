@@ -1,10 +1,13 @@
 class GameFirebase extends Firebase {
-	match = null;
-	match_id = null;
-	my_team = null;
+	// match = null;
+	// match_id = null;
+	// my_team = null;
 
 	listenMatch(match_id, callback) {
+		this.match = null;
+		this.my_team = null;
 		this.match_id = match_id;
+
 		var self = this;
 
 		super.listenMatch(match_id, (match) => {
