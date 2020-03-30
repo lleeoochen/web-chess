@@ -151,12 +151,12 @@ async function updateMatchMoves() {
 function updateMatchUndo() {
 	if (my_team == TEAM.B && match.white_undo == DB_REQUEST_ASK || my_team == TEAM.W && match.black_undo == DB_REQUEST_ASK) {
 		swal({
-			text: `${players[enemy_team].name} is once again asking for your mercy. Undo move?`,
+			text: `${players[enemy_team].name} is asking for your mercy.`,
 			type: "warning",
 			showCancelButton: true,
 			buttons: [
 			  'Cancel',
-			  'Undo'
+			  'Undo Move'
 			],
 			closeOnConfirm: false
 		}).then((toResign) => {

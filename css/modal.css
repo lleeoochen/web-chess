@@ -1,26 +1,26 @@
 @media screen and (orientation: portrait) {
 	:root {
-		--modal-title-size:         3vw;
-		--modal-btn-size:           3vw;
-		--modal-width:              80vw;
+		--modal-title-size:         6vw;
+		--modal-width:              90vw;
 		--modal-height:             25vw;
 		--modal-border-size:        2vw;
 		--modal-border-radius:      0.5vw;
 		--modal-margin-size:        5vw;
-		--modal-button-margin-size: 2vw;
+		--modal-button-title-size:  calc(var(--modal-title-size) * 0.8);
+		--modal-button-margin-size: 6vw;
 	}
 }
 
 @media screen and (orientation: landscape) {
 	:root {
-		--modal-title-size:         3vh;
-		--modal-btn-size:           3vh;
+		--modal-title-size:         4vh;
 		--modal-width:              80vh;
 		--modal-height:             25vh;
 		--modal-border-size:        2vh;
 		--modal-border-radius:      0.5vh;
 		--modal-margin-size:        5vh;
-		--modal-button-margin-size: 2vh;
+		--modal-button-title-size:  calc(var(--modal-title-size) * 0.8);
+		--modal-button-margin-size: 3vh;
 	}
 }
 
@@ -78,7 +78,7 @@
 }
 
 .swal-button {
-	font-size: var(--modal-title-size) !important;
+	font-size: var(--modal-button-title-size) !important;
 	padding: calc(var(--modal-button-margin-size) / 2) var(--modal-button-margin-size) !important;
 	border-radius: var(--modal-border-radius) !important;
 }
@@ -88,6 +88,11 @@
 }
 
 .swal-button--confirm {
-	background-color: #757575 !important;
+	background-color: #57bf69 !important;
 	border-color: unset !important;
+	color: darkslategrey !important;
+}
+
+.swal-footer {
+	margin-top: calc(var(--modal-margin-size) / 2) !important;
 }
