@@ -62,7 +62,7 @@ class Firebase {
 	}
 
 	getMatches(ids, user, callback) {
-		let total = Math.floor(ids.length / 10) + 1;
+		let total = Math.ceil(ids.length / 10);
 		let sent = 0;
 		let result = [];
 		var self = this;
@@ -76,9 +76,10 @@ class Firebase {
 					let id = (self.auth_user.uid == doc.data()["black"]) ? doc.data()["white"] : doc.data()["black"];
 
 					if (id) {
-						self.getUser(id, (user) => {
+						self.getUser(id).then((user) => {
 							result.push([doc.id, doc.data(), user]);
 							sent ++;
+
 							if (sent == ids.length) {
 								callback(result);
 							}

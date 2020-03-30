@@ -18,7 +18,7 @@ database.authenticate((auth_user1) => {
 function showMatches() {
 	if (!user || !user.matches) return
 
-	database.getMatches(user.matches, user, async matches_data => {
+	database.getMatches(user.matches, user, async (matches_data) => {
 		var elements = $();
 		matches_data.sort((a, b) => b[1].updated.toDate().getTime() - a[1].updated.toDate().getTime());
 		await matches_data.forEach(match => {
@@ -39,7 +39,7 @@ function showMatches() {
 								<img src="assets/${color}King.svg"/>
 							</div>
 							<div style="text-align: left;">
-								${ match_opponent ? match_opponent.displayName : "New Match" }<br/>
+								${ match_opponent ? match_opponent.name : "New Match" }<br/>
 								<div class="match-link-date"> ${ d_str } </div>
 							</div>
 						</div>
@@ -57,7 +57,7 @@ function showMatches() {
 function initToolbar() {
 	// Signout button
 	$('#signout-btn').on('click', (e) => {
-		database.auth().signOut();
+		firebase.auth().signOut();
 		location.reload();
 	});
 
