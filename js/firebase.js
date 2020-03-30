@@ -46,7 +46,7 @@ class Firebase {
 					photo: self.auth_user.photoURL,
 					name: self.auth_user.displayName
 				}, { merge: true });
-				callback(self.auth_user);
+				self.callback(self.auth_user);
 			}
 			else {
 				$('#modal').modal({ backdrop: 'static', keyboard: false })

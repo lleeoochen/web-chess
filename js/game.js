@@ -70,7 +70,9 @@ database.authenticate((_auth_user) => {
 		
 		updateMatchDraw();
 
-		updateMatchTimer();
+		if (match.black && match.white) {
+			updateMatchTimer();
+		}
 	});
 });
 
