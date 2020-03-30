@@ -50,6 +50,7 @@
 	width: var(--util-picture-size);
 	height: var(--util-picture-size);
 	border-radius: calc(var(--util-picture-size) / 10);
+	background-color: white;
 }
 
 .player-utility-stat {
@@ -81,11 +82,11 @@
 }
 
 #B-player-utility-image {
-	border: calc(var(--util-picture-size) / 15) solid black;
+	border: calc(var(--util-margin-size) * 0.7) solid black;
 }
 
 #W-player-utility-image {
-	border: calc(var(--util-picture-size) / 15) solid white;
+	border: calc(var(--util-margin-size) * 0.7) solid white;
 }
 
 

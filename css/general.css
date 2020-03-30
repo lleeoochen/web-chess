@@ -15,6 +15,7 @@ body {
 	background-color: black !important;
 	background-size: cover;
 	background-position: center;
+	font-size: 0 !important;
 }
 
 img {

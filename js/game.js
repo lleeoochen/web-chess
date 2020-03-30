@@ -926,13 +926,13 @@ function canCastle(oldGrid, newGrid) {
 function switchTurn() {
 	if (turn == TEAM.B) {
 		turn = TEAM.W;
-		$("#W-player-image").css("border", "calc(var(--picture-size) / 15) solid #008640");
-		$("#B-player-image").css("border", "calc(var(--picture-size) / 15) solid #000000");
+		$("#W-player-image").css("border", "calc(var(--margin-size) * 0.7) solid #008640");
+		$("#B-player-image").css("border", "calc(var(--margin-size) * 0.7) solid #000000");
 	}
 	else {
 		turn = TEAM.B;
-		$("#B-player-image").css("border", "calc(var(--picture-size) / 15) solid #008640");
-		$("#W-player-image").css("border", "calc(var(--picture-size) / 15) solid #ffffff");
+		$("#B-player-image").css("border", "calc(var(--margin-size) * 0.7) solid #008640");
+		$("#W-player-image").css("border", "calc(var(--margin-size) * 0.7) solid #ffffff");
 	}
 }
 
