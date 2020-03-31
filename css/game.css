@@ -43,7 +43,7 @@
 }
 
 /* 176vh is calculated by computing: 2 * --layer-size */
-@media (max-width: 176vh) and (orientation: landscape) {
+@media (max-width: 174vh) and (orientation: landscape) {
 	:root {
 		--margin-size:		1vh;
 		--eaten-piece-size: 3vh;

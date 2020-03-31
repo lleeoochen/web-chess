@@ -45,6 +45,7 @@ class GameFirebase extends Firebase {
 	}
 
 	updateTimer(black_timer, white_timer) {
+		this.message(`[Added 15 seconds to opponent.]`);
 		this.db.collection(MATCHES_TABLE).doc(this.match_id).set({
 			black_timer: black_timer,
 			white_timer: white_timer,
@@ -86,6 +87,7 @@ class GameFirebase extends Firebase {
 		let moves = (this.match && this.match.moves) ? this.match.moves : [];
 		moves.push(DB_DRAW); // draw
 
+		this.message(`[Accepted a draw.]`);
 		this.db.collection(MATCHES_TABLE).doc(this.match_id).set({
 			moves: moves,
 			updated: new Date()
@@ -96,6 +98,7 @@ class GameFirebase extends Firebase {
 		let moves = (this.match && this.match.moves) ? this.match.moves : [];
 		moves.push(winning_team == TEAM.W ? DB_TIMESUP_WHITE : DB_TIMESUP_BLACK); // timesup
 
+		this.message(`[Resigned match.]`);
 		this.db.collection(MATCHES_TABLE).doc(this.match_id).set({
 			moves: moves,
 			updated: new Date()
@@ -119,6 +122,7 @@ class GameFirebase extends Firebase {
 			moves.pop();
 		}
 
+		this.message(`[Gave mercy to opponent's move.]`);
 		if (this.my_team == TEAM.B) {
 			this.db.collection(MATCHES_TABLE).doc(this.match_id).set({
 				white_undo: DB_REQUEST_DONE,
@@ -183,7 +187,6 @@ class GameFirebase extends Firebase {
 
 		this.db.collection(MATCHES_TABLE).doc(this.match_id).set({
 			chat: chat,
-			updated: new Date()
 		}, { merge: true });
 	}
 

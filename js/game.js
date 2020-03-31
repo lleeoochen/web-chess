@@ -844,7 +844,7 @@ function fillNumbering(x, y) {
 	if (x == 0) {
 		let number = document.createElement("div");
 		number.setAttribute("class", `${color} numbering`);
-		number.innerText = BOARD_SIZE - y;
+		number.innerText = (my_team == TEAM.B) ? y + 1 : BOARD_SIZE - y;
 		background[x][y].append(number);
 	}
 
@@ -1073,6 +1073,7 @@ function onAddTimeClick() {
 		white_timer += 16;
 		database.updateTimer(match.black_timer, match.white_timer + 15);
 	}
+
 	showTimer();
 	enableHtml('#add-time-btn .btn', false);
 }
