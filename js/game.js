@@ -80,6 +80,8 @@ function updateMatchChat() {
 	for (; match.chat.length != chats_applied; chats_applied++) {
 		let chat = Util.unpackMessage(match.chat[chats_applied]);
 		let team_name = players[chat.team].name;
+		let color = chat.team == TEAM.B ? 'dark' : 'light';
+		let photo = players[chat.team].photo;
 
 		if (chats_applied != 0 && chat.team == Util.unpackMessage(match.chat[chats_applied - 1]).team) {
 			let message = $('#chat-messages-content').children().last().find('.chat-message-content');
@@ -87,8 +89,10 @@ function updateMatchChat() {
 		}
 		else {
 			$("#chat-messages-content").append(`
-				<div class="chat-message row">
-					<div class="chat-message-sender">${ team_name }</div>
+				<div class="chat-message ${color} row">
+					<div class="chat-message-sender">
+						<div>${ team_name }</div>
+					</div>
 					<p class="chat-message-content">${ chat.message }</p>
 				</div>`);
 		}
@@ -100,6 +104,9 @@ function updateMatchChat() {
 			showHtml('#chat-notification', true);
 		}
 	}
+
+	$('.chat-message.dark').css('background-color', theme.COLOR_BOARD_DARK);
+	$('.chat-message.light').css('background-color', theme.COLOR_BOARD_LIGHT);
 }
 
 async function updateMatchMoves() {
@@ -926,13 +933,13 @@ function canCastle(oldGrid, newGrid) {
 function switchTurn() {
 	if (turn == TEAM.B) {
 		turn = TEAM.W;
-		$("#W-player-image").css("border", "calc(var(--margin-size) * 0.7) solid #008640");
-		$("#B-player-image").css("border", "calc(var(--margin-size) * 0.7) solid #000000");
+		$("#W-player-image").css("border-color", "#008640");
+		$("#B-player-image").css("border-color", "#000000");
 	}
 	else {
 		turn = TEAM.B;
-		$("#B-player-image").css("border", "calc(var(--margin-size) * 0.7) solid #008640");
-		$("#W-player-image").css("border", "calc(var(--margin-size) * 0.7) solid #ffffff");
+		$("#B-player-image").css("border-color", "#008640");
+		$("#W-player-image").css("border-color", "#ffffff");
 	}
 }
 

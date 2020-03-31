@@ -1,9 +1,8 @@
 @media screen and (orientation: portrait) {
 	:root {
 		--margin-size:		1vw;
-		--piece-size: 		12vw;
 		--eaten-piece-size: 3vw;
-		--picture-size: 	10vw;
+		--picture-size: 	15vw;
 		--icon-size: 		3vw;
 		--title-size: 		3vw;
 		--font-size:		2.25vw;
@@ -11,11 +10,11 @@
 		--border-radius: 	0.75vw;
 
 		--eaten-panel-line-height: 1vw;
-		--game-content-display:	unset;
-		--layer-margin-side:	auto;
-		--side-layer-padding-top:	0;
-		--side-layer-padding-left:	var(--margin-size);
-		--scrollbar-size:		1vw;
+		--game-content-display:    unset;
+		--layer-margin-side:       auto;
+		--side-layer-padding-top:  0;
+		--side-layer-padding-left: var(--margin-size);
+		--scrollbar-size:          1vw;
 
 		--cell-size: calc((100vw - 4 * var(--margin-size)) / 8);
 	}
@@ -24,7 +23,6 @@
 @media screen and (orientation: landscape) {
 	:root {
 		--margin-size:		1vh;
-		--piece-size:		10.5vh;
 		--eaten-piece-size: 2.8vh;
 		--picture-size:		12vh;
 		--icon-size:		3vh;
@@ -34,13 +32,13 @@
 		--border-radius: 	0.75vh;
 
 		--eaten-panel-line-height: 1vh;
-		--game-content-display:	flex;
-		--layer-margin-side:	unset;
-		--side-layer-padding-top:	var(--margin-size);
-		--side-layer-padding-left:	0;
-		--scrollbar-size:		1vh;
+		--game-content-display:    flex;
+		--layer-margin-side:       unset;
+		--side-layer-padding-top:  var(--margin-size);
+		--side-layer-padding-left: 0;
+		--scrollbar-size:          1vh;
 
-		--cell-size: calc((100vh - 5 * var(--margin-size) - var(--picture-size)) / 8);
+		--cell-size: calc((100vh - 5 * var(--margin-size) - var(--picture-size)) / 8.0);
 	}
 }
 
@@ -48,7 +46,6 @@
 @media (max-width: 176vh) and (orientation: landscape) {
 	:root {
 		--margin-size:		1vh;
-		--piece-size:		10.5vh;
 		--eaten-piece-size: 3vh;
 		--picture-size:		12vh;
 		--icon-size:		3vh;
@@ -57,11 +54,11 @@
 		--btn-size:			3vh;
 		--border-radius: 	0.75vh;
 
-		--game-content-display:	unset;
-		--layer-margin-side: 	auto;
-		--side-layer-padding-top:	0;
-		--side-layer-padding-left:	var(--margin-size);
-		--scrollbar-size:		1vh;
+		--game-content-display:    unset;
+		--layer-margin-side:       auto;
+		--side-layer-padding-top:  0;
+		--side-layer-padding-left: var(--margin-size);
+		--scrollbar-size:          1vh;
 
 		--cell-size: calc((100vh - 5 * var(--margin-size) - var(--picture-size)) / 8);
 	}
@@ -106,22 +103,22 @@
 
 .lettering {
 	text-align: right;
-	margin-top: calc(var(--cell-size) - var(--margin-size) * 2.5);
-	margin-right: calc(var(--margin-size) / 2);
+	margin-top: calc(var(--cell-size) - var(--margin-size) * 2.8);
+	margin-right: calc(var(--margin-size) * 0.5);
 	font-weight: bold;
 	font-size: var(--font-size);
 }
 
 .grid {
-	width: var(--piece-size);
-	height: var(--piece-size);
+	width: var(--cell-size);
+	height: var(--cell-size);
 	transition: .2s all ease;
 	position: absolute;
 }
 
 .piece {
-	width: calc(var(--piece-size));
-	height: calc(var(--piece-size));
+	width: calc(var(--cell-size));
+	height: calc(var(--cell-size));
 
 	position: absolute;
 	float: left;
@@ -164,14 +161,16 @@
 	margin: var(--margin-size);
 	border-radius: calc(var(--picture-size) / 10);
 	background-color: white;
+	border: calc(var(--margin-size) * 0.7);
+	border-style: solid;
 }
 
 #B-player-image {
-	border: calc(var(--margin-size) * 0.7) solid black;
+	border-color: black;
 }
 
 #W-player-image {
-	border: calc(var(--margin-size) * 0.7) solid white;
+	border-color: white;
 }
 
 .player-pic.pull-left  { margin-left: 0; }
@@ -241,7 +240,7 @@
 }
 
 #utility-section {
-	height: calc(70% - 1 * var(--margin-size));
+	height: calc(55% - 1 * var(--margin-size));
 	margin-bottom: calc(var(--margin-size));
 	padding: calc(var(--margin-size));
 	background-color: #000000db;
@@ -249,7 +248,7 @@
 }
 
 #chat-section {
-	height: 30%;
+	height: 45%;
 	background-color: #000000db;
 	border-radius: var(--border-radius);
 	margin-bottom: var(--margin-size);
