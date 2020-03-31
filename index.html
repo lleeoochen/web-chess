@@ -10,6 +10,7 @@
 
 	<!-- My CSS Files -->
 	<link href="css/general.css" rel="stylesheet" type="text/css">
+	<link href="css/utility.css" rel="stylesheet" type="text/css">
 	<link href="css/modal.css" rel="stylesheet" type="text/css">
 	<link href="css/firebaseui.css" rel="stylesheet" type="text/css">
 	<link href="css/index.css" rel="stylesheet" type="text/css">
@@ -34,6 +35,76 @@
 	      </div>
 	    </div>
 	  </div>
+	</div>
+
+	<!-- Theme Selection Popup Window -->
+	<div id="new-match-modal" class="modal" tabindex="-1" role="dialog">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-body">
+
+					<div class="utility-divider">Theme</div>
+					<div id="theme-panel" class="utility-panel">
+						<div id="classic-theme-btn" class="utility-btn-wrap"> 
+							<div class="btn utility-btn outline" onclick="selectMatchTheme(event, THEME_CLASSIC)">
+								Classic
+							</div>
+						</div>
+						<div id="winter-theme-btn" class="utility-btn-wrap"> 
+							<div class="btn utility-btn" onclick="selectMatchTheme(event, THEME_WINTER)">
+								Winter
+							</div>
+						</div>
+						<div id="metal-theme-btn" class="utility-btn-wrap"> 
+							<div class="btn utility-btn" onclick="selectMatchTheme(event, THEME_METAL)">
+								Metal
+							</div>
+						</div>
+						<div id="nature-theme-btn" class="utility-btn-wrap"> 
+							<div class="btn utility-btn" onclick="selectMatchTheme(event, THEME_NATURE)">
+								Nature
+							</div>
+						</div>
+					</div>
+
+					<div class="spacing"></div>
+
+					<div class="utility-divider">Time</div>
+					<div id="time-panel" class="utility-panel">
+						<div id="classic-theme-btn" class="utility-btn-wrap"> 
+							<div class="btn utility-btn" onclick="selectMatchTime(event, 5 * 60)">
+								5 Min
+							</div>
+						</div>
+						<div id="winter-theme-btn" class="utility-btn-wrap"> 
+							<div class="btn utility-btn" onclick="selectMatchTime(event, 10 * 60)">
+								10 Min
+							</div>
+						</div>
+						<div id="metal-theme-btn" class="utility-btn-wrap"> 
+							<div class="btn utility-btn outline" onclick="selectMatchTime(event, 15 * 60)">
+								15 Min
+							</div>
+						</div>
+						<div id="nature-theme-btn" class="utility-btn-wrap"> 
+							<div class="btn utility-btn" onclick="selectMatchTime(event, 30 * 60)">
+								30 Min
+							</div>
+						</div>
+					</div>
+
+					<div class="spacing"></div>
+					<div class="spacing"></div>
+
+					<div id="submit" class="btn utility-btn">
+						Create Match
+					</div>
+
+					<div class="spacing"></div>
+
+				</div>
+			</div>
+		</div>
 	</div>
 
 	<h1 id="title">Web Chess</h1>

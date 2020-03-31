@@ -101,3 +101,16 @@
 	margin-left: 10px;
 }
 
+#new-match-modal .modal-body {
+	text-align: center;
+}
+
+#new-match-modal #submit {
+	color: black !important;
+	background-color: white !important;
+	display: unset !important;
+}
+
+.spacing {
+	height: var(--margin-size);
+}

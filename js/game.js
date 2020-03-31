@@ -53,6 +53,8 @@ database.authenticate((_auth_user) => {
 
 		if (game_reset) {
 			initGame();
+			$('#white-timer').text(Util.formatTimer(match.white_timer));
+			$('#black-timer').text(Util.formatTimer(match.black_timer));
 		}
 
 		updateTheme(Util.unpackTheme(match.theme));
@@ -107,7 +109,7 @@ function updateMatchChat() {
 
 	// $('.chat-message.dark').css('background-color', theme.COLOR_BOARD_DARK);
 	// $('.chat-message.light').css('background-color', theme.COLOR_BOARD_LIGHT);
-	
+
 	$('.chat-message.dark').css('background-color', '#494949');
 	$('.chat-message.light').css('background-color', '#494949');
 }
@@ -1084,6 +1086,7 @@ function onAddTimeClick() {
 function onThemeClick() {
 	$('#theme-modal').modal('show');
 
+	$('#theme-modal .utility-btn').removeClass('outline');
 	if (theme == THEME_CLASSIC) $('#classic-theme-btn .btn').addClass('outline');
 	else if (theme == THEME_WINTER) $('#winter-theme-btn .btn').addClass('outline');
 	else if (theme == THEME_METAL) $('#metal-theme-btn .btn').addClass('outline');
@@ -1091,10 +1094,7 @@ function onThemeClick() {
 }
 
 function onThemeSelect(event, newTheme) {
-	$('.utility-btn').removeClass('outline');
-	$(event.target).addClass('outline');
 	database.changeTheme(newTheme);
-	// swal.close();
 	$('#theme-modal').modal('hide');
 }
 

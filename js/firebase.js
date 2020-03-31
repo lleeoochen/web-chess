@@ -134,7 +134,7 @@ class Firebase {
 		});
 	}
 
-	createMatch(user, callback) {
+	createMatch(user, theme, time, callback) {
 		let self = this;
 
 		this.db.collection(MATCHES_TABLE).add({
@@ -142,10 +142,10 @@ class Firebase {
 			white: null,
 			moves: [],
 			chat: [],
-			theme: DB_THEME_CLASSIC,
+			theme: Util.packTheme(theme),
 			updated: new Date(),
-			black_timer: MAX_TIME,
-			white_timer: MAX_TIME,
+			black_timer: time || MAX_TIME,
+			white_timer: time || MAX_TIME,
 			black_undo: DB_REQUEST_NONE,
 			white_undo: DB_REQUEST_NONE,
 			black_draw: DB_REQUEST_NONE,

@@ -174,5 +174,5 @@
 }
 
 .utility-btn.outline {
-	border: var(--util-border-size) solid white !important;
+	border: calc(var(--util-border-size) / 2) solid white !important;
 }

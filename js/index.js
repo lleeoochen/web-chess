@@ -2,6 +2,9 @@ var user = null;
 var auth_user = null;
 var database = new Firebase();
 
+var theme = undefined;
+var time = undefined;
+
 database.authenticate((auth_user1) => {
 	initToolbar();
 	auth_user = auth_user1;
@@ -63,10 +66,28 @@ function initToolbar() {
 
 	// New match button
 	$('#new-match-btn').on('click', (e) => {
-		database.createMatch(user, match_id => {
+		$('#new-match-modal').modal('show');
+	});
+
+	$('#new-match-modal #submit').on('click', (e) => {
+		database.createMatch(user, theme, time, match_id => {
 			window.location = `${ CHESS_URL }/game.html?match=${ match_id }`;
 		});
+		$('#new-match-modal').modal('hide');
 	});
 
 	$('#chess-toolbar').removeAttr('hidden');
+}
+
+
+function selectMatchTheme(event, _theme) {
+	theme = _theme;
+	$('#new-match-modal #theme-panel .utility-btn').removeClass('outline');
+	$(event.target).addClass('outline');
+}
+
+function selectMatchTime(event, _time) {
+	time = _time;
+	$('#new-match-modal #time-panel .utility-btn').removeClass('outline');
+	$(event.target).addClass('outline');
 }
