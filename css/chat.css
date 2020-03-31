@@ -24,7 +24,7 @@
 
 /* Chat messages container */
 #chat-messages {
-	height: 85%;
+	height: 80%;
 	padding: var(--chat-margin-size);
 	text-align: left;
 	border-radius: var(--chat-border-radius) var(--chat-border-radius) 0px 0px;
@@ -64,7 +64,6 @@
 
 
 /* Each chat message */
-
 .chat-message {
 	font-size: var(--chat-font-size) !important;
 	display: flex;
@@ -113,7 +112,7 @@
 
 /* Chat bottom container */
 #chat-bottom {
-	height: 15%;
+	height: 20%;
 	display: flex;
 	margin-left: unset;
 	margin-right: unset;
