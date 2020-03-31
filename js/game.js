@@ -105,8 +105,11 @@ function updateMatchChat() {
 		}
 	}
 
-	$('.chat-message.dark').css('background-color', theme.COLOR_BOARD_DARK);
-	$('.chat-message.light').css('background-color', theme.COLOR_BOARD_LIGHT);
+	// $('.chat-message.dark').css('background-color', theme.COLOR_BOARD_DARK);
+	// $('.chat-message.light').css('background-color', theme.COLOR_BOARD_LIGHT);
+	
+	$('.chat-message.dark').css('background-color', '#494949');
+	$('.chat-message.light').css('background-color', '#494949');
 }
 
 async function updateMatchMoves() {
