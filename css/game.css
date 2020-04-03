@@ -189,6 +189,14 @@
 	display: var(--game-content-display);
 }
 
+#canvas-background {
+	left: calc(var(--margin-size));
+	top: calc(var(--margin-size));
+	width: calc(var(--cell-size) * 8);
+	height: calc(var(--cell-size) * 8);
+	position: absolute;
+}
+
 #canvas-layer {
 	left: 0;
 	position: absolute;

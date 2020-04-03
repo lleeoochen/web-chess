@@ -974,6 +974,7 @@ function updateTheme(newTheme) {
 
 	$('body').css('background-image', `url(${theme.BACKGROUND_IMAGE})`);
 	$('.player-name').css('color', theme.NAME_TITLE_COLOR);
+	$('#canvas-background').css('background-color', theme.COLOR_BOARD_LIGHT);
 }
 
 
