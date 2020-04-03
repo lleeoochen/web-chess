@@ -36,12 +36,12 @@ function showMatches() {
 
 			if (match_data.moves && Math.floor(match_data.moves[match_data.moves.length - 1] / 10) != 0) {
 				elements = elements.add(`
-					<a class="btn btn-warning match-link" href="${ CHESS_URL }/game.html?match=${ match_name }">
-						<div style="display: flex; align-items: center;">
+					<a class="btn match-link" href="${ CHESS_URL }/game.html?match=${ match_name }">
+						<div class="match-link-content">
 							<div>
 								<img src="assets/${color}King.svg"/>
 							</div>
-							<div style="text-align: left;">
+							<div>
 								${ match_opponent ? match_opponent.name : "New Match" }<br/>
 								<div class="match-link-date"> ${ d_str } </div>
 							</div>
@@ -54,7 +54,6 @@ function showMatches() {
 		$('#matches-list').empty();
 		$('#matches-list').append(elements);
 	});
-
 }
 
 function initToolbar() {

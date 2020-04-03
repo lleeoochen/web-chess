@@ -2,9 +2,11 @@
 	:root {
 		--home-title-size: 10vw;
 		--home-button-size: 5vw;
+		--home-toolbar-margin: 2vw;
+		--home-margin-size: 4vw;
 		--home-match-width: 80vw;
 		--home-match-text-size: 8vw;
-		--home-match-margin: 2vw;
+		--home-match-margin: 1vw;
 		--home-match-icon-size: 15vw;
 
 		--margin-size: 2vw;
@@ -15,9 +17,11 @@
 	:root {
 		--home-title-size: 8vh;
 		--home-button-size: 2vh;
+		--home-toolbar-margin: 2vh;
+		--home-margin-size: 4vh;
 		--home-match-width: 40vh;
 		--home-match-text-size: 3vh;
-		--home-match-margin: 1vw;
+		--home-match-margin: 0.5vw;
 		--home-match-icon-size: 7vh;
 
 		--margin-size: 2vh;
@@ -28,9 +32,11 @@
 	:root {
 		--home-title-size: 8vh;
 		--home-button-size: 2vh;
+		--home-toolbar-margin: 2vh;
+		--home-margin-size: 4vh;
 		--home-match-width: 40vh;
 		--home-match-text-size: 3vh;
-		--home-match-margin: 1vw;
+		--home-match-margin: 0.5vw;
 		--home-match-icon-size: 7vh;
 
 		--margin-size: 2vh;
@@ -39,18 +45,19 @@
 }
 
 #matches-display {
-	margin-left: 50px;
-	margin-right: 50px;
-	margin-bottom: 50px;
-	margin-top: 0px;
+	margin-left: var(--home-margin-size);
+	margin-right: var(--home-margin-size);
+	margin-bottom: var(--home-margin-size);
+	margin-top: 0;
 }
 
 .match-link {
 	width: var(--home-match-width);
-	margin-left: calc(var(--home-match-margin) / 2);
-	margin-right: calc(var(--home-match-margin) / 2);
-	margin-top: var(--home-match-margin);
-	border-radius: calc(var(--home-match-margin) / 2) !important;
+	margin-left: var(--home-match-margin);
+	margin-right: var(--home-match-margin);
+	margin-top: calc(var(--home-match-margin) * 2);
+	padding: calc(var(--home-match-margin) * 2) !important;
+	border-radius: var(--home-match-margin) !important;
 
 	white-space: nowrap;
 	overflow: hidden;
@@ -68,22 +75,29 @@
 	margin-right: var(--margin-size);
 }
 
+.match-link-content {
+	display: flex;
+	align-items: center;
+}
+
 .match-link-date {
 	font-size: calc(var(--home-match-text-size) * 0.8) !important;
 	color: darkslategrey;
+	text-align: left;
 }
 
 #title {
 	color: white;
-	-webkit-text-stroke: 2px black;
-	margin-bottom: 0px;
+	-webkit-text-stroke: calc(var(--home-title-size) * 0.05) black;
+	margin-bottom: 0;
 	font-size: var(--home-title-size);
 	font-weight: bold;
 }
 
 #chess-toolbar {
-	margin-top: 2px;
-	margin-bottom: 10px;
+	margin: var(--home-toolbar-margin) 0;
+	background-color: darkslategrey;
+	padding: var(--home-toolbar-margin);
 }
 
 #chess-toolbar .btn {
@@ -95,10 +109,11 @@
 	background-image: unset;
 	background-color: black;
 	border: unset;
+	color: white;
 }
 
 #new-match-btn {
-	margin-left: 10px;
+	margin-left: var(--home-toolbar-margin);
 }
 
 #new-match-modal .modal-body {
