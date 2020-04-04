@@ -147,6 +147,10 @@
 	display: table-cell !important;
 }
 
+.utility-btn-wrap .btn {
+	background-color: grey !important;
+}
+
 .utility-icon {
 	width: var(--util-icon-size);
 	height: var(--util-icon-size);

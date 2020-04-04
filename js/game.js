@@ -55,8 +55,14 @@ database.authenticate((_auth_user) => {
 
 		if (game_reset) {
 			initGame();
-			$('#white-timer').text(Util.formatTimer(match.white_timer));
-			$('#black-timer').text(Util.formatTimer(match.black_timer));
+			if (match.black_timer < MAX_TIME && match.white_timer < MAX_TIME) {
+				$('#white-timer').text(Util.formatTimer(match.white_timer));
+				$('#black-timer').text(Util.formatTimer(match.black_timer));
+			}
+			else {
+				$('#white-timer').text('∞:∞');
+				$('#black-timer').text('∞:∞');
+			}
 		}
 
 		updateTheme(Util.unpackTheme(match.theme));
@@ -74,7 +80,7 @@ database.authenticate((_auth_user) => {
 		
 		updateMatchDraw();
 
-		if (match.black && match.white) {
+		if (match.black && match.white && match.black_timer < MAX_TIME && match.white_timer < MAX_TIME) {
 			updateMatchTimer();
 		}
 	});
