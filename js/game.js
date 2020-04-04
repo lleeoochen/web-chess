@@ -29,8 +29,8 @@ var theme = null;
 
 var id = 0;
 var stats = {
-	black: STATS_MAX,
-	white: STATS_MAX
+	B: STATS_MAX,
+	W: STATS_MAX
 };
 
 var players = {
@@ -590,6 +590,49 @@ function moveChess(oldGrid, newGrid) {
 	if (oldGrid.get_piece() == null) return;
 
 	//Play sound
+	moveSound(newGrid);
+
+	//===================== Special Moves ========================
+
+	//Passant Move
+	movePassantPawn(oldGrid, newGrid);
+
+	//Castle Move
+	moveCastleKing(oldGrid, newGrid);
+
+	//====================== Redraw Pieces =======================
+
+	//Remove newGrid piece if being eaten
+	moveEatPiece(oldGrid, newGrid);
+
+	//Assign oldGrid piece for newGrid.
+	drawGridPiece(newGrid, oldGrid.piece);
+
+	//====================== Update Miscs =======================
+
+	//Pawn to Queen Move
+	movePawnToQueen(oldGrid, newGrid);
+
+	//Update king position
+	king_grid = oldGrid == king_grid ? newGrid : king_grid;
+
+	//Clear old grid piece
+	oldGrid.piece = -1;
+
+	//Update move counter and switch turn
+	moves_applied += 1;
+
+	//Color old and new grids
+	colorLatestMove(oldGrid, newGrid);
+
+	//Switch turn
+	switchTurn();
+
+	//Show resulting stats
+	updateStats();
+}
+
+function moveSound(newGrid) {
 	if (!first_move) {
 		if (!newGrid.get_piece())
 			playSound("doo");
@@ -601,20 +644,19 @@ function moveChess(oldGrid, newGrid) {
 	else {
 		playSound("opening");
 	}
+}
 
-	//Remove chess piece being eaten
+function moveEatPiece(oldGrid, newGrid) {
 	if (newGrid.get_piece() != null) {
-		if (newGrid.get_piece().team == TEAM.B)
-			stats.black -= VALUE[newGrid.get_piece().type];
-		else
-			stats.white -= VALUE[newGrid.get_piece().type];
+		stats[newGrid.get_piece().team] -= VALUE[newGrid.get_piece().type];
 
 		var old_img = oldGrid.get_piece().image
 		var new_img = newGrid.get_piece().image;
 		var newGridTeam = newGrid.get_piece().team;
 
-		//Eating animation delay.
 		old_img.style.zIndex = "1000";
+
+		//Eating animation delay.
 		setTimeout(() => {
 			piecesLayer.removeChild(new_img);
 			new_img.setAttribute("class", "eaten-piece");
@@ -628,70 +670,7 @@ function moveChess(oldGrid, newGrid) {
 			}
 		}, 300); //TODO: delay depends on the pieces' distance
 	}
-
-	movePassantPawn(oldGrid, newGrid);
-
-	//Castle move
-	if (my_team == oldGrid.get_piece().team && !king_moved || my_team != oldGrid.get_piece().team && !other_king_moved) {
-		if (oldGrid.get_piece().type == CHESS.King && Math.abs(newGrid.x - oldGrid.x) == 2) {
-			let row = (oldGrid.get_piece().team == my_team) ? BOARD_SIZE - 1 : 0;
-			if (newGrid.x - oldGrid.x == 2) {
-				chessboard[oldGrid.x + 1][oldGrid.y].piece = chessboard[BOARD_SIZE - 1][oldGrid.y].piece;
-				chessboard[oldGrid.x + 1][oldGrid.y].get_piece().image.setAttribute("class", "piece x" + (oldGrid.x + 1) + " y" + oldGrid.y);
-				chessboard[BOARD_SIZE - 1][oldGrid.y].piece = -1;
-			}
-			else {
-				chessboard[oldGrid.x - 1][oldGrid.y].piece = chessboard[0][oldGrid.y].piece;
-				chessboard[oldGrid.x - 1][oldGrid.y].get_piece().image.setAttribute("class", "piece x" + (oldGrid.x - 1) + " y" + oldGrid.y);
-				chessboard[0][oldGrid.y].piece = -1;
-			}
-		}
-	}
-
-	//King has moved, cannot castle anymore
-	if (oldGrid == king_grid) {
-		king_moved = true;
-	}
-
-	//Other King has moved, cannot castle anymore
-	if (my_team != oldGrid.get_piece().team && oldGrid.get_piece().type == CHESS.King) {
-		other_king_moved = true;
-	}
-
-	//Color last move
-	clearMoves();
-	colorLatestMove(oldGrid, newGrid);
-
-	//Move chess piece from old grid to current grid.
-	newGrid.piece = oldGrid.piece;
-	newGrid.get_piece().image.setAttribute("class", "piece x" + newGrid.x + " y" + newGrid.y);
-
-	//Pawn to Queen
-	if (newGrid.get_piece().type == CHESS.Pawn) {
-		if ((newGrid.get_piece().team == my_team && newGrid.y == 0) || (newGrid.get_piece().team != my_team && newGrid.y == BOARD_SIZE - 1)) {
-			piecesLayer.removeChild(newGrid.get_piece().image);
-			initEachPiece(id++, newGrid.x, newGrid.y, newGrid.get_piece().team, CHESS.Queen);
-
-			if (newGrid.get_piece().team == TEAM.B)
-				stats.black += VALUE[CHESS.Queen] - VALUE[CHESS.Pawn];
-			else
-				stats.white += VALUE[CHESS.Queen] - VALUE[CHESS.Pawn];
-		}
-	}
-
-	//Update king position
-	if (oldGrid == king_grid)
-		king_grid = newGrid;
-
-	//Clear old grid
-	oldGrid.piece = -1;
-
-	//Update move counter and switch turn
-	moves_applied += 1;
-	switchTurn();
-	updateStats();
 }
-
 
 function movePassantPawn(oldGrid, newGrid) {
 	let kill_passant_pawn = false;
@@ -712,10 +691,7 @@ function movePassantPawn(oldGrid, newGrid) {
 
 	// Kill passant pawn
 	if (kill_passant_pawn && passant_pawn) {
-		if (passant_pawn.get_piece().team == TEAM.B)
-			stats.black -= VALUE[passant_pawn.get_piece().type];
-		else
-			stats.white -= VALUE[passant_pawn.get_piece().type];
+		stats[passant_pawn.get_piece().team] -= VALUE[passant_pawn.get_piece().type];
 
 		let pawn_img = passant_pawn.get_piece().image;
 		let pawn_team = passant_pawn.get_piece().team;
@@ -744,6 +720,55 @@ function movePassantPawn(oldGrid, newGrid) {
 			if (newGrid.y - oldGrid.y == 2) {
 				passant_pawn = newGrid;
 			}
+		}
+	}
+}
+
+function moveCastleKing(oldGrid, newGrid) {
+	// If oldGrid is king
+	if (oldGrid.get_piece().type == CHESS.King) {
+
+		// If either king hasn't move
+		if (my_team == oldGrid.get_piece().team && !king_moved || my_team != oldGrid.get_piece().team && !other_king_moved) {
+
+			// Perform right castle
+			if (newGrid.x - oldGrid.x == 2) {
+				chessboard[oldGrid.x + 1][oldGrid.y].piece = chessboard[BOARD_SIZE - 1][oldGrid.y].piece;
+				chessboard[oldGrid.x + 1][oldGrid.y].get_piece().image.setAttribute("class", "piece x" + (oldGrid.x + 1) + " y" + oldGrid.y);
+				chessboard[BOARD_SIZE - 1][oldGrid.y].piece = -1;
+			}
+
+			// Perform left castle
+			if (newGrid.x - oldGrid.x == -2) {
+				chessboard[oldGrid.x - 1][oldGrid.y].piece = chessboard[0][oldGrid.y].piece;
+				chessboard[oldGrid.x - 1][oldGrid.y].get_piece().image.setAttribute("class", "piece x" + (oldGrid.x - 1) + " y" + oldGrid.y);
+				chessboard[0][oldGrid.y].piece = -1;
+			}
+		}
+	}
+
+
+	//King has moved, cannot castle anymore
+	if (oldGrid == king_grid) {
+		king_moved = true;
+	}
+
+	//Other King has moved, cannot castle anymore
+	if (my_team != oldGrid.get_piece().team && oldGrid.get_piece().type == CHESS.King) {
+		other_king_moved = true;
+	}
+}
+
+function movePawnToQueen(oldGrid, newGrid) {
+	if (newGrid.get_piece().type == CHESS.Pawn) {
+		let myPawnArrived = newGrid.get_piece().team == my_team && newGrid.y == 0;
+		let enemyPawnArrived = newGrid.get_piece().team != my_team && newGrid.y == BOARD_SIZE - 1;
+
+		if (myPawnArrived || enemyPawnArrived) {
+			piecesLayer.removeChild(newGrid.get_piece().image);
+			initEachPiece(id++, newGrid.x, newGrid.y, newGrid.get_piece().team, CHESS.Queen);
+
+			stats[newGrid.get_piece().team] += VALUE[CHESS.Queen] - VALUE[CHESS.Pawn];
 		}
 	}
 }
@@ -778,7 +803,7 @@ function updateMoves(grid) {
 
 
 function updateStats() {
-	let w_stat = stats.white / (stats.white + stats.black);
+	let w_stat = stats.W / (stats.W + stats.B);
 	w_stat = 0.35 * Math.atan(10 * w_stat - 5) + 0.5;
 
 	let w_pos = my_team == TEAM.W ? "bottom" : "top";
@@ -796,13 +821,13 @@ function updateStats() {
 		$(".canvas-border.bg-black").css('border-radius', 'var(--border-radius) var(--border-radius) var(--border-radius) var(--border-radius)');
 	}
 
-	if (stats.white > stats.black) {
-		$("#white-stat").text("+" + (stats.white - stats.black));
+	if (stats.W > stats.B) {
+		$("#white-stat").text("+" + (stats.W - stats.B));
 		$("#black-stat").text("+0");
 	}
 	else {
 		$("#white-stat").text("+0");
-		$("#black-stat").text("+" + (stats.black - stats.white));
+		$("#black-stat").text("+" + (stats.B - stats.W));
 	}
 }
 
@@ -868,6 +893,8 @@ function fillNumbering(x, y) {
 
 //Set last move grid color
 function colorLatestMove(oldGrid, newGrid) {
+	clearMoves();
+
 	fillGrid(lastMove.oldGrid, COLOR_ORIGINAL);
 	fillGrid(lastMove.newGrid, COLOR_ORIGINAL);
 	lastMove.oldGrid = oldGrid;
@@ -975,6 +1002,13 @@ function updateTheme(newTheme) {
 	$('body').css('background-image', `url(${theme.BACKGROUND_IMAGE})`);
 	$('.player-name').css('color', theme.NAME_TITLE_COLOR);
 	$('#canvas-background').css('background-color', theme.COLOR_BOARD_LIGHT);
+}
+
+function drawGridPiece(grid, piece) {
+	grid.piece = piece;
+
+	if (grid.get_piece())
+		grid.get_piece().image.setAttribute("class", "piece x" + grid.x + " y" + grid.y);
 }
 
 

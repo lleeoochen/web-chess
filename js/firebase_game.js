@@ -98,7 +98,7 @@ class GameFirebase extends Firebase {
 		let moves = (this.match && this.match.moves) ? this.match.moves : [];
 		moves.push(winning_team == TEAM.W ? DB_TIMESUP_WHITE : DB_TIMESUP_BLACK); // timesup
 
-		this.message(`[Resigned match.]`);
+		this.message(`[Time's up. Match ended.]`);
 		this.db.collection(MATCHES_TABLE).doc(this.match_id).set({
 			moves: moves,
 			updated: new Date()
@@ -109,6 +109,7 @@ class GameFirebase extends Firebase {
 		let moves = (this.match && this.match.moves) ? this.match.moves : [];
 		moves.push(winning_team == TEAM.W ? DB_RESIGN_WHITE : DB_RESIGN_BLACK); // resign
 
+		this.message(`[Resigned match.]`);
 		this.db.collection(MATCHES_TABLE).doc(this.match_id).set({
 			moves: moves,
 			updated: new Date()

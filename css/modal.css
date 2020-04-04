@@ -52,7 +52,7 @@
 	height: var(--modal-height) !important;
 	position: absolute !important;
 	left: 50% !important;
-	top: 50% !important;
+	top: 25% !important;
 	margin-left: calc(var(--modal-width) * -0.5) !important;
 	margin-top: calc(var(--modal-height) * -0.5) !important;
 }
