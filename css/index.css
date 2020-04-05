@@ -102,9 +102,7 @@
 
 #chess-toolbar .btn {
 	font-size: var(--home-button-size);
-	padding: calc(var(--btn-size) / 3);
-	padding-left: calc(var(--btn-size) / 1.5);
-	padding-right: calc(var(--btn-size) / 1.5);
+	padding: calc(var(--btn-size) / 3) calc(var(--btn-size) / 1.5);
 	border-radius: calc(var(--btn-size) / 4);
 	background-image: unset;
 	background-color: black;
@@ -124,6 +122,8 @@
 	color: black !important;
 	background-color: white !important;
 	display: unset !important;
+	border-radius: calc(var(--btn-size) / 4);
+    padding: calc(var(--btn-size) / 2) var(--btn-size) !important;
 }
 
 .spacing {

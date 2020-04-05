@@ -56,7 +56,7 @@ database.authenticate((_auth_user) => {
 		enemy_team = my_team == TEAM.B ? TEAM.W : TEAM.B;
 
 		timer_enable = match.black_timer < MAX_TIME && match.white_timer < MAX_TIME;
-		enableHtml('#add-time-btn .btn', timer_enable);
+		enableHtml('#add-time-btn .utility-btn', timer_enable);
 
 		if (game_reset) {
 			initGame();
@@ -120,11 +120,13 @@ function updateMatchChat() {
 		}
 	}
 
-	// $('.chat-message.dark').css('background-color', theme.COLOR_BOARD_DARK);
-	// $('.chat-message.light').css('background-color', theme.COLOR_BOARD_LIGHT);
+	$('.chat-message.dark').css('background-color', theme.COLOR_BOARD_DARK);
+	$('.chat-message.dark').css('color', 'white');
+	$('.chat-message.light').css('background-color', theme.COLOR_BOARD_LIGHT);
+	$('.chat-message.light').css('color', 'black');
 
-	$('.chat-message.dark').css('background-color', '#494949');
-	$('.chat-message.light').css('background-color', '#494949');
+	// $('.chat-message.dark').css('background-color', '#494949');
+	// $('.chat-message.light').css('background-color', '#494949');
 }
 
 async function updateMatchMoves() {
@@ -196,10 +198,10 @@ function updateMatchUndo() {
 	if (match.moves.length == 0 || turn == my_team ||
 		(my_team == TEAM.B && match.black_undo == DB_REQUEST_ASK) ||
 		(my_team == TEAM.W && match.white_undo == DB_REQUEST_ASK)) {
-		enableHtml('#undo-btn .btn', false);
+		enableHtml('#undo-btn .utility-btn', false);
 	}
 	else {
-		enableHtml('#undo-btn .btn', true);
+		enableHtml('#undo-btn .utility-btn', true);
 	}
 }
 
@@ -224,10 +226,10 @@ function updateMatchDraw() {
 
 	if ((my_team == TEAM.B && match.black_draw == DB_REQUEST_ASK) ||
 		(my_team == TEAM.W && match.white_draw == DB_REQUEST_ASK)) {
-		enableHtml('#draw-btn .btn', false);
+		enableHtml('#draw-btn .utility-btn', false);
 	}
 	else {
-		enableHtml('#draw-btn .btn', true);
+		enableHtml('#draw-btn .utility-btn', true);
 	}
 }
 
@@ -260,7 +262,7 @@ function updateMatchTimer() {
 	setTimeout(() => {
 		clearInterval(interval);
 		countDown();
-		enableHtml('#add-time-btn .btn', true);
+		enableHtml('#add-time-btn .utility-btn', true);
 
 		interval = setInterval(function() {
 			countDown();
@@ -785,13 +787,13 @@ function canCastle(oldGrid, newGrid) {
 function switchTurn() {
 	if (turn == TEAM.B) {
 		turn = TEAM.W;
-		$("#W-player-image").css("border-color", "#008640");
-		$("#B-player-image").css("border-color", "#000000");
+		// $("#W-player-image").css("border-color", "#008640");
+		// $("#B-player-image").css("border-color", "#000000");
 	}
 	else {
 		turn = TEAM.B;
-		$("#B-player-image").css("border-color", "#008640");
-		$("#W-player-image").css("border-color", "#ffffff");
+		// $("#B-player-image").css("border-color", "#008640");
+		// $("#W-player-image").css("border-color", "#ffffff");
 	}
 }
 
@@ -822,6 +824,10 @@ function updateTheme(newTheme) {
 	$('body').css('background-image', `url(${theme.BACKGROUND_IMAGE})`);
 	$('.player-name').css('color', theme.NAME_TITLE_COLOR);
 	$('#canvas-background').css('background-color', theme.COLOR_BOARD_LIGHT);
+	$('.utility-btn-wrap .utility-btn').css('background-color', theme.COLOR_BOARD_DARK);
+	$('#chat-send-button').css('background-color', theme.COLOR_BOARD_DARK);
+	$('.player-pic').css('background-color', theme.COLOR_BOARD_DARK);
+	$('.player-utility-pic').css('background-color', theme.COLOR_BOARD_DARK);
 }
 
 function drawGridPiece(grid, piece) {
@@ -874,7 +880,7 @@ window.onscroll = function(ev) {
 };
 
 function onInviteClick() {
-	if (!htmlEnabled('#invite-btn .btn'))
+	if (!htmlEnabled('#invite-btn .utility-btn'))
 		return;
 
 	let e = document.createElement('textarea');
@@ -888,7 +894,7 @@ function onInviteClick() {
 }
 
 function onResignClick() {
-	if (!htmlEnabled('#resign-btn .btn'))
+	if (!htmlEnabled('#resign-btn .utility-btn'))
 		return;
 
 	swal({
@@ -905,21 +911,21 @@ function onResignClick() {
 }
 
 function onDrawClick() {
-	if (!htmlEnabled('#draw-btn .btn'))
+	if (!htmlEnabled('#draw-btn .utility-btn'))
 		return;
 
 	database.askDraw();
 }
 
 function onUndoClick() {
-	if (!htmlEnabled('#undo-btn .btn'))
+	if (!htmlEnabled('#undo-btn .utility-btn'))
 		return;
 
 	database.askUndo();
 }
 
 function onAddTimeClick() {
-	if (!htmlEnabled('#add-time-btn .btn'))
+	if (!htmlEnabled('#add-time-btn .utility-btn'))
 		return;
 
 	if (my_team == TEAM.W) {
@@ -932,17 +938,17 @@ function onAddTimeClick() {
 	}
 
 	showTimer();
-	enableHtml('#add-time-btn .btn', false);
+	enableHtml('#add-time-btn .utility-btn', false);
 }
 
 function onThemeClick() {
 	$('#theme-modal').modal('show');
 
 	$('#theme-modal .utility-btn').removeClass('outline');
-	if (theme == THEME_CLASSIC) $('#classic-theme-btn .btn').addClass('outline');
-	else if (theme == THEME_WINTER) $('#winter-theme-btn .btn').addClass('outline');
-	else if (theme == THEME_METAL) $('#metal-theme-btn .btn').addClass('outline');
-	else if (theme == THEME_NATURE) $('#nature-theme-btn .btn').addClass('outline');
+	if (theme == THEME_CLASSIC) $('#classic-theme-btn .utility-btn').addClass('outline');
+	else if (theme == THEME_WINTER) $('#winter-theme-btn .utility-btn').addClass('outline');
+	else if (theme == THEME_METAL) $('#metal-theme-btn .utility-btn').addClass('outline');
+	else if (theme == THEME_NATURE) $('#nature-theme-btn .utility-btn').addClass('outline');
 }
 
 function onThemeSelect(event, newTheme) {

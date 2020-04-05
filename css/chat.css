@@ -69,8 +69,8 @@
 	display: flex;
     margin-left: 0 !important;
 	margin-right: calc(var(--chat-margin-size) * 0.8) !important;
-	margin-bottom: var(--chat-margin-size);
-	border-radius: var(--chat-border-radius);
+	/*margin-bottom: var(--chat-margin-size);*/
+	/*border-radius: var(--chat-border-radius);*/
 }
 
 .chat-message:last-of-type {

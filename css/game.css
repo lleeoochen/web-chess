@@ -160,7 +160,7 @@
 	height: var(--picture-size);
 	margin: var(--margin-size);
 	border-radius: calc(var(--picture-size) / 10);
-	background-color: white;
+	background-color: black;
 	border: calc(var(--margin-size) * 0.7);
 	border-style: solid;
 }
