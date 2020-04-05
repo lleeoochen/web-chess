@@ -84,6 +84,11 @@ const DB_THEME_WINTER = 1;
 const DB_THEME_METAL = 2;
 const DB_THEME_NATURE = 3;
 
+const FLAG_NONE = 0;
+const FLAG_KING_CASTLE = 1;
+const FLAG_PASSANT_PAWN = 2;
+const FLAG_PAWN_TO_QUEEN = 3;
+
 const MAX_TIME = 60 * 60; // 1 Hour Max (Infinite time otherwise)
 
 const STATS_MAX = 42; // treat king as 3 score

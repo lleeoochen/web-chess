@@ -42,8 +42,10 @@ var passant_pawn = null;
 var database = new GameFirebase();
 var game_reset = true;
 
-var eaten_stack = [];
+var moves_stack = [];
+var passant_stack = [];
 
+var timer_enable = false;
 
 database.authenticate((_auth_user) => {
 	auth_user = _auth_user;
@@ -53,9 +55,12 @@ database.authenticate((_auth_user) => {
 		my_team = _my_team;
 		enemy_team = my_team == TEAM.B ? TEAM.W : TEAM.B;
 
+		timer_enable = match.black_timer < MAX_TIME && match.white_timer < MAX_TIME;
+		enableHtml('#add-time-btn .btn', timer_enable);
+
 		if (game_reset) {
 			initGame();
-			if (match.black_timer < MAX_TIME && match.white_timer < MAX_TIME) {
+			if (timer_enable) {
 				$('#white-timer').text(Util.formatTimer(match.white_timer));
 				$('#black-timer').text(Util.formatTimer(match.black_timer));
 			}
@@ -80,7 +85,7 @@ database.authenticate((_auth_user) => {
 		
 		updateMatchDraw();
 
-		if (match.black && match.white && match.black_timer < MAX_TIME && match.white_timer < MAX_TIME) {
+		if (match.black && match.white && timer_enable) {
 			updateMatchTimer();
 		}
 	});
@@ -123,11 +128,11 @@ function updateMatchChat() {
 }
 
 async function updateMatchMoves() {
-	if (moves_applied > match.moves.length) {
-		location.reload();
+	while (moves_applied > match.moves.length) {
+		unmoveChess();
 	}
 
-	for (; moves_applied < match.moves.length;) {
+	while (moves_applied < match.moves.length) {
 		if (Util.gameFinished(match.moves[moves_applied])) {
 			clearInterval(interval);
 
@@ -170,15 +175,14 @@ async function updateMatchMoves() {
 
 function updateMatchUndo() {
 	if (my_team == TEAM.B && match.white_undo == DB_REQUEST_ASK || my_team == TEAM.W && match.black_undo == DB_REQUEST_ASK) {
+		console.log("JOOOOOOOOO");
+		console.log(match.white_undo);
 		swal({
 			text: `${players[enemy_team].name} is asking for your mercy.`,
-			type: "warning",
-			showCancelButton: true,
 			buttons: [
 			  'Cancel',
 			  'Undo Move'
 			],
-			closeOnConfirm: false
 		}).then((toResign) => {
 			if (toResign) {
 				database.undoMove();
@@ -204,13 +208,10 @@ function updateMatchDraw() {
 		my_team == TEAM.W && match.black_draw == DB_REQUEST_ASK) {
 		swal({
 			text: `${players[enemy_team].name} is asking for a draw. Confirm?`,
-			type: "warning",
-			showCancelButton: true,
 			buttons: [
 			  'Cancel',
 			  'Draw'
 			],
-			closeOnConfirm: false
 		}).then((toResign) => {
 			if (toResign) {
 				database.draw();
@@ -892,13 +893,10 @@ function onResignClick() {
 
 	swal({
 		text: "Resign match?",
-		type: "warning",
-		showCancelButton: true,
 		buttons: [
 		  'Cancel',
 		  'Resign'
 		],
-		closeOnConfirm: false
 	}).then((toResign) => {
 		if (toResign) {
 			database.resign(my_team == TEAM.W ? TEAM.B : TEAM.W);

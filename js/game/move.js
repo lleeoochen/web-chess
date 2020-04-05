@@ -5,7 +5,7 @@ function moveChess(oldGrid, newGrid) {
 	//Play sound
 	moveSound(newGrid);
 
-	stackEatenPiece(newGrid, false);
+	stackEatenPiece(oldGrid, newGrid, newGrid, newGrid.piece, false, FLAG_NONE);
 
 	//===================== Special Moves ========================
 
@@ -20,7 +20,7 @@ function moveChess(oldGrid, newGrid) {
 	//Remove newGrid piece if being eaten
 	moveEatPiece(oldGrid, newGrid);
 
-	//Assign oldGrid piece for newGrid.
+	//Copy oldGrid piece for newGrid.
 	drawGridPiece(newGrid, oldGrid.piece);
 
 	//====================== Update Miscs =======================
@@ -108,7 +108,7 @@ function movePassantPawn(oldGrid, newGrid) {
 	if (kill_passant_pawn && passant_pawn) {
 		stats[passant_pawn.get_piece().team] -= VALUE[passant_pawn.get_piece().type];
 
-		stackEatenPiece(passant_pawn, true);
+		stackEatenPiece(oldGrid, newGrid, passant_pawn, passant_pawn.piece, true, FLAG_PASSANT_PAWN);
 
 		let pawn_img = passant_pawn.get_piece().image;
 		let pawn_team = passant_pawn.get_piece().team;
@@ -140,6 +140,7 @@ function movePassantPawn(oldGrid, newGrid) {
 			}
 		}
 	}
+	passant_stack.push(passant_pawn);
 }
 
 function moveCastleKing(oldGrid, newGrid) {
@@ -154,6 +155,7 @@ function moveCastleKing(oldGrid, newGrid) {
 				chessboard[oldGrid.x + 1][oldGrid.y].piece = chessboard[BOARD_SIZE - 1][oldGrid.y].piece;
 				chessboard[oldGrid.x + 1][oldGrid.y].get_piece().image.setAttribute("class", "piece x" + (oldGrid.x + 1) + " y" + oldGrid.y);
 				chessboard[BOARD_SIZE - 1][oldGrid.y].piece = -1;
+				stackEatenPiece(oldGrid, newGrid, newGrid, newGrid.piece, true, FLAG_KING_CASTLE);
 			}
 
 			// Perform left castle
@@ -161,10 +163,11 @@ function moveCastleKing(oldGrid, newGrid) {
 				chessboard[oldGrid.x - 1][oldGrid.y].piece = chessboard[0][oldGrid.y].piece;
 				chessboard[oldGrid.x - 1][oldGrid.y].get_piece().image.setAttribute("class", "piece x" + (oldGrid.x - 1) + " y" + oldGrid.y);
 				chessboard[0][oldGrid.y].piece = -1;
+				stackEatenPiece(oldGrid, newGrid, newGrid, newGrid.piece, true, FLAG_KING_CASTLE);
 			}
+
 		}
 	}
-
 
 	//King has moved, cannot castle anymore
 	if (oldGrid == king_grid) {
@@ -183,7 +186,8 @@ function movePawnToQueen(oldGrid, newGrid) {
 		let enemyPawnArrived = newGrid.get_piece().team != my_team && newGrid.y == BOARD_SIZE - 1;
 
 		if (myPawnArrived || enemyPawnArrived) {
-			stackEatenPiece(newGrid, true);
+			let eatenPiece = moves_stack.pop().eaten_piece;
+			stackEatenPiece(oldGrid, newGrid, newGrid, eatenPiece, false, FLAG_PAWN_TO_QUEEN);
 
 			piecesLayer.removeChild(newGrid.get_piece().image);
 			initEachPiece(id++, newGrid.x, newGrid.y, newGrid.get_piece().team, CHESS.Queen);
@@ -193,7 +197,16 @@ function movePawnToQueen(oldGrid, newGrid) {
 	}
 }
 
-function stackEatenPiece(grid, toPopOne) {
-	if (toPopOne) eaten_stack.pop();
-	eaten_stack.push({ x: grid.x, y: grid.y, piece: grid.piece });
+function stackEatenPiece(oldGrid, newGrid, eatenGrid, eatenPiece, toPopOne, flag) {
+	if (toPopOne) moves_stack.pop();
+	moves_stack.push({
+		old_x: oldGrid.x,
+		old_y: oldGrid.y,
+		new_x: newGrid.x,
+		new_y: newGrid.y,
+		eaten_x: eatenGrid.x,
+		eaten_y: eatenGrid.y,
+		eaten_piece: eatenPiece,
+		flag: flag
+	});
 }
