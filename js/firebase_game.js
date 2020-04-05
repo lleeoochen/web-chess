@@ -45,10 +45,12 @@ class GameFirebase extends Firebase {
 	}
 
 	updateTimer(black_timer, white_timer) {
-		this.message(`[Added 15 seconds to opponent.]`);
+		this.match.chat.push(Util.packMessage(`[Added 15 seconds to opponent.]`, this.my_team));
+
 		this.db.collection(MATCHES_TABLE).doc(this.match_id).set({
 			black_timer: black_timer,
 			white_timer: white_timer,
+			chat: this.match.chat
 		}, { merge: true });
 	}
 
@@ -87,10 +89,11 @@ class GameFirebase extends Firebase {
 		let moves = (this.match && this.match.moves) ? this.match.moves : [];
 		moves.push(DB_DRAW); // draw
 
-		this.message(`[Accepted a draw.]`);
+		this.match.chat.push(Util.packMessage(`[Accepted a draw.]`, this.my_team));
 		this.db.collection(MATCHES_TABLE).doc(this.match_id).set({
 			moves: moves,
-			updated: new Date()
+			updated: new Date(),
+			chat: this.match.chat
 		}, { merge: true });
 	}
 
@@ -98,10 +101,11 @@ class GameFirebase extends Firebase {
 		let moves = (this.match && this.match.moves) ? this.match.moves : [];
 		moves.push(winning_team == TEAM.W ? DB_TIMESUP_WHITE : DB_TIMESUP_BLACK); // timesup
 
-		this.message(`[Time's up. Match ended.]`);
+		this.match.chat.push(Util.packMessage(`[Time's up. Match ended.]`, this.my_team));
 		this.db.collection(MATCHES_TABLE).doc(this.match_id).set({
 			moves: moves,
-			updated: new Date()
+			updated: new Date(),
+			chat: this.match.chat
 		}, { merge: true });
 	}
 
@@ -109,10 +113,11 @@ class GameFirebase extends Firebase {
 		let moves = (this.match && this.match.moves) ? this.match.moves : [];
 		moves.push(winning_team == TEAM.W ? DB_RESIGN_WHITE : DB_RESIGN_BLACK); // resign
 
-		this.message(`[Resigned match.]`);
+		this.match.chat.push(Util.packMessage(`[Resigned match.]`, this.my_team));
 		this.db.collection(MATCHES_TABLE).doc(this.match_id).set({
 			moves: moves,
-			updated: new Date()
+			updated: new Date(),
+			chat: this.match.chat
 		}, { merge: true });
 	}
 
@@ -123,17 +128,19 @@ class GameFirebase extends Firebase {
 			moves.pop();
 		}
 
-		this.message(`[Gave mercy to opponent's move.]`);
+		this.match.chat.push(Util.packMessage(`[Gave mercy to opponent's move.]`, this.my_team));
 		if (this.my_team == TEAM.B) {
 			this.db.collection(MATCHES_TABLE).doc(this.match_id).set({
 				white_undo: DB_REQUEST_DONE,
 				moves: moves,
+				chat: this.match.chat
 			}, { merge: true });
 		}
 		else {
 			this.db.collection(MATCHES_TABLE).doc(this.match_id).set({
 				black_undo: DB_REQUEST_DONE,
 				moves: moves,
+				chat: this.match.chat
 			}, { merge: true });
 		}
 	}
