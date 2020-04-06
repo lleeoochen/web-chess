@@ -72,14 +72,31 @@ database.authenticate((_auth_user) => {
 
 		updateTheme(Util.unpackTheme(match.theme));
 
-		updateUtilityButtons();
-
 		await updatePlayerData();
 
 		updateMatchChat();
 
-		let gameProceed = await updateMatchMoves();
-		if (!gameProceed) return;
+		updateUtilityButtons();
+
+		if (match.moves.length > 0 && Util.gameFinished(match.moves[match.moves.length - 1])) {
+			clearInterval(interval);
+
+			showHtml('#invite-btn',       false);
+			showHtml('#resign-btn',       false);
+			showHtml('#draw-btn',         false);
+			showHtml('#undo-btn',         false);
+			showHtml('#add-time-btn',     false);
+			showHtml('#change-theme-btn', false);
+			showHtml('#playback-btn',     true);
+			showHtml('#fast-backward-btn',true);
+			showHtml('#backward-btn',     true);
+			showHtml('#forward-btn',      true);
+			showHtml('#fast-forward-btn', true);
+			updateReviewButtons();
+			return false;
+		}
+
+		await updateMatchMoves();
 
 		updateMatchUndo();
 		
@@ -135,19 +152,6 @@ async function updateMatchMoves() {
 	}
 
 	while (moves_applied < match.moves.length) {
-		if (Util.gameFinished(match.moves[moves_applied])) {
-			clearInterval(interval);
-
-			showHtml('#invite-btn',       false);
-			showHtml('#resign-btn',       false);
-			showHtml('#draw-btn',         false);
-			showHtml('#undo-btn',         false);
-			showHtml('#add-time-btn',     false);
-			showHtml('#change-theme-btn', false);
-			showHtml('#review-btn',       true);
-			return false;
-		}
-
 		let move = Util.unpack(match.moves[moves_applied]);
 		if (turn != my_team) {
 			move.old_y = BOARD_SIZE - move.old_y - 1;
@@ -157,7 +161,7 @@ async function updateMatchMoves() {
 		await new Promise((resolve, reject) => {
 		  setTimeout(() => {
 			moveChess(chessboard[move.old_x][move.old_y], chessboard[move.new_x][move.new_y]);
-			resolve('Promise A win!');
+			resolve();
 		  }, 50);
 		})
 		turn = move.turn;
@@ -172,7 +176,6 @@ async function updateMatchMoves() {
 			database.stalemate();
 			break;
 	}
-	return true;
 }
 
 function updateMatchUndo() {
@@ -275,7 +278,6 @@ function updateUtilityButtons() {
 
 	if (match.black && match.white) {
 		showHtml('#invite-btn',       false);
-		showHtml('#review-btn',	      false);
 		showHtml('#resign-btn',       true);
 		showHtml('#draw-btn',         true);
 		showHtml('#undo-btn',         true);
@@ -284,7 +286,6 @@ function updateUtilityButtons() {
 	}
 	else {
 		showHtml('#invite-btn',       true);
-		showHtml('#review-btn',       false);
 		showHtml('#resign-btn',       false);
 		showHtml('#draw-btn',         false);
 		showHtml('#undo-btn',         false);

@@ -34,6 +34,7 @@
 #chat-messages-content {
 	height: 100%;
 	overflow-y: scroll;
+	border-radius: var(--chat-border-radius);
 }
 
 #chat-messages-content::-webkit-scrollbar {
