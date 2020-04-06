@@ -8,21 +8,18 @@ var time = undefined;
 database.authenticate((auth_user1) => {
 	initToolbar();
 	auth_user = auth_user1;
-	database.getUser(auth_user1.uid).then((user_data) => {
+	database.listenUser(auth_user1.uid, (user_data) => {
 		user = user_data;
 		showMatches();
 	});
-
-	// database.listenUser(auth_user.uid, (user_data) => {
-	// 	user = user_data;
-	// })
 });
 
 function showMatches() {
 	if (!user || !user.matches) return
 
 	database.getMatches(user.matches, user, async (matches_data) => {
-		var elements = $();
+		$('#matches-list').html('<div id="matches-list-divider" class="hidden"></div>');
+
 		matches_data.sort((a, b) => b[1].updated.toDate().getTime() - a[1].updated.toDate().getTime());
 		await matches_data.forEach(match => {
 			let match_name = match[0];
@@ -33,26 +30,27 @@ function showMatches() {
 			let d_str = Util.formatDate(d);
 
 			let color = (match_data.black == auth_user.uid) ? "B" : "W";
+			let active = Math.floor(match_data.moves[match_data.moves.length - 1] / 10) != 0;
 
-			if (match_data.moves && Math.floor(match_data.moves[match_data.moves.length - 1] / 10) != 0) {
-				elements = elements.add(`
-					<a class="btn match-link" href="${ CHESS_URL }/game.html?match=${ match_name }">
-						<div class="match-link-content">
-							<div>
-								<img src="assets/${color}King.svg"/>
-							</div>
-							<div>
-								${ match_opponent ? match_opponent.name : "New Match" }<br/>
-								<div class="match-link-date"> ${ d_str } </div>
-							</div>
+			let match_html = $(`
+				<a class="btn match-link ${active ? '': 'inactive'}" href="${ CHESS_URL }/game.html?match=${ match_name }">
+					<div class="match-link-content">
+						<div>
+							<img src="assets/${color}King.svg"/>
 						</div>
-					</a>`
-				);
-			}
-		});
+						<div>
+							${ match_opponent ? match_opponent.name : "New Match" }<br/>
+							<div class="match-link-date"> ${ d_str } </div>
+						</div>
+					</div>
+				</a>`
+			);
 
-		$('#matches-list').empty();
-		$('#matches-list').append(elements);
+			if (active)
+				match_html.insertBefore('#matches-list-divider');
+			else
+				match_html.insertAfter('#matches-list-divider');
+		});
 	});
 }
 

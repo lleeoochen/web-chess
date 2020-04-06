@@ -70,6 +70,10 @@
 	background-color: #57bf69 !important;
 }
 
+.match-link.inactive {
+	background-color: grey !important;
+}
+
 .match-link img {
 	width: var(--home-match-icon-size);
 	margin-right: var(--margin-size);
