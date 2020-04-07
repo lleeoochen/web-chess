@@ -6,6 +6,7 @@ async function reviewMove(moves_target, timeout=0) {
 
 	while (moves_applied > 0 && moves_applied > moves_target && !stopPlayBack) {
 		unmoveChess();
+		updateReviewButtons();
 	}
 
 	while (moves_applied < match.moves.length - 1 && moves_applied < moves_target && !stopPlayBack) {
@@ -20,13 +21,12 @@ async function reviewMove(moves_target, timeout=0) {
 			if (!stopPlayBack) {
 				moveChess(chessboard[move.old_x][move.old_y], chessboard[move.new_x][move.new_y]);
 				turn = move.turn;
+				updateReviewButtons();
 			}
 			resolve();
 		  }, timeout);
 		});
 	}
-
-	updateReviewButtons();
 
 	clearTimeout(playTimeout);
 	playingBack.set(false);

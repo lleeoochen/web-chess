@@ -689,10 +689,7 @@ function fillGrid(grid, color) {
 function fillNumbering(x, y) {
 	let color;
 
-	if (my_team == TEAM.B)
-		color = (y % 2 == 0) ? "black" : "white";
-	else
-		color = (y % 2 != 0) ? "black" : "white";
+	color = (y % 2 == 0) ? "black" : "white";
 
 	if (x == 0) {
 		let number = document.createElement("div");
@@ -701,10 +698,7 @@ function fillNumbering(x, y) {
 		background[x][y].append(number);
 	}
 
-	if (my_team == TEAM.W)
-		color = (x % 2 == 0) ? "black" : "white";
-	else
-		color = (x % 2 != 0) ? "black" : "white";
+	color = (x % 2 != 0) ? "black" : "white";
 
 	if (y == BOARD_SIZE - 1) {
 		let letter = document.createElement("div");
@@ -812,8 +806,8 @@ function copyBoard(board) {
 
 function updateTheme(newTheme) {
 	theme = newTheme;
-	let color1 = my_team == TEAM.W ? theme.COLOR_BOARD_DARK : theme.COLOR_BOARD_LIGHT;
-	let color2 = my_team == TEAM.W ? theme.COLOR_BOARD_LIGHT : theme.COLOR_BOARD_DARK;
+	let color1 = theme.COLOR_BOARD_LIGHT;
+	let color2 = theme.COLOR_BOARD_DARK;
 
 	for (let x = 0; x < BOARD_SIZE; x++) {
 		for (let y = 0; y < BOARD_SIZE; y++) {

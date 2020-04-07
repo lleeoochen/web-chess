@@ -3,7 +3,7 @@ var auth_user = null;
 var database = new Firebase();
 
 var theme = undefined;
-var time = undefined;
+var time = 15 * 60;
 
 database.authenticate((auth_user1) => {
 	initToolbar();
