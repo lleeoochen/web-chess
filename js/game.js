@@ -819,8 +819,8 @@ function updateTheme(newTheme) {
 	$('.player-pic')					.css('background-color', theme.COLOR_BOARD_DARK);
 	$('.player-utility-pic')			.css('background-color', theme.COLOR_BOARD_DARK);
 	$(':root')							.css('--scroll-color', theme.COLOR_BOARD_DARK);
-	$('.utility-piece-icon.dark')		.css('background-color', theme.COLOR_BOARD_DARK);
-	$('.utility-piece-icon.light')		.css('background-color', theme.COLOR_BOARD_LIGHT);
+	// $('.utility-piece-icon.dark')		.css('background-color', theme.COLOR_BOARD_DARK);
+	// $('.utility-piece-icon.light')		.css('background-color', theme.COLOR_BOARD_LIGHT);
 }
 
 function getGridColor(x, y) {
@@ -841,8 +841,11 @@ function addMoveHistory(oldGrid, newGrid) {
 	let old_numbering = getNumbering(oldGrid.x, oldGrid.y);
 	let new_numbering = getNumbering(newGrid.x, newGrid.y);
 
-	let old_color = getGridColor(oldGrid.x, oldGrid.y);
-	let new_color = getGridColor(newGrid.x, newGrid.y);
+	// let old_color = getGridColor(oldGrid.x, oldGrid.y);
+	// let new_color = getGridColor(newGrid.x, newGrid.y);
+
+	let old_color = 'transparent';
+	let new_color = 'transparent';
 
 	let old_color_id = old_color == theme.COLOR_BOARD_DARK ? 'dark' : 'light';
 	let new_color_id = new_color == theme.COLOR_BOARD_DARK ? 'dark' : 'light';
