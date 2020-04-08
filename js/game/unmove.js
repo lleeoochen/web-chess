@@ -22,11 +22,11 @@ function unmoveChess() {
 	let eatenGrid = chessboard[prev_move.eaten_x][prev_move.eaten_y];
 	let eaten_piece = prev_move.eaten_piece;
 	let flag = prev_move.flag;
-	console.log("==================");
-	console.log("newGrid: " + JSON.stringify(newGrid));
-	console.log("oldGrid: " + JSON.stringify(oldGrid));
-	console.log("eaten_grid: " + JSON.stringify(eatenGrid));
-	console.log("eaten_piece: " + eaten_piece);
+	// console.log("==================");
+	// console.log("newGrid: " + JSON.stringify(newGrid));
+	// console.log("oldGrid: " + JSON.stringify(oldGrid));
+	// console.log("eaten_grid: " + JSON.stringify(eatenGrid));
+	// console.log("eaten_piece: " + eaten_piece);
 
 	revertMoveHistory();
 

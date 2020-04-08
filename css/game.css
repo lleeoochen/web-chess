@@ -252,16 +252,21 @@
 }
 
 #utility-section {
-	height: calc(70% - 2 * var(--margin-size));
 	margin-bottom: calc(var(--margin-size));
 	background-color: #000000db;
 	border-radius: var(--border-radius);
+	padding: calc(var(--margin-size));
+	padding-bottom: 0;
+	/*flex-grow: 100;*/
 }
 
-#utility-section-inner {
-	height: calc(100% - 2 * var(--margin-size));
-	margin: calc(var(--margin-size));
-	overflow-x: hidden;
+#history-section {
+	height: 40%;
+	margin-bottom: calc(var(--margin-size));
+	background-color: #000000db;
+	border-radius: var(--border-radius);
+	padding: calc(var(--margin-size));
+	padding-bottom: 0;
 	overflow-y: scroll;
 }
 

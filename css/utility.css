@@ -191,7 +191,7 @@
 	table-layout: unset;
 	flex-flow: wrap;
 	justify-content: center;
-	/*background-color: #434343;*/
+	margin-bottom: 0 !important;
 }
 
 #move-history-panel .move-history-item {

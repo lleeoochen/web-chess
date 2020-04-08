@@ -851,13 +851,14 @@ function addMoveHistory(oldGrid, newGrid) {
 		<div class="move-history-item utility-btn-wrap">
 			<div class="utility-btn">
 				<img class="utility-icon utility-piece-icon ${old_color_id}" src="${old_img}" style="background-color: ${old_color}"/>
-				(${ old_numbering.x }, ${ old_numbering.y })
+				(${ old_numbering.y }, ${ old_numbering.x })
 				<img class="utility-icon" src="assets/arrow-right.png"/>
-				(${ new_numbering.x }, ${ new_numbering.y })
+				(${ new_numbering.y }, ${ new_numbering.x })
 				<img class="utility-icon utility-piece-icon ${new_color_id}" src="${new_img}" style="background-color: ${new_color}"/>
 			</div>
 		</div>
 	`);
+	$("#move-history-panel").scrollTop($("#move-history-panel")[0].scrollHeight);
 }
 
 function revertMoveHistory() {
