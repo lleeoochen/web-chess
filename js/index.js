@@ -49,7 +49,7 @@ function showMatches() {
 			if (active)
 				match_html.insertBefore('#matches-list-divider');
 			else
-				match_html.insertAfter('#matches-list-divider');
+				$('#matches-list').append(match_html);
 		});
 	});
 }

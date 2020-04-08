@@ -81,17 +81,10 @@ database.authenticate((_auth_user) => {
 		if (match.moves.length > 0 && Util.gameFinished(match.moves[match.moves.length - 1])) {
 			clearInterval(interval);
 
-			showHtml('#invite-btn',       false);
-			showHtml('#resign-btn',       false);
-			showHtml('#draw-btn',         false);
-			showHtml('#undo-btn',         false);
-			showHtml('#add-time-btn',     false);
-			showHtml('#change-theme-btn', false);
-			showHtml('#playback-btn',     true);
-			showHtml('#fast-backward-btn',true);
-			showHtml('#backward-btn',     true);
-			showHtml('#forward-btn',      true);
-			showHtml('#fast-forward-btn', true);
+			showHtml('#invite-panel', false);
+			showHtml('#game-panel', false);
+			showHtml('#theme-panel', false);
+			showHtml('#review-panel', true);
 			updateReviewButtons();
 			return false;
 		}
@@ -277,20 +270,16 @@ function updateUtilityButtons() {
 	showHtml('#game-utility-title',	true);
 
 	if (match.black && match.white) {
-		showHtml('#invite-btn',       false);
-		showHtml('#resign-btn',       true);
-		showHtml('#draw-btn',         true);
-		showHtml('#undo-btn',         true);
-		showHtml('#add-time-btn',     true);
-		showHtml('#change-theme-btn', true);
+		showHtml('#invite-panel', false);
+		showHtml('#game-panel', true);
+		showHtml('#theme-panel', true);
+		showHtml('#move-history-divider', true);
 	}
 	else {
-		showHtml('#invite-btn',       true);
-		showHtml('#resign-btn',       false);
-		showHtml('#draw-btn',         false);
-		showHtml('#undo-btn',         false);
-		showHtml('#add-time-btn',     false);
-		showHtml('#change-theme-btn', false);
+		showHtml('#invite-panel', true);
+		showHtml('#game-panel', false);
+		showHtml('#theme-panel', false);
+		showHtml('#move-history-divider', false);
 	}
 }
 
@@ -708,6 +697,14 @@ function fillNumbering(x, y) {
 	}
 }
 
+//Get numbering from grid
+function getNumbering(x, y) {
+	return {
+		x: (my_team == TEAM.B) ? y + 1 : BOARD_SIZE - y,
+		y: String.fromCharCode(x + 97)
+	}
+}
+
 //Set last move grid color
 function colorLatestMove(oldGrid, newGrid) {
 	clearMoves();
@@ -806,23 +803,28 @@ function copyBoard(board) {
 
 function updateTheme(newTheme) {
 	theme = newTheme;
-	let color1 = theme.COLOR_BOARD_LIGHT;
-	let color2 = theme.COLOR_BOARD_DARK;
 
 	for (let x = 0; x < BOARD_SIZE; x++) {
 		for (let y = 0; y < BOARD_SIZE; y++) {
-			chessboard[x][y].color = (y % 2 != 0) ^ (x % 2 == 0) ? color1 : color2;
+			chessboard[x][y].color = getGridColor(x, y);
 			fillGrid(chessboard[x][y], chessboard[x][y].color);
 		}
 	}
 
-	$('body').css('background-image', `url(${theme.BACKGROUND_IMAGE})`);
-	$('.player-name').css('color', theme.NAME_TITLE_COLOR);
-	$('#canvas-background').css('background-color', theme.COLOR_BOARD_LIGHT);
-	$('.utility-btn-wrap .utility-btn').css('background-color', theme.COLOR_BOARD_DARK);
-	$('#chat-send-button').css('background-color', theme.COLOR_BOARD_DARK);
-	$('.player-pic').css('background-color', theme.COLOR_BOARD_DARK);
-	$('.player-utility-pic').css('background-color', theme.COLOR_BOARD_DARK);
+	$('body')							.css('background-image', `url(${theme.BACKGROUND_IMAGE})`);
+	$('.player-name')					.css('color', theme.NAME_TITLE_COLOR);
+	$('#canvas-background')				.css('background-color', theme.COLOR_BOARD_LIGHT);
+	$('.utility-btn-wrap .utility-btn')	.css('background-color', theme.COLOR_BOARD_DARK);
+	$('#chat-send-button')				.css('background-color', theme.COLOR_BOARD_DARK);
+	$('.player-pic')					.css('background-color', theme.COLOR_BOARD_DARK);
+	$('.player-utility-pic')			.css('background-color', theme.COLOR_BOARD_DARK);
+	$(':root')							.css('--scroll-color', theme.COLOR_BOARD_DARK);
+	$('.utility-piece-icon.dark')		.css('background-color', theme.COLOR_BOARD_DARK);
+	$('.utility-piece-icon.light')		.css('background-color', theme.COLOR_BOARD_LIGHT);
+}
+
+function getGridColor(x, y) {
+	return (y % 2 != 0) ^ (x % 2 == 0) ? theme.COLOR_BOARD_LIGHT : theme.COLOR_BOARD_DARK;
 }
 
 function drawGridPiece(grid, piece) {
@@ -830,6 +832,36 @@ function drawGridPiece(grid, piece) {
 
 	if (grid.get_piece())
 		grid.get_piece().image.setAttribute("class", "piece x" + grid.x + " y" + grid.y);
+}
+
+function addMoveHistory(oldGrid, newGrid) {
+	let old_img = oldGrid.get_piece() ? oldGrid.get_piece().image.src : 'assets/transparent.png';
+	let new_img = newGrid.get_piece() ? newGrid.get_piece().image.src : 'assets/transparent.png';
+
+	let old_numbering = getNumbering(oldGrid.x, oldGrid.y);
+	let new_numbering = getNumbering(newGrid.x, newGrid.y);
+
+	let old_color = getGridColor(oldGrid.x, oldGrid.y);
+	let new_color = getGridColor(newGrid.x, newGrid.y);
+
+	let old_color_id = old_color == theme.COLOR_BOARD_DARK ? 'dark' : 'light';
+	let new_color_id = new_color == theme.COLOR_BOARD_DARK ? 'dark' : 'light';
+
+	$('#move-history-panel').append(`
+		<div class="move-history-item utility-btn-wrap">
+			<div class="utility-btn">
+				<img class="utility-icon utility-piece-icon ${old_color_id}" src="${old_img}" style="background-color: ${old_color}"/>
+				(${ old_numbering.x }, ${ old_numbering.y })
+				<img class="utility-icon" src="assets/arrow-right.png"/>
+				(${ new_numbering.x }, ${ new_numbering.y })
+				<img class="utility-icon utility-piece-icon ${new_color_id}" src="${new_img}" style="background-color: ${new_color}"/>
+			</div>
+		</div>
+	`);
+}
+
+function revertMoveHistory() {
+	$('.move-history-item').last().remove();
 }
 
 

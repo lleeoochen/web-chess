@@ -101,94 +101,104 @@
 		</div>
 		<div id="side-layer" >
 			<div id="utility-section">
-				<!-- <div id="B-player-utility-name" class="player-utility-name">&nbsp;</div> -->
-				<div id="B-player-utility" class="player-utility">
-					<div class="player-utility-profile">
-						<img id="B-player-utility-image" class="player-utility-pic" src="assets/WRook.svg"/>
-					</div>
-					<div id="black-stat" class="player-utility-stat"></div>
-					<div class="player-utility-timer">
-						<div id="black-timer" class="timer"> 00:00 </div>
-					</div>
-				</div>
-				<!-- <div id="W-player-utility-name" class="player-utility-name">Opponent</div> -->
-				<div id="W-player-utility" class="player-utility">
-					<div class="player-utility-profile">
-						<img id="W-player-utility-image" class="player-utility-pic" src="assets/WRook.svg"/>
-					</div>
-					<div id="white-stat" class="player-utility-stat"></div>
-					<div class="player-utility-timer">
-						<div id="white-timer" class="timer">00:00</div>
-					</div>
-				</div>
-				<!-- <div id="game-utility-title" class="utility-divider hidden"> Utility </div> -->
-				<div class="utility-panel">
-					<div id="invite-btn" class="utility-btn-wrap hidden">
-						<div class="btn utility-btn" onclick="onInviteClick()">
-							<img class="utility-icon" src="assets/invite.png"/>
-							Invite
+				<div id="utility-section-inner">
+					<!-- <div id="B-player-utility-name" class="player-utility-name">&nbsp;</div> -->
+					<div id="B-player-utility" class="player-utility">
+						<div class="player-utility-profile">
+							<img id="B-player-utility-image" class="player-utility-pic" src="assets/WRook.svg"/>
+						</div>
+						<div id="black-stat" class="player-utility-stat"></div>
+						<div class="player-utility-timer">
+							<div id="black-timer" class="timer"> 00:00 </div>
 						</div>
 					</div>
-					<div id="resign-btn" class="utility-btn-wrap hidden">
-						<div class="btn utility-btn"  onclick="onResignClick()">
-							<img class="utility-icon" src="assets/resign.png"/>
-							Resign
+					<!-- <div id="W-player-utility-name" class="player-utility-name">Opponent</div> -->
+					<div id="W-player-utility" class="player-utility">
+						<div class="player-utility-profile">
+							<img id="W-player-utility-image" class="player-utility-pic" src="assets/WRook.svg"/>
+						</div>
+						<div id="white-stat" class="player-utility-stat"></div>
+						<div class="player-utility-timer">
+							<div id="white-timer" class="timer">00:00</div>
 						</div>
 					</div>
-					<div id="draw-btn" class="utility-btn-wrap hidden">
-						<div class="btn utility-btn"  onclick="onDrawClick()">
-							<img class="utility-icon" src="assets/draw.png"/>
-							Draw
-						</div>
-					</div>
-					<div id="undo-btn" class="utility-btn-wrap hidden">
-						<div class="btn utility-btn" onclick="onUndoClick()">
-							<img class="utility-icon" src="assets/mercy.png"/>
-							Mercy
-						</div>
-					</div>
-					<div id="add-time-btn" class="utility-btn-wrap hidden">
-						<div class="btn utility-btn" onclick="onAddTimeClick()">
-							<img class="utility-icon" src="assets/time.png"/>
-							+15 sec
+					<!-- <div id="game-utility-title" class="utility-divider hidden"> Utility </div> -->
+
+					<div id="invite-panel" class="utility-panel hidden">
+						<div id="invite-btn" class="utility-btn-wrap">
+							<div class="btn utility-btn" onclick="onInviteClick()">
+								<img class="utility-icon" src="assets/invite.png"/>
+								Invite
+							</div>
 						</div>
 					</div>
 
-					<!-- Review buttons -->
-					<div id="fast-backward-btn" class="utility-btn-wrap hidden">
-						<div class="btn utility-btn" onclick="onFastBackwardClick()">
-							<img class="utility-icon" src="assets/fast-backward.png"/>
+					<div id="game-panel" class="utility-panel hidden">
+						<div id="resign-btn" class="utility-btn-wrap">
+							<div class="btn utility-btn"  onclick="onResignClick()">
+								<img class="utility-icon" src="assets/resign.png"/>
+								Resign
+							</div>
+						</div>
+						<div id="draw-btn" class="utility-btn-wrap">
+							<div class="btn utility-btn"  onclick="onDrawClick()">
+								<img class="utility-icon" src="assets/draw.png"/>
+								Draw
+							</div>
+						</div>
+						<div id="undo-btn" class="utility-btn-wrap">
+							<div class="btn utility-btn" onclick="onUndoClick()">
+								<img class="utility-icon" src="assets/mercy.png"/>
+								Mercy
+							</div>
+						</div>
+						<div id="add-time-btn" class="utility-btn-wrap">
+							<div class="btn utility-btn" onclick="onAddTimeClick()">
+								<img class="utility-icon" src="assets/time.png"/>
+								+15 sec
+							</div>
 						</div>
 					</div>
-					<div id="backward-btn" class="utility-btn-wrap hidden">
-						<div class="btn utility-btn" onclick="onBackwardClick()">
-							<img class="utility-icon" src="assets/backward.png"/>
-						</div>
-					</div>
-					<div id="playback-btn" class="utility-btn-wrap hidden">
-						<div class="btn utility-btn" onclick="onPlaybackClick()">
-							<img class="utility-icon" src="assets/play.png"/>
-						</div>
-					</div>
-					<div id="forward-btn" class="utility-btn-wrap hidden">
-						<div class="btn utility-btn" onclick="onForwardClick()">
-							<img class="utility-icon" src="assets/forward.png"/>
-						</div>
-					</div>
-					<div id="fast-forward-btn" class="utility-btn-wrap hidden">
-						<div class="btn utility-btn" onclick="onFastForwardClick()">
-							<img class="utility-icon" src="assets/fast-forward.png"/>
-						</div>
-					</div>
-				</div>
 
-				<!-- <div class="utility-divider">Theme</div> -->
-				<div class="utility-panel">
-					<div id="change-theme-btn" class="utility-btn-wrap hidden">
-						<div class="btn utility-btn" onclick="onThemeClick()">
-							<img class="utility-icon" src="assets/theme.png"/>
-							Theme
+					<div id="review-panel" class="utility-panel hidden">
+						<div id="fast-backward-btn" class="utility-btn-wrap">
+							<div class="btn utility-btn" onclick="onFastBackwardClick()">
+								<img class="utility-icon" src="assets/fast-backward.png"/>
+							</div>
 						</div>
+						<div id="backward-btn" class="utility-btn-wrap">
+							<div class="btn utility-btn" onclick="onBackwardClick()">
+								<img class="utility-icon" src="assets/backward.png"/>
+							</div>
+						</div>
+						<div id="playback-btn" class="utility-btn-wrap">
+							<div class="btn utility-btn" onclick="onPlaybackClick()">
+								<img class="utility-icon" src="assets/play.png"/>
+							</div>
+						</div>
+						<div id="forward-btn" class="utility-btn-wrap">
+							<div class="btn utility-btn" onclick="onForwardClick()">
+								<img class="utility-icon" src="assets/forward.png"/>
+							</div>
+						</div>
+						<div id="fast-forward-btn" class="utility-btn-wrap">
+							<div class="btn utility-btn" onclick="onFastForwardClick()">
+								<img class="utility-icon" src="assets/fast-forward.png"/>
+							</div>
+						</div>
+					</div>
+
+					<div id="theme-panel" class="utility-panel hidden">
+						<div id="change-theme-btn" class="utility-btn-wrap">
+							<div class="btn utility-btn" onclick="onThemeClick()">
+								<img class="utility-icon" src="assets/theme.png"/>
+								Theme
+							</div>
+						</div>
+					</div>
+
+					<!-- <div id="move-history-divider" class="utility-divider line hidden"></div> -->
+					<div id="move-history-panel" class="utility-panel">
 					</div>
 				</div>
 			</div>

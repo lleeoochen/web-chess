@@ -252,11 +252,17 @@
 }
 
 #utility-section {
-	height: calc(70% - var(--margin-size));
+	height: calc(70% - 2 * var(--margin-size));
 	margin-bottom: calc(var(--margin-size));
-	padding: calc(var(--margin-size));
 	background-color: #000000db;
 	border-radius: var(--border-radius);
+}
+
+#utility-section-inner {
+	height: calc(100% - 2 * var(--margin-size));
+	margin: calc(var(--margin-size));
+	overflow-x: hidden;
+	overflow-y: scroll;
 }
 
 #chat-section {

@@ -37,24 +37,6 @@
 	border-radius: var(--chat-border-radius);
 }
 
-#chat-messages-content::-webkit-scrollbar {
-	width: var(--chat-scrollbar-size);
-}
-
-#chat-messages-content::-webkit-scrollbar-track {
-	box-shadow: inset 0 0 5px grey;
-	border-radius: 5px;
-}
-
-#chat-messages-content::-webkit-scrollbar-thumb {
-	background: grey;
-	border-radius: 5px;
-}
-
-#chat-messages-content::-webkit-scrollbar-thumb:hover {
-	background: grey;
-}
-
 #chat-notification {
 	width: var(--chat-btn-size);
 	position: fixed;
@@ -68,8 +50,8 @@
 .chat-message {
 	font-size: var(--chat-font-size) !important;
 	display: flex;
-    margin-left: 0 !important;
-	margin-right: calc(var(--chat-margin-size) * 0.8) !important;
+    margin: 0 !important;
+	/*margin-right: calc(var(--chat-margin-size) * 0.8) !important;*/
 	/*margin-bottom: var(--chat-margin-size);*/
 	/*border-radius: var(--chat-border-radius);*/
 }

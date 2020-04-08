@@ -119,6 +119,8 @@ class Util {
 	}
 
 	static gameFinished(move) {
+		// return true;
+
 		if (move == DB_STALEMATE) {
 			swal('Stalemate.', {button: false });
 			return true;

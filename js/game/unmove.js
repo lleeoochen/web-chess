@@ -28,6 +28,8 @@ function unmoveChess() {
 	console.log("eaten_grid: " + JSON.stringify(eatenGrid));
 	console.log("eaten_piece: " + eaten_piece);
 
+	revertMoveHistory();
+
 	//===================== Special Moves ========================
 
 	//Castle Move

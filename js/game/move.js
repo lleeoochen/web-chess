@@ -2,6 +2,8 @@
 function moveChess(oldGrid, newGrid) {
 	if (oldGrid.get_piece() == null) return;
 
+	addMoveHistory(oldGrid, newGrid);
+
 	//Play sound
 	moveSound(newGrid);
 
