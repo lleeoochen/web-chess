@@ -195,9 +195,11 @@
 }
 
 #move-history-panel .move-history-item {
-	min-width: calc((100% - 0 * var(--util-margin-size)) / 3);
+	min-width: calc((100% - 0 * var(--util-margin-size)) / 4);
 	padding-bottom: var(--util-margin-size) !important;
 	text-align: center;
+	border-left-width: 1px;
+	margin: auto;
 }
 
 #move-history-panel .utility-btn {
@@ -208,10 +210,12 @@
 	justify-content: space-between;
     display: flex !important;
     align-items: center;
+    margin-right: 0 !important;
+    font-family: 'Roboto Mono', monospace;
 }
 
 #move-history-panel .utility-piece-icon {
 	/*background-color: #437149 !important;*/
 	border-radius: calc(var(--util-btn-size) / 4);
-	margin: auto calc(var(--util-margin-size) / 2) !important;
+	margin: 0 !important;
 }

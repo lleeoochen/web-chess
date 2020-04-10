@@ -252,19 +252,17 @@
 }
 
 #utility-section {
-	margin-bottom: calc(var(--margin-size));
 	background-color: #000000db;
-	border-radius: var(--border-radius);
+	border-radius: var(--border-radius) var(--border-radius) 0 0;
 	padding: calc(var(--margin-size));
 	padding-bottom: 0;
-	/*flex-grow: 100;*/
 }
 
 #history-section {
 	height: 40%;
 	margin-bottom: calc(var(--margin-size));
 	background-color: #000000db;
-	border-radius: var(--border-radius);
+	border-radius: 0 0 var(--border-radius) var(--border-radius);
 	padding: calc(var(--margin-size));
 	padding-bottom: 0;
 	overflow-y: scroll;

@@ -78,7 +78,7 @@ database.authenticate((_auth_user) => {
 
 		updateUtilityButtons();
 
-		if (match.moves.length > 0 && Util.gameFinished(match.moves[match.moves.length - 1])) {
+		if (match.moves.length > 0 && Util.gameFinished(match)) {
 			clearInterval(interval);
 
 			showHtml('#invite-panel', false);
@@ -86,6 +86,7 @@ database.authenticate((_auth_user) => {
 			showHtml('#theme-panel', false);
 			showHtml('#review-panel', true);
 			updateReviewButtons();
+			showEnding();
 			return false;
 		}
 
@@ -145,11 +146,7 @@ async function updateMatchMoves() {
 	}
 
 	while (moves_applied < match.moves.length) {
-		let move = Util.unpack(match.moves[moves_applied]);
-		if (turn != my_team) {
-			move.old_y = BOARD_SIZE - move.old_y - 1;
-			move.new_y = BOARD_SIZE - move.new_y - 1;
-		}
+		let move = Util.unpack(match.moves[moves_applied], turn != my_team);
 
 		await new Promise((resolve, reject) => {
 		  setTimeout(() => {
@@ -283,6 +280,35 @@ function updateUtilityButtons() {
 	}
 }
 
+function showEnding() {
+	let move = match.moves[match.moves.length - 1];
+
+	if (move == DB_STALEMATE) {
+		swal('Stalemate.', {button: false });
+	}
+	else if (move == DB_DRAW) {
+		swal('Draw.', {button: false });
+	}
+	else if (move == DB_CHECKMATE_BLACK) {
+		swal('Checkmate. Black Team Wins!', { button: false });
+	}
+	else if (move == DB_CHECKMATE_WHITE) {
+		swal('Checkmate. White Team Wins!', { button: false });
+	}
+	else if (move == DB_TIMESUP_BLACK) {
+		swal('Time\'s Up. Black Team Wins!', { button: false });
+	}
+	else if (move == DB_TIMESUP_WHITE) {
+		swal('Time\'s Up. White Team Wins!', { button: false });
+	}
+	else if (move == DB_RESIGN_BLACK) {
+		swal('White Resigned. Black Team Wins!', { button: false });
+	}
+	else if (move == DB_RESIGN_WHITE) {
+		swal('Black Resigned. White Team Wins!', { button: false });
+	}
+}
+
 //Game
 function initGame() {
 	canvasLayer.addEventListener("click", onClick, false);
@@ -407,6 +433,9 @@ function initPieces() {
 	let white_pos = 7;
 	let white_pawn_pos = 6;
 
+	let king_x = my_team == TEAM.B ? 3 : 4;
+	let queen_x = my_team == TEAM.B ? 4 : 3;
+
 	if (my_team == TEAM.B) {
 		black_pos = 7;
 		black_pawn_pos = 6;
@@ -420,8 +449,9 @@ function initPieces() {
 	initEachPiece(id++, 6, black_pos, TEAM.B, CHESS.Knight);
 	initEachPiece(id++, 2, black_pos, TEAM.B, CHESS.Bishop);
 	initEachPiece(id++, 5, black_pos, TEAM.B, CHESS.Bishop);
-	initEachPiece(id++, 4, black_pos, TEAM.B, CHESS.Queen);
-	initEachPiece(id++, 3, black_pos, TEAM.B, CHESS.King);
+
+	initEachPiece(id++, queen_x, black_pos, TEAM.B, CHESS.Queen);
+	initEachPiece(id++, king_x, black_pos, TEAM.B, CHESS.King);
 
 	initEachPiece(id++, 0, white_pos, TEAM.W, CHESS.Rook);
 	initEachPiece(id++, 7, white_pos, TEAM.W, CHESS.Rook);
@@ -429,8 +459,9 @@ function initPieces() {
 	initEachPiece(id++, 6, white_pos, TEAM.W, CHESS.Knight);
 	initEachPiece(id++, 2, white_pos, TEAM.W, CHESS.Bishop);
 	initEachPiece(id++, 5, white_pos, TEAM.W, CHESS.Bishop);
-	initEachPiece(id++, 4, white_pos, TEAM.W, CHESS.Queen);
-	initEachPiece(id++, 3, white_pos, TEAM.W, CHESS.King);
+
+	initEachPiece(id++, queen_x, white_pos, TEAM.W, CHESS.Queen);
+	initEachPiece(id++, king_x, white_pos, TEAM.W, CHESS.King);
 
 	for (var x = 0; x < BOARD_SIZE; x++) {
 		initEachPiece(id++, x, black_pawn_pos, TEAM.B, CHESS.Pawn);
@@ -480,7 +511,7 @@ function onClick(event, x, y) {
 
 //Handle chess event with (x, y) click coordinate
 function handleChessEvent(x, y) {
-	if ((auth_user.uid != match.black && auth_user.uid != match.white) || my_team != turn)
+	if ((auth_user.uid != match.black && auth_user.uid != match.white) || my_team != turn || Util.gameFinished(match))
 		return;
 
 	//Initalize important variables
@@ -676,14 +707,14 @@ function fillGrid(grid, color) {
 
 //Set numbering for specific grids
 function fillNumbering(x, y) {
-	let color;
+	let numbering = getNumbering(x, y);
 
-	color = (y % 2 == 0) ? "black" : "white";
+	let color = (y % 2 == 0) ? "black" : "white";
 
 	if (x == 0) {
 		let number = document.createElement("div");
 		number.setAttribute("class", `${color} numbering`);
-		number.innerText = (my_team == TEAM.B) ? y + 1 : BOARD_SIZE - y;
+		number.innerText = numbering.x;
 		background[x][y].append(number);
 	}
 
@@ -692,7 +723,7 @@ function fillNumbering(x, y) {
 	if (y == BOARD_SIZE - 1) {
 		let letter = document.createElement("div");
 		letter.setAttribute("class", `${color} lettering`);
-		letter.innerText = String.fromCharCode(x + 97);
+		letter.innerText = numbering.y;
 		background[x][y].append(letter);
 	}
 }
@@ -701,7 +732,7 @@ function fillNumbering(x, y) {
 function getNumbering(x, y) {
 	return {
 		x: (my_team == TEAM.B) ? y + 1 : BOARD_SIZE - y,
-		y: String.fromCharCode(x + 97)
+		y: (my_team == TEAM.B) ? String.fromCharCode(97 + 7 - x) : String.fromCharCode(x + 97)
 	}
 }
 
@@ -812,13 +843,14 @@ function updateTheme(newTheme) {
 	}
 
 	$('body')							.css('background-image', `url(${theme.BACKGROUND_IMAGE})`);
-	$('.player-name')					.css('color', theme.NAME_TITLE_COLOR);
+	$('.player-name')					.css('color',            theme.NAME_TITLE_COLOR);
 	$('#canvas-background')				.css('background-color', theme.COLOR_BOARD_LIGHT);
 	$('.utility-btn-wrap .utility-btn')	.css('background-color', theme.COLOR_BOARD_DARK);
 	$('#chat-send-button')				.css('background-color', theme.COLOR_BOARD_DARK);
 	$('.player-pic')					.css('background-color', theme.COLOR_BOARD_DARK);
 	$('.player-utility-pic')			.css('background-color', theme.COLOR_BOARD_DARK);
-	$(':root')							.css('--scroll-color', theme.COLOR_BOARD_DARK);
+	$(':root')							.css('--dark-color',     theme.COLOR_BOARD_DARK);
+	$(':root')							.css('--light-color',    theme.COLOR_BOARD_LIGHT);
 	// $('.utility-piece-icon.dark')		.css('background-color', theme.COLOR_BOARD_DARK);
 	// $('.utility-piece-icon.light')		.css('background-color', theme.COLOR_BOARD_LIGHT);
 }

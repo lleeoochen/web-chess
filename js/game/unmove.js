@@ -102,10 +102,8 @@ function unmoveCastleKing(newGrid, oldGrid) {
 	// Perform left castle
 	if (oldGrid.x - newGrid.x == 2) {
 		chessboard[0][newGrid.y].piece = chessboard[newGrid.x + 1][newGrid.y].piece;
-		console.log(JSON.stringify(chessboard[0][newGrid.y]));
 		chessboard[0][newGrid.y].get_piece().image.setAttribute("class", "piece x" + (0) + " y" + newGrid.y);
 		chessboard[newGrid.x + 1][newGrid.y].piece = -1;
-		console.log(JSON.stringify(chessboard[0][newGrid.y]));
 	}
 
 	// Restore king_moved check

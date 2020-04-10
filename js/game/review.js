@@ -10,11 +10,7 @@ async function reviewMove(moves_target, timeout=0) {
 	}
 
 	while (moves_applied < match.moves.length - 1 && moves_applied < moves_target && !stopPlayBack) {
-		let move = Util.unpack(match.moves[moves_applied]);
-		if (turn != my_team) {
-			move.old_y = BOARD_SIZE - move.old_y - 1;
-			move.new_y = BOARD_SIZE - move.new_y - 1;
-		}
+		let move = Util.unpack(match.moves[moves_applied], turn != my_team);
 
 		await new Promise((resolve, reject) => {
 		  playTimeout = setTimeout(() => {
