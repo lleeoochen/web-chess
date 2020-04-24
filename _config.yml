@@ -2,7 +2,7 @@
 title:       Web Chess
 description: This is a beautiful chess platform for chess lovers and friends.
 
-url:         'weitungchen.com' # remote url  (github/website url)
+url:         'www.weitungchen.com' # remote url  (github/website url)
 # url:         'localhost:4000' # local url
 
 baseUrl:     '/web-chess' # local baseUrl (github repo name)
