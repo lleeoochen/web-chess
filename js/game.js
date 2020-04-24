@@ -1,3 +1,6 @@
+---
+---
+
 //Intialize global variables
 var canvasLayer = document.getElementById("canvas-layer");
 var gridsLayer = document.getElementById("grids-layer");
@@ -364,7 +367,7 @@ function initToolbar() {
 	});
 
 	$('#home-btn').on('click', (e) => {
-		window.location = CHESS_URL + "/";
+		window.location = "{{ site.baseUrl }}/";
 	});
 }
 

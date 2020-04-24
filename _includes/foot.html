@@ -1,0 +1,20 @@
+<!-- Javascript + Bootstrap Libraries -->
+<script src="{{ site.baseUrl }}/plugins/js/bootstrap/jquery.js"></script>
+<script src="{{ site.baseUrl }}/plugins/js/bootstrap/sweetalert.js"></script>
+<script src="{{ site.baseUrl }}/plugins/js/bootstrap/bootstrap.js"></script>
+
+<!-- Firebase Libraries -->
+<script src="{{ site.baseUrl }}/plugins/js/firebase/firebase-app.js"></script>
+<script src="{{ site.baseUrl }}/plugins/js/firebase/firebase-firestore.js"></script>
+<script src="{{ site.baseUrl }}/plugins/js/firebase/firebase-auth.js"></script>
+<script src="{{ site.baseUrl }}/plugins/js/firebase/firebase-ui-auth.js"></script>
+
+<!-- Custom Libraries -->
+<script src="{{ site.baseUrl }}/js/utility.js"></script>
+<script src="{{ site.baseUrl }}/js/const.js"></script>
+<script src="{{ site.baseUrl }}/js/modal.js"></script>
+<script src="{{ site.baseUrl }}/js/firebase.js"></script>
+
+{% for js in page.js %}
+	<script src="{{ site.baseUrl }}/js/{{ js }}"></script>
+{% endfor %}

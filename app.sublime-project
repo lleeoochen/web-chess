@@ -1,0 +1,17 @@
+{
+	"folders":
+	[
+		{
+			"path": ".",
+			"file_exclude_patterns": [
+				".jekyll-metadata",
+				"*.lock",
+				"app.sublime-project"
+			],
+			"folder_exclude_patterns": [
+				".*",
+				"_site"
+			],
+		}
+	]
+}

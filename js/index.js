@@ -1,3 +1,6 @@
+---
+---
+
 var user = null;
 var auth_user = null;
 var database = new Firebase();
@@ -33,7 +36,7 @@ function showMatches() {
 			let active = Math.floor(match_data.moves[match_data.moves.length - 1] / 10) != 0;
 
 			let match_html = $(`
-				<a class="btn match-link ${active ? '': 'inactive'}" href="${ CHESS_URL }/game.html?match=${ match_name }">
+				<a class="btn match-link ${active ? '': 'inactive'}" href="{{ site.baseUrl }}/game.html?match=${ match_name }">
 					<div class="match-link-content">
 						<div>
 							<img src="assets/${color}King.svg"/>
@@ -68,7 +71,7 @@ function initToolbar() {
 
 	$('#new-match-modal #submit').on('click', (e) => {
 		database.createMatch(user, theme, time, match_id => {
-			window.location = `${ CHESS_URL }/game.html?match=${ match_id }`;
+			window.location = `{{ site.baseUrl }}/game.html?match=${ match_id }`;
 		});
 		$('#new-match-modal').modal('hide');
 	});

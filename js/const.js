@@ -1,5 +1,16 @@
+---
+---
+
 const CANVAS_LAYER = document.getElementById("canvas-layer");
-const CHESS_URL = (location.hostname == "localhost") ? "" : "/web-chess"
+
+if (location.origin != "{{ site.url }}") {
+	swal({
+		text: "Your url and baseUrl are misconfigured in _config.yml. Please change them and restart the server.",
+		icon: "warning",
+        button: [],
+        closeOnClickOutside: false
+	});
+}
 
 const CHESS = {King: "King", Queen: "Queen", Rook: "Rook", Bishop: "Bishop", Knight: "Knight", Pawn: "Pawn", None: "None"};
 const VALUE = {King: 200, Queen: 9, Rook: 5, Bishop: 3, Knight: 3, Pawn: 1, None: 0};

@@ -33,7 +33,7 @@ class Firebase {
 			}
 		};
 		let ui = new firebaseui.auth.AuthUI(firebase.auth());
-		ui.start('#firebaseui-auth-container', firebaseAuthConfig);
+		ui.start('#firebase-modal .modal-body', firebaseAuthConfig);
 	}
 
 	authenticate(callback) {
@@ -52,7 +52,7 @@ class Firebase {
 				callback(self.auth_user);
 			}
 			else {
-				$('#modal').modal({ backdrop: 'static', keyboard: false })
+				$('#firebase-modal').modal({ backdrop: 'static', keyboard: false })
 			}
 		});
 	}
