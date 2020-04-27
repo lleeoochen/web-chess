@@ -6,7 +6,10 @@
 			"file_exclude_patterns": [
 				".jekyll-metadata",
 				"*.lock",
-				"app.sublime-project"
+				"app.sublime-project",
+				".gitignore",
+				"LICENSE",
+				"Gemfile"
 			],
 			"folder_exclude_patterns": [
 				".*",
