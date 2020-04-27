@@ -1,11 +1,2 @@
-# Site variables
-title:       Web Chess
-description: This is a beautiful chess platform for chess lovers and friends.
-
 url:       'localhost:4000'
 baseUrl:   ''
-pluginUrl: 'https://weitungchen.com/plugins'
-
-# Build settings
-markdown: kramdown
-theme:    minima
