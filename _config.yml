@@ -8,6 +8,8 @@ url:         'www.weitungchen.com' # remote url  (github/website url)
 baseUrl:     '/web-chess' # local baseUrl (github repo name)
 # baseUrl:     '' # local baseUrl
 
+pluginUrl:   'https://weitungchen.com/plugins'
+
 # Build settings
 markdown: kramdown
 theme:    minima
