@@ -12,8 +12,8 @@ const BOARD_SIZE = 8;
 const GRID_SIZE_P = SCREEN_PORTRAIT ? Util.vw2px(11.5) : Util.vh2px(10);
 const HIGHLIGHT_P = 3;
 
-const MATCHES_TABLE = "matches";
-const USERS_TABLE = "users";
+const MATCHES_TABLE = "chess_matches";
+const USERS_TABLE = "chess_users";
 
 const THEME_CLASSIC = {
 	COLOR_BOARD_LIGHT: 		"#E6BF83",

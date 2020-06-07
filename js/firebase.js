@@ -9,14 +9,13 @@ class Firebase {
 
 		// General Init
 		let firebaseConfig = {
-			apiKey: "AIzaSyDGTEzcebCXK3B4e--I2itLD0lBtXTQPYs",
-			authDomain: "web-chess-e5c05.firebaseapp.com",
-			databaseURL: "https://web-chess-e5c05.firebaseio.com",
-			projectId: "web-chess-e5c05",
-			storageBucket: "web-chess-e5c05.appspot.com",
-			messagingSenderId: "730184283244",
-			appId: "1:730184283244:web:34b7cb61dfe77db0049449",
-			measurementId: "G-8C72YJXJ07"
+			apiKey: "AIzaSyAjnKviJftJE7M0a4ylnMeVpMjI8Y-uG_Q",
+			authDomain: "gamedb-f807e.firebaseapp.com",
+			databaseURL: "https://gamedb-f807e.firebaseio.com",
+			projectId: "gamedb-f807e",
+			storageBucket: "gamedb-f807e.appspot.com",
+			messagingSenderId: "364782423342",
+			appId: "1:364782423342:web:9f0c875b6e988527e3bebf"
 		};
 		firebase.initializeApp(firebaseConfig);
 		this.db = firebase.firestore();
