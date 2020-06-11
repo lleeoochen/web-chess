@@ -21,12 +21,11 @@ class Util {
 			});
 
 			// Session expired
-			if (response.status == 440) {
-				alert('Not logged in.');
-				localStorage.setItem(LAST_VISITED_KEY, window.location.href);
-				window.location = '{{ site.baseUrl }}/login';
-				return;
-			}
+			// if (response.status == 440) {
+			// 	localStorage.setItem(LAST_VISITED_KEY, window.location.href);
+			// 	window.location = '{{ site.baseUrl }}/login';
+			// 	return;
+			// }
 
 			console.log('Request Time ' + url.split('?')[0] + ': ' + (new Date().getTime() - time_start));
 
