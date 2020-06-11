@@ -5,6 +5,7 @@ description: This is a beautiful chess platform for chess lovers and friends.
 url:       'www.weitungchen.com'
 baseUrl:   '/web-chess'
 pluginUrl: 'https://weitungchen.com/plugins'
+backendUrl: 'https://api.weitungchen.com'
 
 # Build settings
 markdown: kramdown

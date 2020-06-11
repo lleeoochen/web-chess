@@ -15,6 +15,20 @@
 				".*",
 				"_site"
 			],
+		},
+		{
+			"path": "../homebackend",
+			"file_exclude_patterns": [
+				"*.lock",
+				"app.sublime-project",
+				".gitignore",
+				"LICENSE",
+				"requirements.txt"
+			],
+			"folder_exclude_patterns": [
+				"__pycache__",
+				"venv"
+			],
 		}
 	]
 }

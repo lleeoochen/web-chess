@@ -2,37 +2,64 @@
 ---
 
 var user = null;
-var auth_user = null;
+var user_id = null;
 var database = new Firebase();
 
 var theme = undefined;
 var time = 15 * 60;
 
-database.authenticate((auth_user1) => {
+var sample_user = 'uTglgv6iP4cEzJlVFp0ZOsnsiL13';
+var sample_match = 'zRhSeePjyI6JyVtDBCmS';
+
+
+// // Socket connection
+// let socket = io.connect('{{ site.backendUrl }}');
+
+// socket.emit('listen_user', sample_user);
+// socket.on('listen_user', (user_data) => {
+// 	console.log('user_data', user_data);
+// });
+
+// socket.emit('listen_match', sample_match);
+// socket.on('listen_match', (match_data) => {
+// 	console.log('match_data', match_data);
+// });
+
+// window.onbeforeunload = function(){
+// 	socket.emit('disconnect');
+// 	console.log("Bye now!");
+// };
+
+// database.listenMatch(sample_match, match => {
+// 	console.log(match);
+// });
+
+// database.getMatch(sample_match, match => {
+// 	console.log(match)
+// })
+
+
+database.getProfile().then(res => {
 	initToolbar();
-	auth_user = auth_user1;
-	database.listenUser(auth_user1.uid, (user_data) => {
-		user = user_data;
-		showMatches();
-	});
-});
 
-function showMatches() {
-	if (!user || !user.matches) return
+	user = res.data;
+	user_id = res.id;
 
-	database.getMatches(user.matches, user, async (matches_data) => {
+	database.getMatches(user.matches).then(async matches_data => {
+		matches_data = matches_data.data;
+		console.log(matches_data)
 		$('#matches-list').html('<div id="matches-list-divider" class="hidden"></div>');
 
-		matches_data.sort((a, b) => b[1].updated.toDate().getTime() - a[1].updated.toDate().getTime());
+		matches_data.sort((a, b) => b[1].updated - a[1].updated);
 		await matches_data.forEach(match => {
 			let match_name = match[0];
 			let match_data = match[1];
 			let match_opponent = match[2];
 
-			let d = match_data.updated.toDate();
+			let d = new Date(match_data.updated);
 			let d_str = Util.formatDate(d);
 
-			let color = (match_data.black == auth_user.uid) ? "B" : "W";
+			let color = (match_data.black == user_id) ? "B" : "W";
 			let active = Math.floor(match_data.moves[match_data.moves.length - 1] / 10) != 0;
 
 			let match_html = $(`
@@ -55,12 +82,13 @@ function showMatches() {
 				$('#matches-list').append(match_html);
 		});
 	});
-}
+});
 
 function initToolbar() {
 	// Signout button
 	$('#signout-btn').on('click', (e) => {
 		firebase.auth().signOut();
+		Util.setCookie('session_id', '');
 		location.reload();
 	});
 
@@ -70,7 +98,7 @@ function initToolbar() {
 	});
 
 	$('#new-match-modal #submit').on('click', (e) => {
-		database.createMatch(user, theme, time, match_id => {
+		database.createMatch(theme, time).then(async match_id => {
 			window.location = `{{ site.baseUrl }}/game.html?match=${ match_id }`;
 		});
 		$('#new-match-modal').modal('hide');

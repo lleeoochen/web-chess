@@ -91,8 +91,8 @@ const FLAG_PASSANT_PAWN = 2;
 const FLAG_PAWN_TO_QUEEN = 3;
 
 const MAX_TIME = 60 * 60; // 1 Hour Max (Infinite time otherwise)
-
 const STATS_MAX = 42; // treat king as 3 score
+const LAST_VISITED_KEY = 'last_visited';
 
 if (CANVAS_LAYER) {
 	CANVAS_LAYER.width = 5 * GRID_SIZE_P * BOARD_SIZE;

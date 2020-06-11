@@ -49,14 +49,17 @@ var moves_stack = [];
 var passant_stack = [];
 
 var timer_enable = false;
+var user_id;
 
-database.authenticate((_auth_user) => {
-	auth_user = _auth_user;
+database.getProfile().then(res => {
+	user_id = res.id;
+	database.user_id = user_id;
 
-	database.listenMatch(match_id, async (_match, _my_team) => {
+	database.listenMatch(user_id, match_id, async (_match, _my_team) => {
 		match = _match;
 		my_team = _my_team;
 		enemy_team = my_team == TEAM.B ? TEAM.W : TEAM.B;
+		console.log(match);
 
 		timer_enable = match.black_timer < MAX_TIME && match.white_timer < MAX_TIME;
 		enableHtml('#add-time-btn .utility-btn', timer_enable);
@@ -173,8 +176,6 @@ async function updateMatchMoves() {
 
 function updateMatchUndo() {
 	if (my_team == TEAM.B && match.white_undo == DB_REQUEST_ASK || my_team == TEAM.W && match.black_undo == DB_REQUEST_ASK) {
-		console.log("JOOOOOOOOO");
-		console.log(match.white_undo);
 		swal({
 			text: `${players[enemy_team].name} is asking for your mercy.`,
 			buttons: [
@@ -231,7 +232,7 @@ function updateMatchDraw() {
 
 
 function updateMatchTimer() {
-	let t1 = match.updated.toDate();
+	let t1 = new Date(match.updated);
 	let t2 = new Date();
 	let time_since_last_move = Math.floor((t2.getTime() - t1.getTime()) / 1000);
 
@@ -373,14 +374,14 @@ function initToolbar() {
 
 async function updatePlayerData() {
 	if (!players[TEAM.B] && match.black) {
-		await database.getUser(match.black).then((user_data) => {
-			players[TEAM.B] = user_data;
+		await database.getUser(match.black).then((user) => {
+			players[TEAM.B] = user.data;
 			setPlayerHTML(TEAM.B);
 		});
 	}
 	if (!players[TEAM.W] && match.white) {
-		await database.getUser(match.white).then((user_data) => {
-			players[TEAM.W] = user_data;
+		await database.getUser(match.white).then((user) => {
+			players[TEAM.W] = user.data;
 			setPlayerHTML(TEAM.W);
 		});
 	}
@@ -514,7 +515,7 @@ function onClick(event, x, y) {
 
 //Handle chess event with (x, y) click coordinate
 function handleChessEvent(x, y) {
-	if ((auth_user.uid != match.black && auth_user.uid != match.white) || my_team != turn || Util.gameFinished(match))
+	if ((user_id != match.black && user_id != match.white) || my_team != turn || Util.gameFinished(match))
 		return;
 
 	//Initalize important variables

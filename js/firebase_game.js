@@ -1,232 +1,152 @@
+---
+---
+
 class GameFirebase extends Firebase {
 	// match = null;
 	// match_id = null;
 	// my_team = null;
 
-	listenMatch(match_id, callback) {
+	constructor() {
+		super();
 		this.match = null;
 		this.my_team = null;
+		this.match_id = null;
+	}
+
+	listenMatch(user_id, match_id, resolve) {
 		this.match_id = match_id;
 
-		var self = this;
-
 		super.listenMatch(match_id, (match) => {
-			self.match = match;
+			this.match = match.data;
 
 			// Register second user if not exists
-			if (!match.white && self.auth_user.uid != match.black) {
-				self.registerOpponent(self.auth_user.uid);
-				self.my_team = TEAM.W;
+			if (!this.match.white && user_id != this.match.black) {
+				this.registerOpponent(user_id);
+				this.my_team = TEAM.W;
 			}
-			else if (self.auth_user.uid == match.black) {
-				self.my_team = TEAM.B;
+			else if (user_id == this.match.black) {
+				this.my_team = TEAM.B;
 			}
-			else if (self.auth_user.uid == match.white) {
-				self.my_team = TEAM.W;
+			else if (user_id == this.match.white) {
+				this.my_team = TEAM.W;
 			}
 			else {
-				self.my_team = TEAM.B; // spectate mode
+				this.my_team = TEAM.B; // spectate mode
 			}
 
-			callback(self.match, self.my_team);
+			resolve(this.match, this.my_team);
 		});
 	}
 
 	updateChessboard(oldGrid, newGrid, turn, black_timer, white_timer) {
-		let moves = (this.match && this.match.moves) ? this.match.moves : [];
-		moves.push(Util.pack(oldGrid, newGrid, turn));
-
-		this.db.collection(MATCHES_TABLE).doc(this.match_id).set({
-			moves: moves,
-			updated: new Date(),
+		console.log(Util.pack(oldGrid, newGrid, turn))
+		Util.request('POST', '/update_chessboard', {
+			match_id: this.match_id,
+			move: Util.pack(oldGrid, newGrid, turn),
 			black_timer: black_timer,
 			white_timer: white_timer,
-		}, { merge: true });
+		});
 	}
 
 	updateTimer(black_timer, white_timer) {
-		this.match.chat.push(Util.packMessage(`[Added 15 seconds to opponent.]`, this.my_team));
-
-		this.db.collection(MATCHES_TABLE).doc(this.match_id).set({
+		Util.request('POST', '/update_timer', {
+			match_id: this.match_id,
 			black_timer: black_timer,
 			white_timer: white_timer,
-			chat: this.match.chat
-		}, { merge: true });
-	}
-
-	addTime(time) {
-		let t = this.match.updated.toDate();
-		t.setSeconds(t.getSeconds() + time);
-
-		// this.match.chat.push(Util.packMessage(, this.my_team));
-
-		this.db.collection(MATCHES_TABLE).doc(this.match_id).set({
-			updated: t
-		}, { merge: true });
+			message: Util.packMessage(`[Added 15 seconds to opponent.]`, this.my_team)
+		});
 	}
 
 	checkmate(winning_team) {
-		let moves = (this.match && this.match.moves) ? this.match.moves : [];
-		moves.push(winning_team == TEAM.W ? DB_CHECKMATE_WHITE : DB_CHECKMATE_BLACK); // checkmate
-
-		this.db.collection(MATCHES_TABLE).doc(this.match_id).set({
-			moves: moves,
-			updated: new Date()
-		}, { merge: true });
+		Util.request('POST', '/checkmate', {
+			match_id: this.match_id,
+			winner: winning_team
+		});
 	}
 
 	stalemate() {
-		let moves = (this.match && this.match.moves) ? this.match.moves : [];
-		moves.push(DB_STALEMATE); // stalement
-
-		this.db.collection(MATCHES_TABLE).doc(this.match_id).set({
-			moves: moves,
-			updated: new Date()
-		}, { merge: true });
+		Util.request('POST', '/stalemate', {
+			match_id: this.match_id
+		});
 	}
 
 	draw() {
-		let moves = (this.match && this.match.moves) ? this.match.moves : [];
-		moves.push(DB_DRAW); // draw
-
-		this.match.chat.push(Util.packMessage(`[Accepted a draw.]`, this.my_team));
-		this.db.collection(MATCHES_TABLE).doc(this.match_id).set({
-			moves: moves,
-			updated: new Date(),
-			chat: this.match.chat
-		}, { merge: true });
+		Util.request('POST', '/draw', {
+			match_id: this.match_id,
+			message: Util.packMessage(`[Accepted a draw.]`, this.my_team)
+		});
 	}
 
 	timesup(winning_team) {
-		let moves = (this.match && this.match.moves) ? this.match.moves : [];
-		moves.push(winning_team == TEAM.W ? DB_TIMESUP_WHITE : DB_TIMESUP_BLACK); // timesup
-
-		this.match.chat.push(Util.packMessage(`[Time's up. Match ended.]`, this.my_team));
-		this.db.collection(MATCHES_TABLE).doc(this.match_id).set({
-			moves: moves,
-			updated: new Date(),
-			chat: this.match.chat
-		}, { merge: true });
+		Util.request('POST', '/timesup', {
+			match_id: this.match_id,
+			winner: winning_team,
+			message: Util.packMessage(`[Time's up. Match ended.]`, this.my_team)
+		});
 	}
 
 	resign(winning_team) {
-		let moves = (this.match && this.match.moves) ? this.match.moves : [];
-		moves.push(winning_team == TEAM.W ? DB_RESIGN_WHITE : DB_RESIGN_BLACK); // resign
-
-		this.match.chat.push(Util.packMessage(`[Resigned match.]`, this.my_team));
-		this.db.collection(MATCHES_TABLE).doc(this.match_id).set({
-			moves: moves,
-			updated: new Date(),
-			chat: this.match.chat
-		}, { merge: true });
+		Util.request('POST', '/resign', {
+			match_id: this.match_id,
+			winner: winning_team,
+			message: Util.packMessage(`[Resigned match.]`, this.my_team)
+		});
 	}
 
 	undoMove() {
-		let moves = (this.match && this.match.moves) ? this.match.moves : [];
-
-		if (moves.length > 0) {
-			moves.pop();
-		}
-
-		this.match.chat.push(Util.packMessage(`[Gave mercy to opponent's move.]`, this.my_team));
-		if (this.my_team == TEAM.B) {
-			this.db.collection(MATCHES_TABLE).doc(this.match_id).set({
-				white_undo: DB_REQUEST_DONE,
-				moves: moves,
-				chat: this.match.chat
-			}, { merge: true });
-		}
-		else {
-			this.db.collection(MATCHES_TABLE).doc(this.match_id).set({
-				black_undo: DB_REQUEST_DONE,
-				moves: moves,
-				chat: this.match.chat
-			}, { merge: true });
-		}
+		Util.request('POST', '/undo', {
+			match_id: this.match_id,
+			undo_team: this.my_team == TEAM.B ? TEAM.W : TEAM.B,
+			message: Util.packMessage(`[Gave mercy to opponent's move.]`, this.my_team)
+		});
 	}
 
 	cancelUndo() {
-		if (this.my_team == TEAM.B) {
-			this.db.collection(MATCHES_TABLE).doc(this.match_id).set({
-				white_undo: DB_REQUEST_NONE,
-			}, { merge: true });
-		}
-		else {
-			this.db.collection(MATCHES_TABLE).doc(this.match_id).set({
-				black_undo: DB_REQUEST_NONE,
-			}, { merge: true });
-		}
+		Util.request('POST', '/cancel_undo', {
+			match_id: this.match_id,
+			undo_team: this.my_team == TEAM.B ? TEAM.W : TEAM.B,
+		});
 	}
 
 	cancelDraw() {
-		if (this.my_team == TEAM.B) {
-			this.db.collection(MATCHES_TABLE).doc(this.match_id).set({
-				white_draw: DB_REQUEST_NONE,
-			}, { merge: true });
-		}
-		else {
-			this.db.collection(MATCHES_TABLE).doc(this.match_id).set({
-				black_draw: DB_REQUEST_NONE,
-			}, { merge: true });
-		}
+		Util.request('POST', '/cancel_draw', {
+			match_id: this.match_id,
+			draw_team: this.my_team == TEAM.B ? TEAM.W : TEAM.B,
+		});
 	}
 
 	registerOpponent(user_id) {
-		let self = this;
-		this.db.collection(MATCHES_TABLE).doc(this.match_id).set({
+		Util.request('POST', '/register_opponent', {
+			match_id: this.match_id,
 			white: user_id,
-			updated: new Date(),
-		}, { merge: true });
-
-		this.db.collection(USERS_TABLE).doc(user_id).get().then(doc => {
-			let user = doc.data();
-			let matches = (user && user.matches) ? user.matches : [];
-			matches.push(self.match_id);
-
-			self.db.collection(USERS_TABLE).doc(user_id).set({
-				matches: matches,
-			}, { merge: true });
 		});
 	}
 
 	message(message) {
-		let chat = (this.match && this.match.chat) ? this.match.chat : [];
-		chat.push(Util.packMessage(message, this.my_team));
-
-		this.db.collection(MATCHES_TABLE).doc(this.match_id).set({
-			chat: chat,
-		}, { merge: true });
+		Util.request('POST', '/message', {
+			match_id: this.match_id,
+			message: Util.packMessage(message, this.my_team),
+		});
 	}
 
 	changeTheme(theme) {
-		this.db.collection(MATCHES_TABLE).doc(this.match_id).set({
+		Util.request('POST', '/change_theme', {
+			match_id: this.match_id,
 			theme: Util.packTheme(theme),
-		}, { merge: true });
+		});
 	}
 
 	askUndo() {
-		if (this.my_team == TEAM.B) {
-			this.db.collection(MATCHES_TABLE).doc(this.match_id).set({
-				black_undo: DB_REQUEST_ASK,
-			}, { merge: true });
-		}
-		else {
-			this.db.collection(MATCHES_TABLE).doc(this.match_id).set({
-				white_undo: DB_REQUEST_ASK,
-			}, { merge: true });
-		}
+		Util.request('POST', '/ask_undo', {
+			match_id: this.match_id,
+			undo_team: this.my_team,
+		});
 	}
 
 	askDraw() {
-		if (this.my_team == TEAM.B) {
-			this.db.collection(MATCHES_TABLE).doc(this.match_id).set({
-				black_draw: DB_REQUEST_ASK,
-			}, { merge: true });
-		}
-		else {
-			this.db.collection(MATCHES_TABLE).doc(this.match_id).set({
-				white_draw: DB_REQUEST_ASK,
-			}, { merge: true });
-		}
+		Util.request('POST', '/ask_draw', {
+			match_id: this.match_id,
+			draw_team: this.my_team,
+		});
 	}
 }
