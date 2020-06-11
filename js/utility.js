@@ -22,6 +22,7 @@ class Util {
 
 			// Session expired
 			if (response.status == 440) {
+				alert('Not logged in.');
 				localStorage.setItem(LAST_VISITED_KEY, window.location.href);
 				window.location = '{{ site.baseUrl }}/login';
 				return;
