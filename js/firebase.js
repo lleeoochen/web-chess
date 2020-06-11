@@ -5,7 +5,6 @@
 class Firebase {
 
 	constructor() {
-		this.auth_user = null;
 		this.socket = io.connect('{{ site.backendUrl }}');
 
 		// General Init
@@ -42,11 +41,13 @@ class Firebase {
 				return;
 			}
 
-			this.auth_user = auth_user;
+			firebase.auth().currentUser.getIdToken(true).then(function(auth_token) {
 
-			Util.request('POST', '/login', { uid: auth_user.uid }).then(res => {
-				resolve();
-			});
+				// Login with firebase token
+				Util.request('POST', '/login', { auth_token: auth_token }) .then(res => {
+					resolve();
+				});
+			})
 		});
 	}
 

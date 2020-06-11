@@ -26,7 +26,6 @@ class Util {
 				window.location = '{{ site.baseUrl }}/login';
 				return;
 			}
-
 			console.log('Request Time ' + url.split('?')[0] + ': ' + (new Date().getTime() - time_start));
 
 			const contentType = response.headers.get("content-type");
