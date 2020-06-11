@@ -35,7 +35,7 @@ class Firebase {
 		ui.start('#firebase-modal .modal-body', firebaseAuthConfig);
 	}
 
-	authenticate(resolve) {
+	login(resolve) {
 		firebase.auth().onAuthStateChanged(auth_user => {
 			if (!auth_user) {
 				$('#firebase-modal').modal({ backdrop: 'static', keyboard: false })
@@ -45,11 +45,13 @@ class Firebase {
 			this.auth_user = auth_user;
 
 			Util.request('POST', '/login', { uid: auth_user.uid }).then(res => {
-				Util.setCookie('session_id', res.session_id, 1);
 				resolve();
 			});
-
 		});
+	}
+
+	logout(resolve) {
+		return Util.request('POST', '/logout');
 	}
 
 	getMatch(id) {

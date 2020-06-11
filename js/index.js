@@ -87,9 +87,10 @@ database.getProfile().then(res => {
 function initToolbar() {
 	// Signout button
 	$('#signout-btn').on('click', (e) => {
-		firebase.auth().signOut();
-		Util.setCookie('session_id', '');
-		location.reload();
+		database.logout().then(() => {
+			firebase.auth().signOut();
+			location.reload();
+		});
 	});
 
 	// New match button

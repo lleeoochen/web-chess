@@ -2,7 +2,7 @@
 ---
 
 var database = new Firebase();
-database.authenticate(() => {
+database.login(() => {
 	let url = localStorage.getItem(LAST_VISITED_KEY);
 	localStorage.removeItem(LAST_VISITED_KEY);
 
