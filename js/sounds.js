@@ -1,3 +1,5 @@
+---
+---
 // Source: https://flukeout.github.io/simple-sounds/#
 
 var sounds = {
@@ -10,9 +12,9 @@ var sounds = {
   "uhoh" : {
     url : "assets/uhoh.mp3"
   },
-  "opening" : {
-    url : "assets/opening.m4a"
-  },
+  // "opening" : {
+  //   url : "assets/opening.m4a"
+  // },
   "omgwow" : {
     url : "assets/omgwow.mp3"
   },
@@ -32,7 +34,7 @@ function loadSound(name){
   var buffer = sound.buffer;
 
   var request = new XMLHttpRequest();
-  request.open('GET', url, true);
+  request.open('GET', '{{ site.baseUrl }}/' + url, true);
   request.responseType = 'arraybuffer';
 
   request.onload = function() {
@@ -45,9 +47,11 @@ function loadSound(name){
 }
 
 function playSound(name, options){
-  return; // TODO: take it out later (it's so noisy omg)
+  // return; // TODO: take it out later (it's so noisy omg)
   var sound = sounds[name];
-  var soundVolume = sounds[name].volume || 1;
+  if (!sound) return;
+
+  var soundVolume = sound.volume || 10;
 
   var buffer = sound.buffer;
   if(buffer){
