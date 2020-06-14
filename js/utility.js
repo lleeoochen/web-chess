@@ -20,19 +20,26 @@ class Util {
 				body: JSON.stringify(body) // body data type must match "Content-Type" header
 			});
 
-			// Session expired
-			if (response.status == 440) {
-				localStorage.setItem(LAST_VISITED_KEY, window.location.href);
-				window.location = '{{ site.baseUrl }}/login';
-				return;
-			}
-			console.log('Request Time ' + url.split('?')[0] + ': ' + (new Date().getTime() - time_start));
+			let short_url = url.split('?')[0];
+			let duration = new Date().getTime() - time_start;
+			console.log('Request Time ' + short_url + ': ' + duration);
 
-			const contentType = response.headers.get("content-type");
-			if (contentType && contentType.indexOf("application/json") !== -1)
-				resolve(response.json());
-			else
-				resolve(response);
+			// Session expired
+			if (response.status >= 400) {
+				console.error('ERROR ' + short_url + ': ' + await response.json());
+				if (response.status == 401) {
+					localStorage.setItem(LAST_VISITED_KEY, window.location.href);
+					window.location = '{{ site.baseUrl }}/login';
+					return;
+				}
+			}
+			else {
+				const contentType = response.headers.get("content-type");
+				if (contentType && contentType.indexOf("application/json") !== -1)
+					resolve(response.json());
+				else
+					resolve(response);
+			}
 		});
 	}
 

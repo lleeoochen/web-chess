@@ -56,19 +56,19 @@ class Firebase {
 	}
 
 	getMatch(id) {
-		return Util.request('GET', '/get_match?id=' + id);
+		return Util.request('GET', '/chess/get_match?id=' + id);
 	}
 
 	getMatches(ids) {
-		return Util.request('GET', '/get_matches?ids=' + JSON.stringify(ids));
+		return Util.request('GET', '/chess/get_matches?ids=' + JSON.stringify(ids));
 	}
 
 	getProfile() {
-		return Util.request('GET', '/get_profile');
+		return Util.request('GET', '/chess/get_profile');
 	}
 
 	getUser(id) {
-		return Util.request('GET', '/get_user?id=' + id);
+		return Util.request('GET', '/chess/get_user?id=' + id);
 	}
 
 	listenMatch(id, resolve) {
@@ -86,7 +86,7 @@ class Firebase {
 	}
 
 	createMatch(theme, time) {
-		return Util.request('POST', '/create_match', {
+		return Util.request('POST', '/chess/create_match', {
 			theme: Util.packTheme(theme),
 			time: time || MAX_TIME
 		});
