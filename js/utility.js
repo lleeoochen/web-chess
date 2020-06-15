@@ -4,7 +4,7 @@
 class Util {
 	static request(method, url, body) {
 
-		return new Promise(async resolve => {
+		return new Promise(async (resolve, reject) => {
 			let time_start = new Date().getTime();
 
 			const response = await fetch('{{ site.backendUrl }}' + url, {
@@ -32,6 +32,7 @@ class Util {
 					window.location = '{{ site.baseUrl }}/login';
 					return;
 				}
+				reject(response);
 			}
 			else {
 				const contentType = response.headers.get("content-type");

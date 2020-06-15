@@ -39,7 +39,7 @@ class GameFirebase extends Firebase {
 	}
 
 	updateChessboard(oldGrid, newGrid, turn, black_timer, white_timer) {
-		Util.request('POST', '/chess/match/update_chessboard', {
+		return Util.request('POST', '/chess/match/update_chessboard', {
 			match_id: this.match_id,
 			move: Util.pack(oldGrid, newGrid, turn),
 			black_timer: black_timer,

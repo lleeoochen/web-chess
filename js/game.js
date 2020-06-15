@@ -514,7 +514,7 @@ function onClick(event, x, y) {
 
 
 //Handle chess event with (x, y) click coordinate
-function handleChessEvent(x, y) {
+async function handleChessEvent(x, y) {
 	if ((user_id != match.black && user_id != match.white) || my_team != turn || Util.gameFinished(match))
 		return;
 
@@ -527,10 +527,17 @@ function handleChessEvent(x, y) {
 
 	//Action0 - Castle
 	if (canCastle(oldGrid, newGrid)) {
-		database.updateChessboard(oldGrid, newGrid, turn, black_timer, white_timer);
-		moveChess(oldGrid, newGrid);
-		oldGrid = null;
-		return;
+		try {
+			let res = await database.updateChessboard(oldGrid, newGrid, turn, black_timer, white_timer);
+			moveChess(oldGrid, newGrid);
+			oldGrid = null;
+			return;
+		}
+		catch (err) {
+			fillGrid(oldGrid, COLOR_ORIGINAL);
+			clearMoves();
+			oldGrid = null;
+		}
 	}
 
 	//Action1 - Deselect Piece by clicking on illegal grid
@@ -549,15 +556,22 @@ function handleChessEvent(x, y) {
 
 	//Action3 - Move Piece by clicking on empty grid or eat enemy by clicking on legal grid. Switch turn.
 	else if (oldGrid != null && oldGrid.get_piece() != null && isLegal) {
-		database.updateChessboard(oldGrid, newGrid, turn, black_timer, white_timer);
-		moveChess(oldGrid, newGrid);
+		try {
+			let res = await database.updateChessboard(oldGrid, newGrid, turn, black_timer, white_timer);
+			moveChess(oldGrid, newGrid);
 
-		if (my_team == TEAM.B)
-			black_timer += 1
-		else
-			white_timer += 1
+			if (my_team == TEAM.B)
+				black_timer += 1
+			else
+				white_timer += 1
 
-		oldGrid = null;
+			oldGrid = null;
+		}
+		catch (err) {
+			fillGrid(oldGrid, COLOR_ORIGINAL);
+			clearMoves();
+			oldGrid = null;
+		}
 	}
 }
 
