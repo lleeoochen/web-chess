@@ -160,7 +160,7 @@ async function updateMatchMoves() {
 			resolve();
 		  }, 50);
 		})
-		turn = move.turn;
+		turn = move.turn == TEAM.W ? TEAM.B : TEAM.W;
 	}
 
 	switch(isCheckmate()) {
@@ -527,8 +527,8 @@ function handleChessEvent(x, y) {
 
 	//Action0 - Castle
 	if (canCastle(oldGrid, newGrid)) {
-		moveChess(oldGrid, newGrid);
 		database.updateChessboard(oldGrid, newGrid, turn, black_timer, white_timer);
+		moveChess(oldGrid, newGrid);
 		oldGrid = null;
 		return;
 	}
@@ -549,6 +549,7 @@ function handleChessEvent(x, y) {
 
 	//Action3 - Move Piece by clicking on empty grid or eat enemy by clicking on legal grid. Switch turn.
 	else if (oldGrid != null && oldGrid.get_piece() != null && isLegal) {
+		database.updateChessboard(oldGrid, newGrid, turn, black_timer, white_timer);
 		moveChess(oldGrid, newGrid);
 
 		if (my_team == TEAM.B)
@@ -556,7 +557,6 @@ function handleChessEvent(x, y) {
 		else
 			white_timer += 1
 
-		database.updateChessboard(oldGrid, newGrid, turn, black_timer, white_timer);
 		oldGrid = null;
 	}
 }
