@@ -13,14 +13,14 @@ async function reviewMove(moves_target, timeout=0) {
 		let move = Util.unpack(match.moves[moves_applied], turn != my_team);
 
 		await new Promise((resolve, reject) => {
-		  playTimeout = setTimeout(() => {
-			if (!stopPlayBack) {
-				moveChess(chessboard[move.old_x][move.old_y], chessboard[move.new_x][move.new_y]);
-				turn = move.turn;
-				updateReviewButtons();
-			}
-			resolve();
-		  }, timeout);
+			playTimeout = setTimeout(() => {
+				if (!stopPlayBack) {
+					moveChess(chessboard[move.old_x][move.old_y], chessboard[move.new_x][move.new_y]);
+					turn = move.turn == TEAM.W ? TEAM.B : TEAM.W;
+					updateReviewButtons();
+				}
+				resolve();
+			}, timeout);
 		});
 	}
 
