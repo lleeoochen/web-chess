@@ -109,41 +109,44 @@ database.getProfile().then(res => {
 });
 
 function updateMatchChat() {
-	for (; match.chat.length != chats_applied; chats_applied++) {
+	for (; match.chat.length != chats_applied;) {
 		let chat = Util.unpackMessage(match.chat[chats_applied]);
-		let team_name = players[chat.team].name;
-		let color = chat.team == TEAM.B ? 'dark' : 'light';
-		let photo = players[chat.team].photo;
-
-		if (chats_applied != 0 && chat.team == Util.unpackMessage(match.chat[chats_applied - 1]).team) {
-			let message = $('#chat-messages-content').children().last().find('.chat-message-content');
-			message.html(message.html() + "<br>" + chat.message);
-		}
-		else {
-			$("#chat-messages-content").append(`
-				<div class="chat-message ${color} row">
-					<div class="chat-message-sender">
-						<div>${ team_name }</div>
-					</div>
-					<p class="chat-message-content">${ chat.message }</p>
-				</div>`);
-		}
-
-		$("#chat-messages-content").scrollTop($("#chat-messages-content")[0].scrollHeight);
-
-		let offset = 10;
-		if (!SCREEN_PORTRAIT && (window.innerHeight + window.scrollY + offset) < document.body.offsetHeight) {
-			showHtml('#chat-notification', true);
-		}
+		addChatMessage(chat.message, chat.team);
 	}
+}
+
+function addChatMessage(message, team) {
+	let color = team == TEAM.B ? 'dark' : 'light';
+	let photo = players[team].photo;
+	let player = players[team].name;
+
+	if (chats_applied != 0 && team == Util.unpackMessage(match.chat[chats_applied - 1]).team) {
+		let message_html = $('#chat-messages-content').children().last().find('.chat-message-content');
+		message_html.html(message_html.html() + "<br>" + message);
+	}
+	else {
+		$("#chat-messages-content").append(`
+			<div class="chat-message ${color} row">
+				<div class="chat-message-sender">
+					<div>${ player }</div>
+				</div>
+				<p class="chat-message-content">${ message }</p>
+			</div>`);
+	}
+
+	$("#chat-messages-content").scrollTop($("#chat-messages-content")[0].scrollHeight);
+
+	let offset = 10;
+	if (!SCREEN_PORTRAIT && (window.innerHeight + window.scrollY + offset) < document.body.offsetHeight) {
+		showHtml('#chat-notification', true);
+	}
+
+	chats_applied++;
 
 	$('.chat-message.dark').css('background-color', theme.COLOR_BOARD_DARK);
 	$('.chat-message.dark').css('color', 'white');
 	$('.chat-message.light').css('background-color', theme.COLOR_BOARD_LIGHT);
 	$('.chat-message.light').css('color', 'black');
-
-	// $('.chat-message.dark').css('background-color', '#494949');
-	// $('.chat-message.light').css('background-color', '#494949');
 }
 
 async function updateMatchMoves() {
@@ -494,12 +497,14 @@ function initChat() {
 	$("#side-layer").on('keyup', function (e) {
 		if (e.keyCode === 13) {
 			let message = $("#chat-text-input").val();
+			addChatMessage(message, my_team);
 			database.message(message);
 			$("#chat-text-input").val("");
 		}
 	});
 	$("#chat-send-button").on('click', function (e) {
 		let message = $("#chat-text-input").val();
+		addChatMessage(message, my_team);
 		database.message(message);
 		$("#chat-text-input").val("");
 	});
@@ -527,17 +532,17 @@ async function handleChessEvent(x, y) {
 
 	//Action0 - Castle
 	if (canCastle(oldGrid, newGrid)) {
-		try {
-			let res = await database.updateChessboard(oldGrid, newGrid, turn, black_timer, white_timer);
-			moveChess(oldGrid, newGrid);
-			oldGrid = null;
-			return;
-		}
-		catch (err) {
+		database.updateChessboard(oldGrid, newGrid, turn, black_timer, white_timer).catch(err => {
 			fillGrid(oldGrid, COLOR_ORIGINAL);
+			unmoveChess();
 			clearMoves();
 			oldGrid = null;
-		}
+		});
+
+		let res = await database.updateChessboard(oldGrid, newGrid, turn, black_timer, white_timer);
+		moveChess(oldGrid, newGrid);
+		oldGrid = null;
+		return;
 	}
 
 	//Action1 - Deselect Piece by clicking on illegal grid
@@ -556,22 +561,19 @@ async function handleChessEvent(x, y) {
 
 	//Action3 - Move Piece by clicking on empty grid or eat enemy by clicking on legal grid. Switch turn.
 	else if (oldGrid != null && oldGrid.get_piece() != null && isLegal) {
-		try {
-			let res = await database.updateChessboard(oldGrid, newGrid, turn, black_timer, white_timer);
-			moveChess(oldGrid, newGrid);
-
-			if (my_team == TEAM.B)
-				black_timer += 1
-			else
-				white_timer += 1
-
-			oldGrid = null;
-		}
-		catch (err) {
+		database.updateChessboard(oldGrid, newGrid, turn, black_timer, white_timer).catch(err => {
 			fillGrid(oldGrid, COLOR_ORIGINAL);
+			unmoveChess();
 			clearMoves();
 			oldGrid = null;
-		}
+		});
+
+		moveChess(oldGrid, newGrid);
+		if (my_team == TEAM.B)
+			black_timer += 1
+		else
+			white_timer += 1
+		oldGrid = null;
 	}
 }
 
@@ -1033,6 +1035,7 @@ function onThemeClick() {
 }
 
 function onThemeSelect(event, newTheme) {
+	updateTheme(newTheme);
 	database.changeTheme(newTheme);
 	$('#theme-modal').modal('hide');
 }
