@@ -871,6 +871,11 @@ function updateTheme(newTheme) {
 	$('.player-utility-pic')			.css('background-color', theme.COLOR_BOARD_DARK);
 	$(':root')							.css('--dark-color',     theme.COLOR_BOARD_DARK);
 	$(':root')							.css('--light-color',    theme.COLOR_BOARD_LIGHT);
+	
+	$('.chat-message.dark').css('background-color', theme.COLOR_BOARD_DARK);
+	$('.chat-message.dark').css('color', 'white');
+	$('.chat-message.light').css('background-color', theme.COLOR_BOARD_LIGHT);
+	$('.chat-message.light').css('color', 'black');
 	// $('.utility-piece-icon.dark')		.css('background-color', theme.COLOR_BOARD_DARK);
 	// $('.utility-piece-icon.light')		.css('background-color', theme.COLOR_BOARD_LIGHT);
 }
