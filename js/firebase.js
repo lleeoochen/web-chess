@@ -59,8 +59,8 @@ class Firebase {
 		return Util.request('GET', '/chess/get_match?id=' + id);
 	}
 
-	getMatches(ids) {
-		return Util.request('GET', '/chess/get_matches?ids=' + JSON.stringify(ids));
+	getMatches(user, ids) {
+		return Util.request('GET', '/chess/get_matches?ids=' + JSON.stringify(ids) + '&user=' + user);
 	}
 
 	getProfile() {

@@ -123,7 +123,7 @@
 	font-size: var(--util-title-size);
 	color: white;
 	background: linear-gradient(90deg, transparent 0%, white 10%, white 40%, transparent 40%, transparent 60%, white 60%, white 90%, transparent 100%);
-	margin: calc(var(--margin-size) * 2) 0 calc(var(--margin-size) * 2) 0;
+	margin: calc(var(--util-margin-size) * 2) 0 calc(var(--util-margin-size) * 2) 0;
 }
 
 .utility-divider span {

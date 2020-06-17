@@ -175,7 +175,7 @@ class Util {
 	}
 
 	// https://stackoverflow.com/a/8888498
-	static formatDate(date) {
+	static formatDate(date, format='%M/%D %h:%m %z') {
 		var hours = date.getHours();
 		var minutes = date.getMinutes();
 		var ampm = hours >= 12 ? 'pm' : 'am';
@@ -183,7 +183,11 @@ class Util {
 		hours = hours ? hours : 12; // the hour '0' should be '12'
 		hours = hours < 10 ? '0' + hours : hours;
 		minutes = minutes < 10 ? '0' + minutes : minutes;
-		var strTime = (date.getMonth() + 1) + "/" + date.getDate() + " " + hours + ':' + minutes + ampm;
+		var strTime = format.replace('%M', (date.getMonth() + 1) || '')
+							.replace('%D', date.getDate() || '')
+							.replace('%h', hours || '')
+							.replace('%m', minutes || '')
+							.replace('%z', ampm || '');
 		return strTime;
 	}
 

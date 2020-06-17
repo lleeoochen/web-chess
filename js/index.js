@@ -44,43 +44,97 @@ database.getProfile().then(res => {
 
 	user = res.data;
 	user_id = res.id;
+	let matches_dict = {};
+	let matches_promises = [];
 
-	database.getMatches(user.matches).then(async matches_data => {
-		matches_data = matches_data.data;
-		console.log(matches_data)
-		$('#matches-list').html('<div id="matches-list-divider" class="hidden"></div>');
+	user.matches.forEach(match => {
+		let [match_id, enemy_id] = match.split('-');
+		enemy_id = enemy_id || 'none'; 
+		matches_dict[enemy_id] = matches_dict[enemy_id] || [];
+		matches_dict[enemy_id].push(match_id);
+	});
 
-		matches_data.sort((a, b) => b[1].updated - a[1].updated);
-		await matches_data.forEach(match => {
-			let match_name = match[0];
-			let match_data = match[1];
-			let match_opponent = match[2];
+	for (let enemy_id in matches_dict) {
+		matches_promises.push(
+			database.getMatches(enemy_id, matches_dict[enemy_id])
+		);
+	}
 
-			let d = new Date(match_data.updated);
-			let d_str = Util.formatDate(d);
+	Promise.all(matches_promises).then(async results => {
 
-			let color = (match_data.black == user_id) ? "B" : "W";
-			let active = Math.floor(match_data.moves[match_data.moves.length - 1] / 10) != 0;
+		// Sort matches by dates for each opponent
+		for (let i in results) {
+			results[i].matches.sort((a, b) => b[1].updated - a[1].updated);
+		}
 
-			let match_html = $(`
-				<a class="btn match-link ${active ? '': 'inactive'}" href="{{ site.baseUrl }}/game.html?match=${ match_name }">
-					<div class="match-link-content">
-						<div>
-							<img src="assets/${color}King.svg"/>
+		// Sort opponent by latest date
+		results.sort((r1, r2) => {
+			return r2.matches[0][1].updated - r1.matches[0][1].updated;
+		});
+
+		for (let i in results) {
+			let { enemy, matches } = results[i];
+			let $active_matches = '';
+			let $inactive_matches = '';
+
+			matches.forEach(match => {
+				let match_name = match[0];
+				let match_data = match[1];
+
+				let d = new Date(match_data.updated);
+				let d_str = Util.formatDate(d, '%M/%D');
+
+				let color = (match_data.black == user_id) ? "B" : "W";
+				let active = Math.floor(match_data.moves[match_data.moves.length - 1] / 10) != 0;
+
+				let match_html = `
+					<a class="btn match-link ${active ? '': 'inactive'}" href="{{ site.baseUrl }}/game.html?match=${ match_name }">
+						<div class="match-link-content">
+							<div>
+								<img src="assets/${color}King.svg"/>
+							</div>
+							<div>
+								<div class="match-link-date"> ${ d_str } </div>
+							</div>
 						</div>
-						<div>
-							${ match_opponent ? match_opponent.name : "New Match" }<br/>
-							<div class="match-link-date"> ${ d_str } </div>
+					</a>`;
+
+				if (active)
+					$active_matches += match_html;
+				else
+					$inactive_matches += match_html;
+			});
+
+			if (enemy.name) {
+				$('#matches-display').append(`
+					<div class="opponent-container">
+						<div class="player-title-bar">
+							<img class="player-pic" src="${ enemy.photo }"/>
+							<div class="player-name">${ enemy.name }</div>
+						</div>
+						<div class="matches-list">
+							${ $active_matches }
+							${ $inactive_matches }
 						</div>
 					</div>
-				</a>`
-			);
+				`);
+			}
+			else {
+				$('#matches-display').prepend(`
+					<div class="opponent-container">
+						<div class="player-title-bar">
+							<img class="player-pic" src="${ user.photo }"/>
+							<div class="player-name">New Matches</div>
+						</div>
+						<div class="matches-list">
+							${ $active_matches }
+							${ $inactive_matches }
+						</div>
+					</div>
+				`);
+			}
+		}
 
-			if (active)
-				match_html.insertBefore('#matches-list-divider');
-			else
-				$('#matches-list').append(match_html);
-		});
 	});
 });
 
