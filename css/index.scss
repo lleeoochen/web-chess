@@ -98,7 +98,15 @@
 		flex-direction: column;
 		min-width: var(--home-match-min-width);
 		width: var(--home-match-width);
-		height: var(--home-match-height);
+
+		@media screen and (orientation: portrait) {
+			height: fit-content;
+			max-height: var(--home-match-height);
+		}
+
+		@media screen and (orientation: landscape) {
+			height: var(--home-match-height);
+		}
 
 		margin: var(--home-match-margin);
 		padding: calc(var(--home-margin) * 3) !important;
@@ -117,13 +125,13 @@
 				width: var(--picture-size);
 				height: var(--picture-size);
 				border-radius: calc(var(--picture-size) / 10);
-				// background-color: black;
-				// border: solid #d6d6d6 var(--home-margin);
+				margin-right: calc(4 * var(--home-margin));
+				background-color: black;
+				border: solid black var(--home-margin);
 			}
 
 			.player-name {
-				font-size: var(--home-match-text-size);
-				margin-left: calc(4 * var(--home-margin));
+				font-size: calc(var(--home-match-text-size) * 0.7);
 				margin-bottom: auto;
 				color: #d6d6d6 !important;
 				text-align: left;
@@ -141,7 +149,7 @@
 			margin-top: calc(2 * var(--home-margin));
 
 			.match-link {
-				width: calc(100% / 3 - 1 * var(--home-margin));
+				width: calc(100% / 4 - 1 * var(--home-margin));
 				margin-bottom: var(--home-margin);
 				margin-right: var(--home-margin);
 				padding: calc(var(--home-margin) * 2) !important;
@@ -164,13 +172,14 @@
 
 				.match-link-content {
 					img {
-						width: var(--picture-size);
+						width: 100%;
+						max-width: var(--picture-size);
 						margin-right: var(--home-margin-size);
 						margin: auto;
 					}
 
 					.match-link-date {
-						font-size: calc(var(--home-match-text-size) * 0.8) !important;
+						font-size: calc(var(--home-match-text-size) * 0.5) !important;
 						color: darkslategrey;
 						text-align: center;
 					}

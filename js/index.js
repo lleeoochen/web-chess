@@ -123,7 +123,7 @@ database.getProfile().then(res => {
 				$('#matches-display').prepend(`
 					<div class="opponent-container">
 						<div class="player-title-bar">
-							<img class="player-pic" src="${ user.photo }"/>
+							<img class="player-pic" src="assets/new_match.png"/>
 							<div class="player-name">New Matches</div>
 						</div>
 						<div class="matches-list">
