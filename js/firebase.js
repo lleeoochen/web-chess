@@ -23,7 +23,12 @@ class Firebase {
 		let firebaseAuthConfig = {
 			signInSuccessUrl: window.location.href,
 			signInOptions: [
-				firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+				{
+					provider: firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+					customParameters: {
+						prompt: 'select_account',
+					}
+				}
 			],
 			tosUrl: 'www.bing.com',
 			privacyPolicyUrl: function() {
