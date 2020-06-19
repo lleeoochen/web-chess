@@ -320,6 +320,7 @@ function showEnding() {
 function initGame() {
 	canvasLayer.addEventListener("click", onClick, false);
 	$("#W-player-icon").css("background-color", "#008640");
+	$('#invite-link').text(window.location.href);
 
 	updateStats();
 	initBoard();
@@ -978,7 +979,10 @@ function onInviteClick() {
 	document.execCommand('copy');
 	document.body.removeChild(e);
 
-	swal('Invite Link Copied!', { button: false, timer: 3000 });
+	$('#invite-modal').modal('show');
+
+	// Magic that allows mobile device to select link on 1 click
+	selectText('invite-link');
 }
 
 function onResignClick() {
@@ -1061,4 +1065,18 @@ function enableHtml(button, toEnable) {
 
 function htmlEnabled(button) {
 	return $(button).attr('disabled') != 'disabled';
+}
+
+function selectText(containerid) {
+    if (document.selection) { // IE
+        var range = document.body.createTextRange();
+        range.moveToElementText(document.getElementById(containerid));
+        range.select();
+    }
+    else if (window.getSelection) {
+        var range = document.createRange();
+        range.selectNode(document.getElementById(containerid));
+        window.getSelection().removeAllRanges();
+        window.getSelection().addRange(range);
+    }
 }

@@ -35,7 +35,9 @@ js:
 				<div id="B-player-name" class="player-name">&nbsp;</div>
 				<div id="whitesEaten" class="row eaten-panel"></div>
 			</div>
-			<div id="home-btn" class="btn btn-primary">Home</div>
+			<div id="home-btn" class="btn btn-primary">
+				<img id="home-icon" src="assets/home.png"/>
+			</div>
 			<img id="W-player-image" class="player-pic pull-right" src="assets/WRook.svg"/>
 			<div class="pull-right white text-right">
 				<div id="W-player-name" class="player-name">Opponent</div>
@@ -198,6 +200,15 @@ js:
 	</div>
 {% endcapture %}
 
+<!-- Invite Popup Window -->
+{% capture invite_modal %}
+	<div id="invite-label">Copy Link:</div>
+	<div id="invite-wrap">
+		<div id="invite-link" onclick="selectText('invite-link')"></div>
+	</div>
+{% endcapture %}
+
 <!-- Modals -->
 {% include modal.html id="firebase-modal" %}
 {% include modal.html id="theme-modal" content=theme_modal %}
+{% include modal.html id="invite-modal" content=invite_modal %}

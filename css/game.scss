@@ -5,9 +5,9 @@
 		--margin-size:		1vw;
 		--eaten-piece-size: 3vw;
 		--picture-size: 	15vw;
-		--icon-size: 		3vw;
+		--icon-size: 		5vw;
 		--title-size: 		3vw;
-		--font-size:		2.25vw;
+		--font-size:		3vw;
 		--btn-size: 		3vw;
 		--border-radius: 	0.75vw;
 
@@ -29,7 +29,7 @@
 		--picture-size:		12vh;
 		--icon-size:		3vh;
 		--title-size:		3vh;
-		--font-size:		2.25vh;
+		--font-size:		3vh;
 		--btn-size:			3vh;
 		--border-radius: 	0.75vh;
 
@@ -100,7 +100,7 @@
 	margin-left: calc(var(--margin-size) / 4);
 	position: absolute;
 	font-weight: bold;
-	font-size: var(--font-size);
+	font-size: calc(var(--font-size) * 0.75);
 }
 
 .lettering {
@@ -108,7 +108,7 @@
 	margin-top: calc(var(--cell-size) - var(--margin-size) * 2.8);
 	margin-right: calc(var(--margin-size) * 0.5);
 	font-weight: bold;
-	font-size: var(--font-size);
+	font-size: calc(var(--font-size) * 0.75);
 }
 
 .grid {
@@ -189,6 +189,11 @@
 
 #game-content {
 	display: var(--game-content-display);
+
+	* {	
+		&:nth-child(1) { animation: 0.2s ease 0s normal forwards 1 fadein; }
+		&:nth-child(2) { animation: 0.4s ease 0s normal forwards 1 fadein; }
+	}
 }
 
 #canvas-background {
@@ -227,15 +232,18 @@
 
 #home-btn {
 	font-size: var(--font-size);
-	padding: calc(var(--btn-size) / 3);
-	padding-left: calc(var(--btn-size) / 1.5);
-	padding-right: calc(var(--btn-size) / 1.5);
+	padding: calc(var(--btn-size) / 4) calc(var(--btn-size) / 2);
 	border-radius: var(--border-radius);
 	margin-top: calc(var(--picture-size) * 0.5 + var(--margin-size) - var(--btn-size));
 	background-image: unset;
 	background-color: black;
 	border: unset;
 	box-shadow: unset;
+
+	#home-icon {
+		width: var(--icon-size);
+		height: var(--icon-size);
+	}
 }
 
 #side-layer {
@@ -275,4 +283,36 @@
 	background-color: #000000db;
 	border-radius: var(--border-radius);
 	margin-bottom: var(--margin-size);
+}
+
+@keyframes fadein {
+    0% { opacity:0; margin-top: -10px; }
+    100% { opacity:1; }
+}
+
+@-webkit-keyframes fadein {
+    0% { opacity:0; margin-top: -10px; }
+    100% { opacity:1; }
+}
+
+
+#invite-modal {
+	#invite-label {
+		font-size: var(--modal-title-size);
+		color: white;
+	}
+	#invite-wrap {
+		background-color: white;
+		padding: calc(3 * var(--margin-size));
+
+		#invite-link {
+			word-wrap: break-word;
+			color: black;
+			font-size: var(--modal-title-size);
+
+			&::selection {
+				background-color: #57bf69;
+			}
+		}
+	}
 }
