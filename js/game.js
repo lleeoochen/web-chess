@@ -540,7 +540,6 @@ async function handleChessEvent(x, y) {
 			oldGrid = null;
 		});
 
-		let res = await database.updateChessboard(oldGrid, newGrid, turn, black_timer, white_timer);
 		moveChess(oldGrid, newGrid);
 		oldGrid = null;
 		return;
