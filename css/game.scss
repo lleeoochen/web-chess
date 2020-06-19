@@ -189,11 +189,6 @@
 
 #game-content {
 	display: var(--game-content-display);
-
-	* {	
-		&:nth-child(1) { animation: 0.2s ease 0s normal forwards 1 fadein; }
-		&:nth-child(2) { animation: 0.4s ease 0s normal forwards 1 fadein; }
-	}
 }
 
 #canvas-background {
@@ -283,16 +278,6 @@
 	background-color: #000000db;
 	border-radius: var(--border-radius);
 	margin-bottom: var(--margin-size);
-}
-
-@keyframes fadein {
-    0% { opacity:0; margin-top: -10px; }
-    100% { opacity:1; }
-}
-
-@-webkit-keyframes fadein {
-    0% { opacity:0; margin-top: -10px; }
-    100% { opacity:1; }
 }
 
 
