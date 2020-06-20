@@ -50,6 +50,7 @@ var passant_stack = [];
 
 var timer_enable = false;
 var user_id;
+var hidden = true;
 
 database.getProfile().then(res => {
 	user_id = res.id;
@@ -77,6 +78,11 @@ database.getProfile().then(res => {
 		}
 
 		updateTheme(Util.unpackTheme(match.theme));
+
+		if (hidden) {
+			$('#game-content').removeClass('hidden');
+			hidden = false;
+		}
 
 		await updatePlayerData();
 
@@ -862,6 +868,7 @@ function updateTheme(newTheme) {
 		}
 	}
 
+	// $('.background-image')				.attr('src', `${theme.BACKGROUND_IMAGE}`);
 	$('body')							.css('background-image', `url(${theme.BACKGROUND_IMAGE})`);
 	$('.player-name')					.css('color',            theme.NAME_TITLE_COLOR);
 	$('#canvas-background')				.css('background-color', theme.COLOR_BOARD_LIGHT);

@@ -29,6 +29,7 @@ class Util {
 				console.error('ERROR ' + short_url + ': ' + await response.json());
 				if (response.status == 401) {
 					localStorage.setItem(LAST_VISITED_KEY, window.location.href);
+					Firebase.signOut();
 					window.location = '{{ site.baseUrl }}/login';
 					return;
 				}

@@ -44,6 +44,9 @@ body {
 	background-size: cover;
 	background-position: center;
 	font-size: 0 !important;
+
+	transition: background-image 0.5s;
+	-webkit-transition: background-image 0.5s;
 }
 
 img {
@@ -60,6 +63,8 @@ img {
 	width: var(--layout-bckgd-image-width);
 	height: var(--layout-bckgd-image-height);
 	z-index: -10;
+	left: 0;
+	top: 0;
 }
 
 
@@ -89,3 +94,14 @@ img {
 	background: var(--scroll-color);
 }
 */
+
+
+@keyframes fadein {
+    0% { opacity:0; margin-top: -10px; }
+    100% { opacity:1; }
+}
+
+@-webkit-keyframes fadein {
+    0% { opacity:0; margin-top: -10px; }
+    100% { opacity:1; }
+}

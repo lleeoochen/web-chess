@@ -62,10 +62,14 @@ database.getProfile().then(res => {
 
 	Promise.all(matches_promises).then(async results => {
 
+		console.log(results)
+
 		// Sort matches by dates for each opponent
 		for (let i in results) {
 			results[i].matches.sort((a, b) => b[1].updated - a[1].updated);
 		}
+
+		console.log(results)
 
 		// Sort opponent by latest date
 		results.sort((r1, r2) => {

@@ -71,6 +71,15 @@
 	--layer-size: calc(var(--canvas-size) + var(--margin-size) * 2);
 }
 
+#game-content {
+	#action-layer {
+		&:nth-child(1) { animation: 0.2s ease 0s normal forwards 1 fadein; }
+	}
+	#side-layer {
+		&:nth-child(2) { animation: 0.4s ease 0s normal forwards 1 fadein; }
+	}
+}
+
 .x0 { left: calc(var(--margin-size) + (0 * var(--cell-size))); }
 .x1 { left: calc(var(--margin-size) + (1 * var(--cell-size))); }
 .x2 { left: calc(var(--margin-size) + (2 * var(--cell-size))); }

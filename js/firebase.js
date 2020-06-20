@@ -96,4 +96,8 @@ class Firebase {
 			time: time || MAX_TIME
 		});
 	}
+
+	static signOut() {
+		firebase.auth().signOut();
+	}
 }
