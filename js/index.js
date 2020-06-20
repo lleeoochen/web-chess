@@ -62,18 +62,34 @@ database.getProfile().then(res => {
 
 	Promise.all(matches_promises).then(async results => {
 
-		console.log(results)
+		$('#matches-display').append(results);
+		$('#matches-display').append("hi");
+
+		let copy = results;
+
 
 		// Sort matches by dates for each opponent
 		for (let i in results) {
-			results[i].matches.sort((a, b) => b[1].updated - a[1].updated);
-		}
+			results[i].matches.sort((a, b) => {
+				let a_time = a[1].updated || 0;
+				if (typeof a_time == 'object') a_time = 0;
 
-		console.log(results)
+				let b_time = b[1].updated || 0;
+				if (typeof b_time == 'object') b_time = 0;
+
+				return b_time - a_time;
+			});
+		}
 
 		// Sort opponent by latest date
 		results.sort((r1, r2) => {
-			return r2.matches[0][1].updated - r1.matches[0][1].updated;
+			let r1_time = r1.matches[0][1].updated || 0;
+			if (typeof r1_time == 'object') r1_time = 0;
+
+			let r2_time = r2.matches[0][1].updated || 0;
+			if (typeof r2_time == 'object') r2_time = 0;
+
+			return r2_time - r1_time;
 		});
 
 		for (let i in results) {
