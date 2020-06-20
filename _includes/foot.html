@@ -4,6 +4,8 @@
 <script src="{{ site.pluginUrl }}/bootstrap/3.3.7.js"></script>
 <!-- <script src="{{ site.pluginUrl }}/socket-io/2.1.1.js"></script> -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io.js"></script>
+<script src="{{ site.pluginUrl }}/xpull/1.0.0.js"></script>
+
 <!-- Firebase Libraries -->
 <script src="{{ site.pluginUrl }}/firebase-app/7.14.2.js"></script>
 <script src="{{ site.pluginUrl }}/firebase-firestore/7.14.2.js"></script>
@@ -15,6 +17,7 @@
 <script src="{{ site.baseUrl }}/js/const.js"></script>
 <script src="{{ site.baseUrl }}/js/modal.js"></script>
 <script src="{{ site.baseUrl }}/js/firebase.js"></script>
+<script src="{{ site.baseUrl }}/js/pull.js"></script>
 
 {% for js in page.js %}
 	<script src="{{ site.baseUrl }}/js/{{ js }}"></script>
