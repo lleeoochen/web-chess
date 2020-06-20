@@ -71,6 +71,10 @@
 	--layer-size: calc(var(--canvas-size) + var(--margin-size) * 2);
 }
 
+body {
+	background-color: black;
+}
+
 #game-content {
 	#action-layer {
 		&:nth-child(1) { animation: 0.2s ease 0s normal forwards 1 fadein; }
@@ -274,12 +278,17 @@
 
 #history-section {
 	height: 40%;
-	margin-bottom: calc(var(--margin-size));
 	background-color: #000000db;
-	border-radius: 0 0 var(--border-radius) var(--border-radius);
 	padding: calc(var(--margin-size));
 	padding-bottom: 0;
 	overflow-y: scroll;
+}
+
+#post-history-section {
+	height: var(--margin-size);
+	background-color: #000000db;
+	margin-bottom: calc(var(--margin-size));
+	border-radius: 0 0 var(--border-radius) var(--border-radius);
 }
 
 #chat-section {

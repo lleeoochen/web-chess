@@ -56,7 +56,7 @@ const THEME_NATURE = {
 	COLOR_LAST_MOVE_LIGHT: 	"#BB92AB",
 	COLOR_LAST_MOVE_DARK: 	"#905E7C",
 	BACKGROUND_IMAGE: 		"./assets/background_nature.jpg",
-	NAME_TITLE_COLOR: 		"black"
+	NAME_TITLE_COLOR: 		"white"
 };
 
 const COLOR_ORIGINAL = 0;
