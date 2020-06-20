@@ -869,7 +869,7 @@ function updateTheme(newTheme) {
 	}
 
 	// $('.background-image')				.attr('src', `${theme.BACKGROUND_IMAGE}`);
-	$('#main-content')							.css('background-image', `url(${theme.BACKGROUND_IMAGE})`);
+	$('body')							.css('background-image', `url(${theme.BACKGROUND_IMAGE})`);
 	$('.player-name')					.css('color',            theme.NAME_TITLE_COLOR);
 	$('#canvas-background')				.css('background-color', theme.COLOR_BOARD_LIGHT);
 	$('.utility-btn-wrap .utility-btn')	.css('background-color', theme.COLOR_BOARD_DARK);

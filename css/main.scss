@@ -71,25 +71,10 @@ img {
 	top: 0;
 }
 
-.pull-indicator {
-	display: flex;
-	-webkit-transform: unset !important;
-	-webkit-transition: unset !important;
-	width: unset;
-
-	.pull-spinner {
-		margin: auto;
-		-webkit-animation: unset !important;
-		animation: unset !important;
-		width: unset;
-		color: white;
-		font-size: 3vh;
-		border: unset;
-	}
-
-	.arrow-body, .triangle-down {
-		height: 0 !important;
-		display: none !important;
+.ptr--ptr {
+	* {
+		font-size: 3vh !important;
+		color: white !important;
 	}
 }
 

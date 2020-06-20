@@ -25,150 +25,149 @@ js:
 - "game/move.js"
 - "game.js"
 ---
-<div id="main-content">
-	<div id="game-content" class="hidden">
-		<!-- <img id="chat-notification" src="assets/notification.png" hidden/> -->
-		<div id="action-layer">
-			<div id="toolbar-wrap" class="row">
-				<img id="B-player-image" class="player-pic pull-left" src="assets/WRook.svg"/>
-				<div class="pull-left white text-left">
-					<div id="B-player-name" class="player-name">&nbsp;</div>
-					<div id="whitesEaten" class="row eaten-panel"></div>
-				</div>
-				<div id="home-btn" class="btn btn-primary">
-					<img id="home-icon" src="assets/home.png"/>
-				</div>
-				<img id="W-player-image" class="player-pic pull-right" src="assets/WRook.svg"/>
-				<div class="pull-right white text-right">
-					<div id="W-player-name" class="player-name">Opponent</div>
-					<div id="blacksEaten" class="row eaten-panel"></div>
-				</div>
+
+<div id="game-content" class="hidden">
+	<!-- <img id="chat-notification" src="assets/notification.png" hidden/> -->
+	<div id="action-layer">
+		<div id="toolbar-wrap" class="row">
+			<img id="B-player-image" class="player-pic pull-left" src="assets/WRook.svg"/>
+			<div class="pull-left white text-left">
+				<div id="B-player-name" class="player-name">&nbsp;</div>
+				<div id="whitesEaten" class="row eaten-panel"></div>
 			</div>
-			<div id="canvas-wrap">
-				<div class="canvas-border bg-black hidden"></div>
-				<div class="canvas-border bg-white hidden"></div>
-				<div id="canvas-background"></div>
-				<div id="canvas-layer"></div>
-				<div id="grids-layer"></div>
-				<div id="pieces-layer"></div>
+			<div id="home-btn" class="btn btn-primary">
+				<img id="home-icon" src="assets/home.png"/>
+			</div>
+			<img id="W-player-image" class="player-pic pull-right" src="assets/WRook.svg"/>
+			<div class="pull-right white text-right">
+				<div id="W-player-name" class="player-name">Opponent</div>
+				<div id="blacksEaten" class="row eaten-panel"></div>
 			</div>
 		</div>
-		<div id="side-layer" >
-			<div id="utility-section">
-				<!-- <div id="B-player-utility-name" class="player-utility-name">&nbsp;</div> -->
-				<div id="B-player-utility" class="player-utility">
-					<div class="player-utility-profile">
-						<img id="B-player-utility-image" class="player-utility-pic" src="assets/WRook.svg"/>
-					</div>
-					<div id="black-stat" class="player-utility-stat"></div>
-					<div class="player-utility-timer">
-						<div id="black-timer" class="timer"> 00:00 </div>
-					</div>
+		<div id="canvas-wrap">
+			<div class="canvas-border bg-black hidden"></div>
+			<div class="canvas-border bg-white hidden"></div>
+			<div id="canvas-background"></div>
+			<div id="canvas-layer"></div>
+			<div id="grids-layer"></div>
+			<div id="pieces-layer"></div>
+		</div>
+	</div>
+	<div id="side-layer" >
+		<div id="utility-section">
+			<!-- <div id="B-player-utility-name" class="player-utility-name">&nbsp;</div> -->
+			<div id="B-player-utility" class="player-utility">
+				<div class="player-utility-profile">
+					<img id="B-player-utility-image" class="player-utility-pic" src="assets/WRook.svg"/>
 				</div>
-				<!-- <div id="W-player-utility-name" class="player-utility-name">Opponent</div> -->
-				<div id="W-player-utility" class="player-utility">
-					<div class="player-utility-profile">
-						<img id="W-player-utility-image" class="player-utility-pic" src="assets/WRook.svg"/>
-					</div>
-					<div id="white-stat" class="player-utility-stat"></div>
-					<div class="player-utility-timer">
-						<div id="white-timer" class="timer">00:00</div>
-					</div>
+				<div id="black-stat" class="player-utility-stat"></div>
+				<div class="player-utility-timer">
+					<div id="black-timer" class="timer"> 00:00 </div>
 				</div>
-				<!-- <div id="game-utility-title" class="utility-divider hidden"> Utility </div> -->
+			</div>
+			<!-- <div id="W-player-utility-name" class="player-utility-name">Opponent</div> -->
+			<div id="W-player-utility" class="player-utility">
+				<div class="player-utility-profile">
+					<img id="W-player-utility-image" class="player-utility-pic" src="assets/WRook.svg"/>
+				</div>
+				<div id="white-stat" class="player-utility-stat"></div>
+				<div class="player-utility-timer">
+					<div id="white-timer" class="timer">00:00</div>
+				</div>
+			</div>
+			<!-- <div id="game-utility-title" class="utility-divider hidden"> Utility </div> -->
 
-				<div id="invite-panel" class="utility-panel hidden">
-					<div id="invite-btn" class="utility-btn-wrap">
-						<div class="btn utility-btn" onclick="onInviteClick()">
-							<img class="utility-icon" src="assets/invite.png"/>
-							Invite
-						</div>
-					</div>
-				</div>
-
-				<div id="game-panel" class="utility-panel hidden">
-					<div id="resign-btn" class="utility-btn-wrap">
-						<div class="btn utility-btn"  onclick="onResignClick()">
-							<img class="utility-icon" src="assets/resign.png"/>
-							Resign
-						</div>
-					</div>
-					<div id="draw-btn" class="utility-btn-wrap">
-						<div class="btn utility-btn"  onclick="onDrawClick()">
-							<img class="utility-icon" src="assets/draw.png"/>
-							Draw
-						</div>
-					</div>
-					<div id="undo-btn" class="utility-btn-wrap">
-						<div class="btn utility-btn" onclick="onUndoClick()">
-							<img class="utility-icon" src="assets/mercy.png"/>
-							Mercy
-						</div>
-					</div>
-					<div id="add-time-btn" class="utility-btn-wrap">
-						<div class="btn utility-btn" onclick="onAddTimeClick()">
-							<img class="utility-icon" src="assets/time.png"/>
-							+15 sec
-						</div>
-					</div>
-				</div>
-
-				<div id="review-panel" class="utility-panel hidden">
-					<div id="fast-backward-btn" class="utility-btn-wrap">
-						<div class="btn utility-btn" onclick="onFastBackwardClick()">
-							<img class="utility-icon" src="assets/fast-backward.png"/>
-						</div>
-					</div>
-					<div id="backward-btn" class="utility-btn-wrap">
-						<div class="btn utility-btn" onclick="onBackwardClick()">
-							<img class="utility-icon" src="assets/backward.png"/>
-						</div>
-					</div>
-					<div id="playback-btn" class="utility-btn-wrap">
-						<div class="btn utility-btn" onclick="onPlaybackClick()">
-							<img class="utility-icon" src="assets/play.png"/>
-						</div>
-					</div>
-					<div id="forward-btn" class="utility-btn-wrap">
-						<div class="btn utility-btn" onclick="onForwardClick()">
-							<img class="utility-icon" src="assets/forward.png"/>
-						</div>
-					</div>
-					<div id="fast-forward-btn" class="utility-btn-wrap">
-						<div class="btn utility-btn" onclick="onFastForwardClick()">
-							<img class="utility-icon" src="assets/fast-forward.png"/>
-						</div>
-					</div>
-				</div>
-
-				<div id="theme-panel" class="utility-panel hidden">
-					<div id="change-theme-btn" class="utility-btn-wrap">
-						<div class="btn utility-btn" onclick="onThemeClick()">
-							<img class="utility-icon" src="assets/theme.png"/>
-							Theme
-						</div>
+			<div id="invite-panel" class="utility-panel hidden">
+				<div id="invite-btn" class="utility-btn-wrap">
+					<div class="btn utility-btn" onclick="onInviteClick()">
+						<img class="utility-icon" src="assets/invite.png"/>
+						Invite
 					</div>
 				</div>
 			</div>
 
-			<div id="history-section">
-				<!-- <div id="move-history-divider" class="utility-divider line hidden"></div> -->
-				<div id="move-history-panel" class="utility-panel">
+			<div id="game-panel" class="utility-panel hidden">
+				<div id="resign-btn" class="utility-btn-wrap">
+					<div class="btn utility-btn"  onclick="onResignClick()">
+						<img class="utility-icon" src="assets/resign.png"/>
+						Resign
+					</div>
+				</div>
+				<div id="draw-btn" class="utility-btn-wrap">
+					<div class="btn utility-btn"  onclick="onDrawClick()">
+						<img class="utility-icon" src="assets/draw.png"/>
+						Draw
+					</div>
+				</div>
+				<div id="undo-btn" class="utility-btn-wrap">
+					<div class="btn utility-btn" onclick="onUndoClick()">
+						<img class="utility-icon" src="assets/mercy.png"/>
+						Mercy
+					</div>
+				</div>
+				<div id="add-time-btn" class="utility-btn-wrap">
+					<div class="btn utility-btn" onclick="onAddTimeClick()">
+						<img class="utility-icon" src="assets/time.png"/>
+						+15 sec
+					</div>
 				</div>
 			</div>
 
-			<div id="post-history-section"></div>
-
-			<div id="chat-section">
-				<div id="chat-messages">
-					<div id="chat-messages-content">
+			<div id="review-panel" class="utility-panel hidden">
+				<div id="fast-backward-btn" class="utility-btn-wrap">
+					<div class="btn utility-btn" onclick="onFastBackwardClick()">
+						<img class="utility-icon" src="assets/fast-backward.png"/>
 					</div>
 				</div>
-				<div id="chat-bottom" class="row">
-					<input id="chat-text-input" type="text" class="form-control"placeholder="Type here...">
-					<div id="chat-send-button" class="btn btn-primary col-2">
-						<img src="assets/send.png"/>
+				<div id="backward-btn" class="utility-btn-wrap">
+					<div class="btn utility-btn" onclick="onBackwardClick()">
+						<img class="utility-icon" src="assets/backward.png"/>
 					</div>
+				</div>
+				<div id="playback-btn" class="utility-btn-wrap">
+					<div class="btn utility-btn" onclick="onPlaybackClick()">
+						<img class="utility-icon" src="assets/play.png"/>
+					</div>
+				</div>
+				<div id="forward-btn" class="utility-btn-wrap">
+					<div class="btn utility-btn" onclick="onForwardClick()">
+						<img class="utility-icon" src="assets/forward.png"/>
+					</div>
+				</div>
+				<div id="fast-forward-btn" class="utility-btn-wrap">
+					<div class="btn utility-btn" onclick="onFastForwardClick()">
+						<img class="utility-icon" src="assets/fast-forward.png"/>
+					</div>
+				</div>
+			</div>
+
+			<div id="theme-panel" class="utility-panel hidden">
+				<div id="change-theme-btn" class="utility-btn-wrap">
+					<div class="btn utility-btn" onclick="onThemeClick()">
+						<img class="utility-icon" src="assets/theme.png"/>
+						Theme
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div id="history-section">
+			<!-- <div id="move-history-divider" class="utility-divider line hidden"></div> -->
+			<div id="move-history-panel" class="utility-panel">
+			</div>
+		</div>
+
+		<div id="post-history-section"></div>
+
+		<div id="chat-section">
+			<div id="chat-messages">
+				<div id="chat-messages-content">
+				</div>
+			</div>
+			<div id="chat-bottom" class="row">
+				<input id="chat-text-input" type="text" class="form-control"placeholder="Type here...">
+				<div id="chat-send-button" class="btn btn-primary col-2">
+					<img src="assets/send.png"/>
 				</div>
 			</div>
 		</div>
