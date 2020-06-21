@@ -112,7 +112,7 @@ database.getProfile().then(res => {
 					<a class="btn match-link ${active ? '': 'inactive'}" href="{{ site.baseUrl }}/game.html?match=${ match_name }">
 						<div class="match-link-content">
 							<div>
-								<img src="assets/${color}King.svg"/>
+								<img class="player-pic ${ color }" src="${ enemy.photo ? enemy.photo + '=c' : "assets/new_match.png" }"/>
 							</div>
 							<div>
 								<div class="match-link-date"> ${ d_str } </div>
@@ -128,7 +128,7 @@ database.getProfile().then(res => {
 
 			$matches.push(...$inactive_matches);
 
-			$matches = groupList($matches, 3).map($match_group => {
+			$matches = groupList($matches, 1).map($match_group => {
 				return `
 					<div class="matches-column">
 						${ $match_group }
@@ -136,32 +136,16 @@ database.getProfile().then(res => {
 				`;
 			});
 
-			if (enemy.name) {
-				$('#matches-display').append(`
-					<div class="opponent-container">
-						<div class="player-title-bar">
-							<img class="player-pic" src="${ enemy.photo }"/>
-							<div class="player-name">${ enemy.name }</div>
-						</div>
-						<div class="matches-list">
-							${ $matches }
-						</div>
+			$('#matches-display').append(`
+				<div class="opponent-container">
+					<div class="player-title-bar">
+						<div class="player-name">${ enemy.name || 'New Matches' }</div>
 					</div>
-				`);
-			}
-			else {
-				$('#matches-display').prepend(`
-					<div class="opponent-container">
-						<div class="player-title-bar">
-							<img class="player-pic" src="assets/new_match.png"/>
-							<div class="player-name">New Matches</div>
-						</div>
-						<div class="matches-list">
-							${ $matches }
-						</div>
+					<div class="matches-list">
+						${ $matches }
 					</div>
-				`);
-			}
+				</div>
+			`);
 		}
 
 	});
@@ -194,13 +178,13 @@ function initToolbar() {
 
 function selectMatchTheme(event, _theme) {
 	theme = _theme;
-	$('#new-match-modal #theme-panel .utility-btn').removeClass('outline');
+	$('#new-match-modal #theme-panel .btn').removeClass('outline');
 	$(event.target).addClass('outline');
 }
 
 function selectMatchTime(event, _time) {
 	time = _time;
-	$('#new-match-modal #time-panel .utility-btn').removeClass('outline');
+	$('#new-match-modal #time-panel .btn').removeClass('outline');
 	$(event.target).addClass('outline');
 }
 

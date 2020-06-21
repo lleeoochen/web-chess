@@ -22,25 +22,25 @@ js:
 
 <!-- New Match Popup Window -->
 {% capture new_match_modal %}
-	<div class="utility-divider">Theme</div>
-	<div id="theme-panel" class="utility-panel">
-		<div id="classic-theme-btn" class="utility-btn-wrap"> 
-			<div class="btn utility-btn outline" onclick="selectMatchTheme(event, THEME_CLASSIC)">
+	<div class="divider">Theme</div>
+	<div id="theme-panel" class="btn-panel">
+		<div id="classic-theme-btn" class="btn-wrap"> 
+			<div class="btn outline" onclick="selectMatchTheme(event, THEME_CLASSIC)">
 				Classic
 			</div>
 		</div>
-		<div id="winter-theme-btn" class="utility-btn-wrap"> 
-			<div class="btn utility-btn" onclick="selectMatchTheme(event, THEME_WINTER)">
+		<div id="winter-theme-btn" class="btn-wrap"> 
+			<div class="btn" onclick="selectMatchTheme(event, THEME_WINTER)">
 				Winter
 			</div>
 		</div>
-		<div id="metal-theme-btn" class="utility-btn-wrap"> 
-			<div class="btn utility-btn" onclick="selectMatchTheme(event, THEME_METAL)">
+		<div id="metal-theme-btn" class="btn-wrap"> 
+			<div class="btn" onclick="selectMatchTheme(event, THEME_METAL)">
 				Metal
 			</div>
 		</div>
-		<div id="nature-theme-btn" class="utility-btn-wrap"> 
-			<div class="btn utility-btn" onclick="selectMatchTheme(event, THEME_NATURE)">
+		<div id="nature-theme-btn" class="btn-wrap"> 
+			<div class="btn" onclick="selectMatchTheme(event, THEME_NATURE)">
 				Nature
 			</div>
 		</div>
@@ -48,30 +48,25 @@ js:
 
 	<div class="spacing"></div>
 
-	<div class="utility-divider">Time</div>
-	<div id="time-panel" class="utility-panel">
-		<div class="utility-btn-wrap">
-			<div class="btn utility-btn" onclick="selectMatchTime(event, 5 * 60)">
+	<div class="divider">Time</div>
+	<div id="time-panel" class="btn-panel">
+		<div class="btn-wrap">
+			<div class="btn" onclick="selectMatchTime(event, 5 * 60)">
 				5 Min
 			</div>
 		</div>
-		<div class="utility-btn-wrap">
-			<div class="btn utility-btn" onclick="selectMatchTime(event, 10 * 60)">
-				10 Min
-			</div>
-		</div>
-		<div class="utility-btn-wrap">
-			<div class="btn utility-btn outline" onclick="selectMatchTime(event, 15 * 60)">
+		<div class="btn-wrap">
+			<div class="btn outline" onclick="selectMatchTime(event, 15 * 60)">
 				15 Min
 			</div>
 		</div>
-		<div class="utility-btn-wrap">
-			<div class="btn utility-btn" onclick="selectMatchTime(event, 30 * 60)">
+		<div class="btn-wrap">
+			<div class="btn" onclick="selectMatchTime(event, 30 * 60)">
 				30 Min
 			</div>
 		</div>
-		<div class="utility-btn-wrap">
-			<div class="btn utility-btn" onclick="selectMatchTime(event, 100 * 60)">
+		<div class="btn-wrap">
+			<div class="btn" onclick="selectMatchTime(event, 100 * 60)">
 				∞
 			</div>
 		</div>
@@ -80,7 +75,7 @@ js:
 	<div class="spacing"></div>
 	<div class="spacing"></div>
 
-	<div id="submit" class="btn utility-btn">
+	<div id="submit" class="btn">
 		Create Match
 	</div>
 

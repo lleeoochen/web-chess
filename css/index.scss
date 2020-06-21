@@ -11,6 +11,7 @@
 		--home-match-text-size: 8vw;
 		--home-match-icon-size: 15vw;
 		--home-match-margin: 1vw 0vw;
+		--home-new-match-margin: 4vw;
 
 		--btn-size: 3vw;
 		--picture-size: 17vw;
@@ -37,6 +38,7 @@
 		--home-match-margin: 0.5vh 0.5vh;
 		--home-match-width: calc((100% - 3vh) / 3);
 		--home-match-min-width: 40vh;
+		--home-new-match-margin: 4vh;
 
 		--btn-size: 3vh;
 		--picture-size: 12vh;
@@ -61,7 +63,6 @@
 	color: var(--text-color);
 	margin: var(--home-margin);
 	font-size: var(--home-title-size);
-	// font-weight: bold;
 }
 
 #chess-toolbar {
@@ -88,7 +89,7 @@
 	}
 
 	#new-match-btn {
-		margin-left: var(--home-toolbar-margin);
+		margin-left: calc(2 * var(--home-margin));
 	}
 }
 
@@ -122,16 +123,6 @@
 			display: inline-flex;
 			align-items: center;
 			padding-bottom: calc(var(--home-margin) * 2);
-			min-height: calc(var(--picture-size) + var(--home-margin) * 2);
-
-			.player-pic {
-				width: var(--picture-size);
-				height: var(--picture-size);
-				border-radius: calc(var(--picture-size) / 10);
-				margin-right: calc(4 * var(--home-margin));
-				background-color: black;
-				border: solid black var(--home-margin);
-			}
 
 			.player-name {
 				font-size: calc(var(--home-match-text-size) * 0.7);
@@ -152,7 +143,7 @@
 			margin-top: calc(2 * var(--home-margin));
 
 			.matches-column {
-				width: calc(100% / 3.7);
+				width: calc(100% / 4 - var(--home-margin));
 				margin-right: var(--home-margin);
 
 				.match-link {
@@ -180,6 +171,23 @@
 						background-color: grey !important;
 					}
 
+					.player-pic {
+						width: var(--picture-size);
+						// height: var(--picture-size);
+						border-radius: calc(var(--picture-size) / 10);
+						margin-right: calc(4 * var(--home-margin));
+
+						&.W {
+							background-color: white;
+							border: solid white var(--home-margin);
+						}
+
+						&.B {
+							background-color: black;
+							border: solid black var(--home-margin);
+						}
+					}
+
 					.match-link-content {
 						img {
 							width: 100%;
@@ -190,7 +198,6 @@
 
 						.match-link-date {
 							font-size: calc(var(--home-match-text-size) * 0.5) !important;
-							color: darkslategrey;
 							text-align: center;
 						}
 					}
@@ -203,17 +210,22 @@
 #new-match-modal {
 	.modal-body {
 		text-align: center;
-	}
+		// font-size: var(--home-button-size);
 
-	#submit {
-		color: black !important;
-		background-color: var(--text-color) !important;
-		display: unset !important;
-		border-radius: calc(var(--btn-size) / 4);
-	    padding: calc(var(--btn-size) / 2) var(--btn-size) !important;
-	}
+		.utility-btn, .utility-divider {
+		    // font-size: var(--home-button-size) !important;
+		}
 
-	.spacing {
-		height: var(--home-spacing);
+		#submit {
+			color: black !important;
+			background-color: var(--text-color) !important;
+			display: unset !important;
+			border-radius: calc(var(--btn-size) / 4);
+		    padding: calc(var(--btn-size) / 2) var(--btn-size) !important;
+		}
+
+		.spacing {
+			height: var(--home-spacing);
+		}
 	}
 }

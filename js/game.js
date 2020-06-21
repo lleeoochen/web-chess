@@ -123,7 +123,6 @@ function updateMatchChat() {
 
 function addChatMessage(message, team) {
 	let color = team == TEAM.B ? 'dark' : 'light';
-	let photo = players[team].photo;
 	let player = players[team].name;
 
 	if (chats_applied != 0 && team == Util.unpackMessage(match.chat[chats_applied - 1]).team) {
@@ -402,9 +401,9 @@ function setPlayerHTML(team) {
 	let player = players[team];
 	let regex = team == TEAM.B ? /\[B\]/g : /\[W\]/g;
 
-	$(`#${team}-player-image`).attr('src', player.photo);
+	$(`#${team}-player-image`).attr('src', player.photo + '=c');
 	$(`#${team}-player-name`).text(player.name);
-	$(`#${team}-player-utility-image`).attr('src', player.photo);
+	$(`#${team}-player-utility-image`).attr('src', player.photo + '=c');
 	$(`#${team}-player-utility-name`).text(player.name);
 
 	$('#chat-messages-content').replaceWith($.parseHTML($('#chat-messages-content').prop('outerHTML').replace(regex, player.name)));
