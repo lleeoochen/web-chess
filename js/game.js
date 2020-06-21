@@ -370,15 +370,33 @@ function countDown() {
 
 
 function initToolbar() {
-	// Signout button
-	$('#signout-btn').on('click', (e) => {
-		database.auth().signOut();
-		location.reload();
-	});
 
 	$('#home-btn').on('click', (e) => {
 		window.location = "{{ site.baseUrl }}/";
 	});
+
+	
+	// Signout button
+	$('#signout-btn').on('click', (e) => {
+		database.logout().then(() => {
+			firebase.auth().signOut();
+			location.reload();
+		});
+	});
+
+	// // New match button
+	// $('#new-match-btn').on('click', (e) => {
+	// 	$('#new-match-modal').modal('show');
+	// });
+
+	// $('#new-match-modal #submit').on('click', (e) => {
+	// 	database.createMatch(theme, time).then(async match_id => {
+	// 		window.location = `{{ site.baseUrl }}/game.html?match=${ match_id }`;
+	// 	});
+	// 	$('#new-match-modal').modal('hide');
+	// });
+
+	$('#chess-toolbar').removeAttr('hidden');
 }
 
 async function updatePlayerData() {
@@ -871,7 +889,8 @@ function updateTheme(newTheme) {
 	$('body')							.css('background-image', `url(${theme.BACKGROUND_IMAGE})`);
 	$('.player-name')					.css('color',            theme.NAME_TITLE_COLOR);
 	$('#canvas-background')				.css('background-color', theme.COLOR_BOARD_LIGHT);
-	$('.utility-btn-wrap .utility-btn')	.css('background-color', theme.COLOR_BOARD_DARK);
+	// $('.utility-btn-wrap .utility-btn')	.css('background-color', theme.COLOR_BOARD_DARK);
+	$('.utility-btn-wrap .utility-btn')	.css('background-color', '#494949');
 	$('#chat-send-button')				.css('background-color', theme.COLOR_BOARD_DARK);
 	$('.player-pic')					.css('background-color', theme.COLOR_BOARD_DARK);
 	$('.player-utility-pic')			.css('background-color', theme.COLOR_BOARD_DARK);

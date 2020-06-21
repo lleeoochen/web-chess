@@ -19,6 +19,14 @@
 		--scrollbar-size:          1vw;
 
 		--cell-size: calc((100vw - 4 * var(--margin-size)) / 8);
+
+
+		--toolbar-margin: 1vw;
+		--toolbar-title: 10vw;
+		--toolbar-btn-font: 5vw;
+		--toolbar-btn-margin-v: 1vw;
+		--toolbar-btn-margin-h: 2vw;
+		--toolbar-btn-border-r: 0.75vw;
 	}
 }
 
@@ -42,6 +50,8 @@
 
 		--cell-size: calc((100vh - 5 * var(--margin-size) - var(--picture-size)) / 8.0);
 	}
+
+	#chess-toolbar { display: none; }
 }
 
 /* 176vh is calculated by computing: 2 * --layer-size */
@@ -64,6 +74,8 @@
 
 		--cell-size: calc((100vh - 5 * var(--margin-size) - var(--picture-size)) / 8);
 	}
+
+	#chess-toolbar { display: none; }
 }
 
 :root {
@@ -73,6 +85,35 @@
 
 body {
 	background-color: black;
+}
+
+
+#chess-toolbar {
+	display: inline-flex;
+    width: -webkit-fill-available;
+    padding: 0 var(--toolbar-margin);
+
+    .title {
+    	color: white;
+    	font-size: var(--toolbar-title);
+    }
+
+	.btn {
+		font-size: var(--toolbar-btn-font);
+		height: fit-content;
+		margin: auto 0;
+		padding: var(--toolbar-btn-margin-v) var(--toolbar-btn-margin-h);
+		border-radius: var(--toolbar-btn-border-r);
+		background-image: unset;
+		background-color: white;
+		border: unset;
+		color: white;
+	    background-color: #00000069;
+	}
+
+	// #home-btn {
+	// 	margin-left: auto;
+	// }
 }
 
 #game-content {
@@ -271,28 +312,29 @@ body {
 
 #utility-section {
 	background-color: #000000db;
-	border-radius: var(--border-radius) var(--border-radius) 0 0;
+	border-radius: var(--border-radius);
 	padding: calc(var(--margin-size));
 	padding-bottom: 0;
 }
 
 #history-section {
-	height: 40%;
+	// height: 40%;
+	height: 0;
 	background-color: #000000db;
-	padding: calc(var(--margin-size));
+	// padding: calc(var(--margin-size));
 	padding-bottom: 0;
 	overflow-y: scroll;
 }
 
 #post-history-section {
-	height: var(--margin-size);
+	// height: var(--margin-size);
 	background-color: #000000db;
 	margin-bottom: calc(var(--margin-size));
-	border-radius: 0 0 var(--border-radius) var(--border-radius);
+	// border-radius: 0 0 var(--border-radius) var(--border-radius);
 }
 
 #chat-section {
-	height: 30%;
+	height: 70%;
 	background-color: #000000db;
 	border-radius: var(--border-radius);
 	margin-bottom: var(--margin-size);

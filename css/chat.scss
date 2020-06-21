@@ -8,6 +8,7 @@
 		--chat-scrollbar-size:	1vw;
 		--chat-border-radius:	0.75vw;
 		--chat-border-size:		0.25vw;
+		--chat-bottom-size:		8vw;
 	}
 }
 
@@ -19,6 +20,7 @@
 		--chat-scrollbar-size:	1vh;
 		--chat-border-radius:	0.75vh;
 		--chat-border-size:		0.25vh;
+		--chat-bottom-size:		5vh;
 	}
 }
 
@@ -26,7 +28,7 @@
 
 /* Chat messages container */
 #chat-messages {
-	height: 80%;
+	height: calc(100% - var(--chat-bottom-size));
 	padding: var(--chat-margin-size);
 	text-align: left;
 	border-radius: var(--chat-border-radius) var(--chat-border-radius) 0px 0px;
@@ -97,7 +99,7 @@
 
 /* Chat bottom container */
 #chat-bottom {
-	height: 20%;
+	height: var(--chat-bottom-size);
 	display: flex;
 	margin-left: unset;
 	margin-right: unset;
