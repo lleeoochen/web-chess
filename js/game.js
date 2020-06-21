@@ -371,11 +371,11 @@ function countDown() {
 
 function initToolbar() {
 
-	$('#home-btn').on('click', (e) => {
+	$('.home-btn').on('click', (e) => {
 		window.location = "{{ site.baseUrl }}/";
 	});
 
-	
+
 	// Signout button
 	$('#signout-btn').on('click', (e) => {
 		database.logout().then(() => {
@@ -886,7 +886,7 @@ function updateTheme(newTheme) {
 	}
 
 	// $('.background-image')				.attr('src', `${theme.BACKGROUND_IMAGE}`);
-	$('body')							.css('background-image', `url(${theme.BACKGROUND_IMAGE})`);
+	$('#background-image')					.css('background-image', `url(${theme.BACKGROUND_IMAGE})`);
 	$('.player-name')					.css('color',            theme.NAME_TITLE_COLOR);
 	$('#canvas-background')				.css('background-color', theme.COLOR_BOARD_LIGHT);
 	// $('.utility-btn-wrap .utility-btn')	.css('background-color', theme.COLOR_BOARD_DARK);

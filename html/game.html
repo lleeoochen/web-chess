@@ -27,8 +27,9 @@ js:
 ---
 
 <div id="chess-toolbar" hidden>
-	<div id="home-btn" class="btn">◄ Back</div>
-	<div id="short-title" class="title">&nbsp;</div>
+	<img class="home-btn toolbar-btn" src="assets/back.png"/>
+	<div id="title" class="title" onClick="onInviteClick()">Match</div>
+	<img class="change-theme-btn toolbar-btn" src="assets/palette.png" onclick="onThemeClick()"/>
 </div>
 
 <div id="game-content" class="hidden">
@@ -40,9 +41,9 @@ js:
 				<div id="B-player-name" class="player-name">&nbsp;</div>
 				<div id="whitesEaten" class="row eaten-panel"></div>
 			</div>
-			<!-- <div id="home-btn" class="btn btn-primary">
+			<div class="home-btn in-game btn btn-primary">
 				<img id="home-icon" src="assets/home.png"/>
-			</div> -->
+			</div>
 			<img id="W-player-image" class="player-pic pull-right" src="assets/WRook.svg"/>
 			<div class="pull-right white text-right">
 				<div id="W-player-name" class="player-name">Opponent</div>
@@ -147,7 +148,7 @@ js:
 			</div>
 
 			<div id="theme-panel" class="utility-panel hidden">
-				<div id="change-theme-btn" class="utility-btn-wrap">
+				<div class="change-theme-btn utility-btn-wrap">
 					<div class="btn utility-btn" onclick="onThemeClick()">
 						<img class="utility-icon" src="assets/theme.png"/>
 						Theme

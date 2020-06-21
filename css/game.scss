@@ -27,7 +27,11 @@
 		--toolbar-btn-margin-v: 1vw;
 		--toolbar-btn-margin-h: 2vw;
 		--toolbar-btn-border-r: 0.75vw;
+		--toolbar-btn-size: 10vw;
 	}
+
+	#theme-panel { display: none !important; }
+	.home-btn.in-game { display: none !important; }
 }
 
 @media screen and (orientation: landscape) {
@@ -51,7 +55,7 @@
 		--cell-size: calc((100vh - 5 * var(--margin-size) - var(--picture-size)) / 8.0);
 	}
 
-	#chess-toolbar { display: none; }
+	#chess-toolbar { display: none !important; }
 }
 
 /* 176vh is calculated by computing: 2 * --layer-size */
@@ -75,7 +79,7 @@
 		--cell-size: calc((100vh - 5 * var(--margin-size) - var(--picture-size)) / 8);
 	}
 
-	#chess-toolbar { display: none; }
+	#chess-toolbar { display: none !important; }
 }
 
 :root {
@@ -91,29 +95,21 @@ body {
 #chess-toolbar {
 	display: inline-flex;
     width: -webkit-fill-available;
+	justify-content: space-between;
     padding: 0 var(--toolbar-margin);
+    background-color: black;
 
     .title {
     	color: white;
     	font-size: var(--toolbar-title);
     }
 
-	.btn {
-		font-size: var(--toolbar-btn-font);
-		height: fit-content;
+	.toolbar-btn {
+		width: var(--toolbar-btn-size);
+		height: var(--toolbar-btn-size);
 		margin: auto 0;
-		padding: var(--toolbar-btn-margin-v) var(--toolbar-btn-margin-h);
-		border-radius: var(--toolbar-btn-border-r);
-		background-image: unset;
-		background-color: white;
-		border: unset;
-		color: white;
-	    background-color: #00000069;
+		cursor: pointer;
 	}
-
-	// #home-btn {
-	// 	margin-left: auto;
-	// }
 }
 
 #game-content {
@@ -279,7 +275,7 @@ body {
 	width: var(--layer-size);
 }
 
-#home-btn {
+.home-btn.in-game {
 	font-size: var(--font-size);
 	padding: calc(var(--btn-size) / 4) calc(var(--btn-size) / 2);
 	border-radius: var(--border-radius);
