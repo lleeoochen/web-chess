@@ -94,8 +94,9 @@ database.getProfile().then(res => {
 
 		for (let i in results) {
 			let { enemy, matches } = results[i];
-			let $active_matches = '';
-			let $inactive_matches = '';
+			let $matches = [];
+			let $inactive_matches = [];
+			let $grouped_matches = [];
 
 			matches.forEach(match => {
 				let match_name = match[0];
@@ -120,9 +121,19 @@ database.getProfile().then(res => {
 					</a>`;
 
 				if (active)
-					$active_matches += match_html;
+					$matches.push(match_html);
 				else
-					$inactive_matches += match_html;
+					$inactive_matches.push(match_html);
+			});
+
+			$matches.push(...$inactive_matches);
+
+			$matches = groupList($matches, 3).map($match_group => {
+				return `
+					<div class="matches-column">
+						${ $match_group }
+					</div>
+				`;
 			});
 
 			if (enemy.name) {
@@ -133,8 +144,7 @@ database.getProfile().then(res => {
 							<div class="player-name">${ enemy.name }</div>
 						</div>
 						<div class="matches-list">
-							${ $active_matches }
-							${ $inactive_matches }
+							${ $matches }
 						</div>
 					</div>
 				`);
@@ -147,8 +157,7 @@ database.getProfile().then(res => {
 							<div class="player-name">New Matches</div>
 						</div>
 						<div class="matches-list">
-							${ $active_matches }
-							${ $inactive_matches }
+							${ $matches }
 						</div>
 					</div>
 				`);
@@ -193,4 +202,15 @@ function selectMatchTime(event, _time) {
 	time = _time;
 	$('#new-match-modal #time-panel .utility-btn').removeClass('outline');
 	$(event.target).addClass('outline');
+}
+
+function groupList(data, n) {
+	let group = [];
+	for (let i = 0, j = 0; i < data.length; i++) {
+		if (i >= n && i % n === 0)
+			j++;
+		group[j] = group[j] || [];
+		group[j].push(data[i])
+	}
+	return group;
 }

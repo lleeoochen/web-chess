@@ -48,8 +48,11 @@
 				background-color: darkslategrey !important;
 				border-color: grey;
 				border-width: var(--modal-border-size);
-				border-style: ridge;
 				width: unset !important;
+
+				border-style: double;
+				-webkit-animation: fadein 0.5s !important;
+						animation: fadein 0.5s !important;
 			}
 		}
 	}
@@ -64,7 +67,9 @@
 	background-color: darkslategrey !important;
 	border-color: grey;
 	border-width: var(--modal-border-size);
-	border-style: ridge;
+	border-style: double;
+	-webkit-animation: unset !important;
+			animation: unset !important;
 
 	.swal-text, .swal-title, .swal-footer {
 		font-weight: normal !important;

@@ -997,6 +997,7 @@ function onResignClick() {
 
 	swal({
 		text: "Resign match?",
+		animation: false,
 		buttons: [
 		  'Cancel',
 		  'Resign'

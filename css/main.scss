@@ -18,15 +18,9 @@
 	--scroll-color: transparent;
 }
 
-/* Hide scrollbar for Chrome, Safari and Opera */
-::-webkit-scrollbar {
-	display: none;
-}
-
-/* Hide scrollbar for IE and Edge */
-* {
-	-ms-overflow-style: none;
-}
+// Hide scrollbar
+*::-webkit-scrollbar { display: none; }
+* { -ms-overflow-style: none; }
 
 ::selection {
 	background: white; /* WebKit/Blink Browsers */
