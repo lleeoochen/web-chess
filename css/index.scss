@@ -9,9 +9,9 @@
 		--home-match-width: 100vw;
 		--home-match-height: 100vw;
 		--home-match-text-size: 8vw;
-		--home-match-icon-size: 15vw;
 		--home-match-margin: 1vw 0vw;
 		--home-new-match-margin: 4vw;
+		--toolbar-btn-size: 10vw;
 
 		--btn-size: 3vw;
 		--picture-size: 17vw;
@@ -32,9 +32,10 @@
 		--home-margin-size: 4vh;
 		--home-match-height: 70vh;
 		--home-match-text-size: 5vh;
-		--home-match-icon-size: 7vh;
 		--home-match-margin: 0.5vh 0.5vh;
 		--home-match-width: calc((100% - 3vh) / 3);
+		--toolbar-btn-size: 7vh;
+
 		--home-match-min-width: 40vh;
 		--home-new-match-margin: 4vh;
 
@@ -63,29 +64,17 @@
 
 #chess-toolbar {
 	display: inline-flex;
+	justify-content: space-between;
     width: -webkit-fill-available;
 	@media screen and (orientation: landscape) {
 		margin: var(--home-margin);
 	}
 
-	.btn {
-		font-size: var(--home-button-size);
-		height: fit-content;
+	.toolbar-btn {
+		width: var(--toolbar-btn-size);
+		height: var(--toolbar-btn-size);
 		margin: auto 0;
-		padding: calc(var(--btn-size) / 3) calc(var(--btn-size) / 1.5);
-		border-radius: calc(var(--btn-size) / 4);
-		background-image: unset;
-		background-color: var(--text-color);
-		border: unset;
-		color: black;
-	}
-
-	#signout-btn {
-		margin-left: auto;
-	}
-
-	#new-match-btn {
-		margin-left: calc(2 * var(--home-margin));
+		cursor: pointer;
 	}
 }
 
@@ -145,7 +134,7 @@
 				.match-link {
 					width: 100%;
 					margin-bottom: var(--home-margin);
-					padding: calc(var(--home-margin) * 2) !important;
+					padding: 0 !important;
 					border-radius: var(--home-margin) !important;
 
 					white-space: nowrap;
@@ -156,7 +145,7 @@
 					justify-content: left;
 
 					background-image: unset !important;
-					border: unset !important;
+					// border: unset !important;
 					background-color: #57bf69 !important;
 
 					&:last-child {
@@ -167,29 +156,21 @@
 						background-color: grey !important;
 					}
 
-					.player-pic {
-						width: var(--picture-size);
-						// height: var(--picture-size);
-						border-radius: calc(var(--picture-size) / 10);
-						margin-right: calc(4 * var(--home-margin));
+					&.W {
+						background-color: white;
+						border: solid white var(--home-margin);
+					}
 
-						&.W {
-							background-color: white;
-							border: solid white var(--home-margin);
-						}
-
-						&.B {
-							background-color: black;
-							border: solid black var(--home-margin);
-						}
+					&.B {
+						background-color: black;
+						border: solid black var(--home-margin);
 					}
 
 					.match-link-content {
-						img {
+						.player-pic {
 							width: 100%;
-							max-width: var(--picture-size);
-							margin-right: var(--home-margin-size);
 							margin: auto;
+							margin-right: calc(4 * var(--home-margin));
 						}
 
 						.match-link-date {
@@ -206,11 +187,6 @@
 #new-match-modal {
 	.modal-body {
 		text-align: center;
-		// font-size: var(--home-button-size);
-
-		.utility-btn, .utility-divider {
-		    // font-size: var(--home-button-size) !important;
-		}
 
 		#submit {
 			color: black !important;
@@ -223,5 +199,30 @@
 		.spacing {
 			height: var(--home-spacing);
 		}
+	}
+}
+
+#menu-modal {
+
+	#menu-name {
+		color: white;
+		font-size: var(--home-match-text-size);
+	}
+
+	#menu-stats {
+		color: white;
+	}
+
+	#menu-photo {
+		width: 50%;
+		margin: auto;
+		margin-bottom: var(--home-margin-size)
+	}
+
+	.btn {
+		color: black !important;
+		background-color: var(--text-color) !important;
+		border-radius: calc(var(--btn-size) / 4);
+		padding: calc(var(--btn-size) / 3) calc(var(--btn-size) / 1.5);
 	}
 }

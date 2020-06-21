@@ -12,40 +12,20 @@ var sample_user = 'uTglgv6iP4cEzJlVFp0ZOsnsiL13';
 var sample_match = 'zRhSeePjyI6JyVtDBCmS';
 
 
-// // Socket connection
-// let socket = io.connect('{{ site.backendUrl }}');
-
-// socket.emit('listen_user', sample_user);
-// socket.on('listen_user', (user_data) => {
-// 	console.log('user_data', user_data);
-// });
-
-// socket.emit('listen_match', sample_match);
-// socket.on('listen_match', (match_data) => {
-// 	console.log('match_data', match_data);
-// });
-
-// window.onbeforeunload = function(){
-// 	socket.emit('disconnect');
-// 	console.log("Bye now!");
-// };
-
-// database.listenMatch(sample_match, match => {
-// 	console.log(match);
-// });
-
-// database.getMatch(sample_match, match => {
-// 	console.log(match)
-// })
-
-
 database.getProfile().then(res => {
-	initToolbar();
-
 	user = res.data;
 	user_id = res.id;
 	let matches_dict = {};
 	let matches_promises = [];
+	let stats = {
+		draw: 0,
+		stalemate: 0,
+		win: 0,
+		lose: 0,
+		ongoing: 0,
+		resign: 0,
+	};
+	initToolbar();
 
 	user.matches.forEach(match => {
 		let [match_id, enemy_id] = match.split('-');
@@ -61,12 +41,6 @@ database.getProfile().then(res => {
 	}
 
 	Promise.all(matches_promises).then(async results => {
-
-		$('#matches-display').append(results);
-		$('#matches-display').append("hi");
-
-		let copy = results;
-
 
 		// Sort matches by dates for each opponent
 		for (let i in results) {
@@ -109,10 +83,10 @@ database.getProfile().then(res => {
 				let active = Math.floor(match_data.moves[match_data.moves.length - 1] / 10) != 0;
 
 				let match_html = `
-					<a class="btn match-link ${active ? '': 'inactive'}" href="{{ site.baseUrl }}/game.html?match=${ match_name }">
+					<a class="btn match-link ${active ? '': 'inactive'} ${ color }" href="{{ site.baseUrl }}/game.html?match=${ match_name }">
 						<div class="match-link-content">
 							<div>
-								<img class="player-pic ${ color }" src="${ enemy.photo ? enemy.photo + '=c' : "assets/new_match.png" }"/>
+								<img class="player-pic" src="${ enemy.photo ? enemy.photo + '=c' : "assets/new_match.png" }"/>
 							</div>
 							<div>
 								<div class="match-link-date"> ${ d_str } </div>
@@ -120,10 +94,20 @@ database.getProfile().then(res => {
 						</div>
 					</a>`;
 
-				if (active)
+				if (active) {
 					$matches.push(match_html);
-				else
+					stats.ongoing += 1;
+				}
+				else {
 					$inactive_matches.push(match_html);
+
+					let win = Util.win(match_data.moves[match_data.moves.length - 1], color);
+					if (win === true) stats.win += 1;
+					else if (win === false) stats.lose += 1;
+					else if (win === 0) stats.draw += 1;
+					else if (win === 1) stats.stalemate += 1;
+					else if (win === 2) stats.resign += 1;
+				}
 			});
 
 			$matches.push(...$inactive_matches);
@@ -148,6 +132,18 @@ database.getProfile().then(res => {
 			`);
 		}
 
+		// Update stats
+		$('#menu-stats').append(`
+			<div>Win Rate ${ (stats.win * 100.0 / (stats.win + stats.lose)).toFixed(2) }%.</div>
+			<div>Win ${ stats.win } games.</div>
+			<div>Lose ${ stats.lose } games.</div>
+			<div>Draw ${ stats.draw } games.</div>
+			<div>Stalemate ${ stats.stalemate } games.</div>
+			<div>Resign ${ stats.draw } games.</div>
+			<div>Ongoing ${ stats.ongoing } games.</div>
+			<br>
+		`);
+
 	});
 });
 
@@ -159,6 +155,13 @@ function initToolbar() {
 			location.reload();
 		});
 	});
+
+	// Menu button
+	$('#menu-btn').on('click', (e) => {
+		$('#menu-modal').modal('show');
+	});
+	$('#menu-modal #menu-name').text(user.name);
+	$('#menu-modal #menu-photo').attr('src', user.photo);
 
 	// New match button
 	$('#new-match-btn').on('click', (e) => {

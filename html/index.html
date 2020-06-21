@@ -11,10 +11,12 @@ js:
 
 
 <div id="chess-toolbar" hidden>
+	<img id="menu-btn" class="toolbar-btn" src="assets/menu.png"/>
 	<div id="long-title" class="title">Chess Home</div>
 	<div id="short-title" class="title">Home</div>
-	<div id="signout-btn" class="btn">Logout</div>
-	<div id="new-match-btn" class="btn">+ Match</div>
+	<!-- <div id="signout-btn" class="btn">Logout</div> -->
+	<!-- <div id="new-match-btn" class="btn">+ Match</div> -->
+	<img id="new-match-btn" class="toolbar-btn" src="assets/new-game.png"/>
 </div>
 
 <div id="matches-display">
@@ -82,6 +84,16 @@ js:
 	<div class="spacing"></div>
 {% endcapture %}
 
+<!-- Menu Popup Window -->
+{% capture menu_modal %}
+	<div id="menu-name"></div>
+	<img id="menu-photo"/>
+	<div id="menu-stats"></div>
+	<div id="signout-btn" class="btn">Logout</div>
+{% endcapture %}
+
+
 <!-- Modals -->
 {% include modal.html id="firebase-modal" %}
 {% include modal.html id="new-match-modal" content=new_match_modal %}
+{% include modal.html id="menu-modal" content=menu_modal %}

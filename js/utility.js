@@ -203,4 +203,31 @@ class Util {
 	static gameFinished(match) {
 		return Math.floor(match.moves[match.moves.length - 1] / 10) == 0;
 	}
+
+	static win(move, team) {
+		if (move == DB_DRAW) {
+			return 0;
+		}
+		else if (move == DB_STALEMATE) {
+			return 1;
+		}
+		else if (move == DB_CHECKMATE_BLACK) {
+			return team == TEAM.B;
+		}
+		else if (move == DB_CHECKMATE_WHITE) {
+			return team == TEAM.W;
+		}
+		else if (move == DB_TIMESUP_BLACK) {
+			return team == TEAM.B;
+		}
+		else if (move == DB_TIMESUP_WHITE) {
+			return team == TEAM.W;
+		}
+		else if (move == DB_RESIGN_BLACK) {
+			return team == TEAM.B ? 2 : undefined;
+		}
+		else if (move == DB_RESIGN_WHITE) {
+			return team == TEAM.W ? 2 : undefined;
+		}
+	}
 }
