@@ -1042,11 +1042,11 @@ function onAddTimeClick() {
 function onThemeClick() {
 	$('#theme-modal').modal('show');
 
-	$('#theme-modal .utility-btn').removeClass('outline');
-	if (theme == THEME_CLASSIC) $('#classic-theme-btn .utility-btn').addClass('outline');
-	else if (theme == THEME_WINTER) $('#winter-theme-btn .utility-btn').addClass('outline');
-	else if (theme == THEME_METAL) $('#metal-theme-btn .utility-btn').addClass('outline');
-	else if (theme == THEME_NATURE) $('#nature-theme-btn .utility-btn').addClass('outline');
+	$('#theme-modal .btn').removeClass('outline');
+	if (theme == THEME_CLASSIC) $('#classic-theme-btn .btn').addClass('outline');
+	else if (theme == THEME_WINTER) $('#winter-theme-btn .btn').addClass('outline');
+	else if (theme == THEME_METAL) $('#metal-theme-btn .btn').addClass('outline');
+	else if (theme == THEME_NATURE) $('#nature-theme-btn .btn').addClass('outline');
 }
 
 function onThemeSelect(event, newTheme) {
