@@ -1,7 +1,7 @@
 ---
 ---
 // Redirect based on screen orientation
-if (SCREEN_PORTRAIT && !window.location.href.includes('mobile')) window.location = '{{ site.baseUrl }}/index_mobile';
+if (SCREEN_PORTRAIT && !window.location.href.includes('mobile')) window.location = '{{ site.baseUrl }}/mobile';
 if (!SCREEN_PORTRAIT && window.location.href.includes('mobile')) window.location = '{{ site.baseUrl }}/';
 
 var user = null;

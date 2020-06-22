@@ -391,7 +391,7 @@ function countDown() {
 
 function initToolbar() {
 	$('.home-btn').on('click', (e) => {
-		window.location = `{{ site.baseUrl }}/${ SCREEN_PORTRAIT ? 'index_mobile' : '' }`;
+		window.location = `{{ site.baseUrl }}/${ SCREEN_PORTRAIT ? 'mobile' : '' }`;
 	});
 
 	// Signout button
