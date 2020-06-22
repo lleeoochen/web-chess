@@ -12,6 +12,9 @@
 		--home-match-margin: 1vw 0vw;
 		--home-new-match-margin: 4vw;
 		--toolbar-btn-size: 10vw;
+		--toolbar-height: 15vw;
+		--toolbar-shadow: 0 1vw 2vw 0 rgba(0, 0, 0, 0.2), 0 1.5vw 2.5vw 0 rgba(0, 0, 0, 0.19);
+		--toolbar-margin: 1vw;
 
 		--btn-size: 3vw;
 		--picture-size: 17vw;
@@ -19,9 +22,9 @@
 		--home-spacing: 2vw;
 	}
 
-	body {
-		margin: 0 var(--home-margin);
-	}
+	// body {
+	// 	margin: 0 var(--home-margin);
+	// }
 }
 
 @media screen and (orientation: landscape) {
@@ -63,7 +66,13 @@
 }
 
 #chess-toolbar {
-	display: inline-flex;
+	position: fixed;
+	height: var(--toolbar-height);
+	z-index: 100;
+	background-color: black;
+	box-shadow: var(--toolbar-shadow);
+
+	display: flex;
 	justify-content: space-between;
     width: -webkit-fill-available;
 	@media screen and (orientation: landscape) {
@@ -71,8 +80,8 @@
 	}
 
 	.toolbar-btn {
-		width: var(--toolbar-btn-size);
 		height: var(--toolbar-btn-size);
+		padding: 0 calc(3 * var(--toolbar-margin));
 		margin: auto 0;
 		cursor: pointer;
 	}
@@ -82,6 +91,7 @@
 	display: flex;
 	flex-wrap: wrap;
 	justify-content: left;
+	padding-top: var(--toolbar-height);
 
 	.opponent-container {
 		display: flex;

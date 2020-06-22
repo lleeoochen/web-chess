@@ -12,7 +12,7 @@
 		--border-radius: 	0.75vw;
 
 		--eaten-panel-line-height: 1vw;
-		--game-content-display:    unset;
+		--game-content-display:    block;
 		--layer-margin-side:       auto;
 		--side-layer-padding-top:  0;
 		--side-layer-padding-left: var(--margin-size);
@@ -28,6 +28,8 @@
 		--toolbar-btn-margin-h: 2vw;
 		--toolbar-btn-border-r: 0.75vw;
 		--toolbar-btn-size: 10vw;
+		--toolbar-height: 15vw;
+		--toolbar-shadow: 0 1vw 2vw 0 rgba(0, 0, 0, 0.2), 0 1.5vw 2.5vw 0 rgba(0, 0, 0, 0.19);
 	}
 
 	#theme-panel { display: none !important; }
@@ -93,10 +95,15 @@ body {
 
 
 #chess-toolbar {
-	display: inline-flex;
+	position: fixed;
+	height: var(--toolbar-height);
+	z-index: 100;
+	background-color: black;
+	box-shadow: var(--toolbar-shadow);
+
+	display: flex;
     width: -webkit-fill-available;
 	justify-content: space-between;
-    padding: 0 var(--toolbar-margin);
     background-color: black;
 
     .title {
@@ -105,14 +112,16 @@ body {
     }
 
 	.toolbar-btn {
-		width: var(--toolbar-btn-size);
 		height: var(--toolbar-btn-size);
+		padding: 0 calc(3 * var(--toolbar-margin));
 		margin: auto 0;
 		cursor: pointer;
 	}
 }
 
 #game-content {
+	padding-top: var(--toolbar-height);
+
 	#action-layer {
 		&:nth-child(1) { animation: 0.2s ease 0s normal forwards 1 fadein; }
 	}
