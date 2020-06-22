@@ -5,8 +5,6 @@
 		--layout-bckgd-image-width: unset;
 		--layout-bckgd-image-height: 100vh;
 	}
-
-	#long-title {display: none;}
 }
 
 @media screen and (min-aspect-ratio: 1920/1080) {
@@ -14,8 +12,6 @@
 		--layout-bckgd-image-width: 100vw;
 		--layout-bckgd-image-height: unset;
 	}
-
-	#short-title {display: none;}
 }
 
 :root {
@@ -49,6 +45,7 @@ body {
 
 	transition: background-image 0.5s;
 	-webkit-transition: background-image 0.5s;
+	position: relative;
 }
 
 img {

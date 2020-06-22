@@ -1,12 +1,12 @@
 ---
-permalink: /game
+permalink: /game_mobile
 layout: default
 title: Match - Web Chess
 
 css:
 - "chat.css"
 - "utility.css"
-- "game.css"
+- "game_mobile.css"
 js:
 - "firebase_game.js"
 - "sounds.js"
@@ -25,6 +25,12 @@ js:
 - "game/move.js"
 - "game.js"
 ---
+
+<div id="chess-toolbar" hidden>
+	<img class="home-btn toolbar-btn" src="assets/back.png"/>
+	<div id="title" class="title" onClick="onInviteClick()">Match</div>
+	<img class="change-theme-btn toolbar-btn" src="assets/palette.png" onclick="onThemeClick()"/>
+</div>
 
 <div id="game-content" class="hidden">
 	<!-- <img id="chat-notification" src="assets/notification.png" hidden/> -->

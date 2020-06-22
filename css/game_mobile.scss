@@ -1,57 +1,69 @@
 ---
 ---
-
-@media (min-width: 174vh) {
-	:root {
-		--margin-size:		1vh;
-		--eaten-piece-size: 2.8vh;
-		--picture-size:		12vh;
-		--icon-size:		3vh;
-		--title-size:		3vh;
-		--font-size:		3vh;
-		--btn-size:			3vh;
-		--border-radius: 	0.75vh;
-
-		--eaten-panel-line-height: 1vh;
-		--game-content-display:    flex;
-		--layer-margin-side:       unset;
-		--side-layer-padding-top:  var(--margin-size);
-		--side-layer-padding-left: 0;
-		--scrollbar-size:          1vh;
-
-		--cell-size: calc((100vh - 5 * var(--margin-size) - var(--picture-size)) / 8.0);
-	}
-}
-
-/* 176vh is calculated by computing: 2 * --layer-size */
-@media (max-width: 174vh) {
-	:root {
-		--margin-size:		1vh;
-		--eaten-piece-size: 3vh;
-		--picture-size:		12vh;
-		--icon-size:		3vh;
-		--title-size:		3vh;
-		--font-size:		2.25vh;
-		--btn-size:			3vh;
-		--border-radius: 	0.75vh;
-
-		--game-content-display:    unset;
-		--layer-margin-side:       auto;
-		--side-layer-padding-top:  0;
-		--side-layer-padding-left: var(--margin-size);
-		--scrollbar-size:          1vh;
-
-		--cell-size: calc((100vh - 5 * var(--margin-size) - var(--picture-size)) / 8);
-	}
-}
-
 :root {
+	--margin-size:		1vw;
+	--eaten-piece-size: 3vw;
+	--picture-size: 	15vw;
+	--icon-size: 		5vw;
+	--title-size: 		3vw;
+	--font-size:		3vw;
+	--btn-size: 		3vw;
+	--border-radius: 	0.75vw;
+
+	--eaten-panel-line-height: 1vw;
+	--game-content-display:    block;
+	--layer-margin-side:       auto;
+	--side-layer-padding-top:  0;
+	--side-layer-padding-left: var(--margin-size);
+	--scrollbar-size:          1vw;
+
+	--cell-size: calc((100vw - 4 * var(--margin-size)) / 8);
+
+	--toolbar-margin: 1vw;
+	--toolbar-title: 10vw;
+	--toolbar-btn-font: 5vw;
+	--toolbar-btn-margin-v: 1vw;
+	--toolbar-btn-margin-h: 2vw;
+	--toolbar-btn-border-r: 0.75vw;
+	--toolbar-btn-size: 10vw;
+	--toolbar-height: 15vw;
+	--toolbar-shadow: 0 1vw 2vw 0 rgba(0, 0, 0, 0.2), 0 1.5vw 2.5vw 0 rgba(0, 0, 0, 0.19);
+
 	--canvas-size: calc(var(--margin-size) * 2 + var(--cell-size) * 8);
 	--layer-size: calc(var(--canvas-size) + var(--margin-size) * 2);
 }
 
+#theme-panel { display: none !important; }
+.home-btn.in-game { display: none !important; }
+
 body {
 	background-color: black;
+}
+
+
+#chess-toolbar {
+	position: fixed;
+	height: var(--toolbar-height);
+	z-index: 100;
+	background-color: black;
+	box-shadow: var(--toolbar-shadow);
+
+	display: flex;
+    width: -webkit-fill-available;
+	justify-content: space-between;
+    background-color: black;
+
+    .title {
+    	color: white;
+    	font-size: var(--toolbar-title);
+    }
+
+	.toolbar-btn {
+		height: var(--toolbar-btn-size);
+		padding: 0 calc(3 * var(--toolbar-margin));
+		margin: auto 0;
+		cursor: pointer;
+	}
 }
 
 #game-content {

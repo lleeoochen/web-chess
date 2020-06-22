@@ -1,5 +1,8 @@
 ---
 ---
+// Redirect based on screen orientation
+if (SCREEN_PORTRAIT && !window.location.href.includes('mobile')) window.location = '{{ site.baseUrl }}/index_mobile';
+if (!SCREEN_PORTRAIT && window.location.href.includes('mobile')) window.location = '{{ site.baseUrl }}/index';
 
 var user = null;
 var user_id = null;
@@ -83,7 +86,7 @@ database.getProfile().then(res => {
 				let active = Math.floor(match_data.moves[match_data.moves.length - 1] / 10) != 0;
 
 				let match_html = `
-					<a class="btn match-link ${active ? '': 'inactive'} ${ color }" href="{{ site.baseUrl }}/game.html?match=${ match_name }">
+					<a class="btn match-link ${active ? '': 'inactive'} ${ color }" href="{{ site.baseUrl }}/game${ SCREEN_PORTRAIT ? '_mobile' : '' }?match=${ match_name }">
 						<div class="match-link-content">
 							<div>
 								<img class="player-pic" src="${ enemy.photo ? enemy.photo + '=c' : "assets/new_match.png" }"/>
@@ -170,7 +173,7 @@ function initToolbar() {
 
 	$('#new-match-modal #submit').on('click', (e) => {
 		database.createMatch(theme, time).then(async match_id => {
-			window.location = `{{ site.baseUrl }}/game.html?match=${ match_id }`;
+			window.location = `{{ site.baseUrl }}/game${ SCREEN_PORTRAIT ? '_mobile' : '' }?match=${ match_id }`;
 		});
 		$('#new-match-modal').modal('hide');
 	});

@@ -1,5 +1,9 @@
 ---
 ---
+// Redirect based on screen orientation
+if (SCREEN_PORTRAIT && !window.location.href.includes('mobile')) window.location = window.location.href.replace(/\/game/, '/game_mobile');
+if (!SCREEN_PORTRAIT && window.location.href.includes('mobile')) window.location = window.location.href.replace(/\/game_mobile/, '/game');
+
 
 //Intialize global variables
 var canvasLayer = document.getElementById("canvas-layer");
@@ -372,7 +376,7 @@ function countDown() {
 function initToolbar() {
 
 	$('.home-btn').on('click', (e) => {
-		window.location = "{{ site.baseUrl }}/";
+		window.location = `{{ site.baseUrl }}/index${ SCREEN_PORTRAIT ? '_mobile' : '' }`;
 	});
 
 
@@ -383,18 +387,6 @@ function initToolbar() {
 			location.reload();
 		});
 	});
-
-	// // New match button
-	// $('#new-match-btn').on('click', (e) => {
-	// 	$('#new-match-modal').modal('show');
-	// });
-
-	// $('#new-match-modal #submit').on('click', (e) => {
-	// 	database.createMatch(theme, time).then(async match_id => {
-	// 		window.location = `{{ site.baseUrl }}/game.html?match=${ match_id }`;
-	// 	});
-	// 	$('#new-match-modal').modal('hide');
-	// });
 
 	$('#chess-toolbar').removeAttr('hidden');
 }

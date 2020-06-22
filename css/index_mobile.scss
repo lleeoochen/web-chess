@@ -4,29 +4,24 @@
 :root {
 	--text-color: white;
 
-	--home-title-size: 8vh;
-	--home-button-size: 3vh;
-	--home-toolbar-margin: 2vh;
-	--home-margin-size: 4vh;
-	--home-match-height: 70vh;
-	--home-match-text-size: 5vh;
-	--home-match-margin: 0.5vh 0.5vh;
-	--home-match-width: calc((100% - 3vh) / 3);
-	--toolbar-btn-size: 7vh;
+	--home-title-size: 10vw;
+	--home-button-size: 5vw;
+	--home-toolbar-margin: 2vw;
+	--home-margin-size: 2vw;
+	--home-match-width: 100vw;
+	--home-match-height: 100vw;
+	--home-match-text-size: 8vw;
+	--home-match-margin: 1vw 0vw;
+	--home-new-match-margin: 4vw;
+	--toolbar-btn-size: 10vw;
+	--toolbar-height: 15vw;
+	--toolbar-shadow: 0 1vw 2vw 0 rgba(0, 0, 0, 0.2), 0 1.5vw 2.5vw 0 rgba(0, 0, 0, 0.19);
+	--toolbar-margin: 1vw;
 
-	--home-match-min-width: 40vh;
-	--home-new-match-margin: 4vh;
-
-	--btn-size: 3vh;
-	--picture-size: 12vh;
-	--home-margin: 0.5vh;
-	--home-spacing: 2vh;
-}
-
-body {
-	// justify-content: center;
-	margin: 0 15vh;
-    // display: grid;
+	--btn-size: 3vw;
+	--picture-size: 17vw;
+	--home-margin: 1vw;
+	--home-spacing: 2vw;
 }
 
 .title {
@@ -36,6 +31,12 @@ body {
 }
 
 #chess-toolbar {
+	position: fixed;
+	height: var(--toolbar-height);
+	z-index: 100;
+	background-color: black;
+	box-shadow: var(--toolbar-shadow);
+
 	display: flex;
 	justify-content: space-between;
     width: -webkit-fill-available;
