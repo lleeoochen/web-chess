@@ -182,7 +182,7 @@ function initToolbar() {
 		$('#new-match-modal').modal('hide');
 	});
 
-	$('#chess-toolbar').removeAttr('hidden');
+	$('#chess-toolbar').removeClass('hidden');
 }
 
 

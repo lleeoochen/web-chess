@@ -11,7 +11,7 @@
 	--border-radius: 	0.75vw;
 
 	--eaten-panel-line-height: 1vw;
-	--game-content-display:    block;
+	--game-content-display:    grid;
 	--layer-margin-side:       auto;
 	--side-layer-padding-top:  0;
 	--side-layer-padding-left: var(--margin-size);
@@ -75,7 +75,7 @@ body {
 	-webkit-backdrop-filter: blur(2vw);
 
 	align-items: center;
-    display: grid !important;
+	display: var(--game-content-display);
 
 	&:nth-child(1) { animation: 0.2s ease 0s normal forwards 1 fadein; -webkit-animation-fill-mode: forwards; }
 	&:nth-child(2) { animation: 0.4s ease 0s normal forwards 1 fadein; -webkit-animation-fill-mode: forwards; }
@@ -196,10 +196,6 @@ body {
 	overflow: hidden;
 	text-overflow: ellipsis;
 	width: 50%;
-}
-
-#game-content {
-	display: var(--game-content-display);
 }
 
 #canvas-background {

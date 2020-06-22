@@ -402,7 +402,7 @@ function initToolbar() {
 		});
 	});
 
-	$('#chess-toolbar').removeAttr('hidden');
+	$('#chess-toolbar').removeClass('hidden');
 }
 
 async function updatePlayerData() {
