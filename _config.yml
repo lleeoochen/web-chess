@@ -2,8 +2,8 @@
 title:       Web Chess
 description: This is a beautiful chess platform for chess lovers and friends.
 
-url:       'www.weitungchen.com'
-baseUrl:   '/web-chess'
+url:       'www.chessvibe.net'
+baseUrl:   ''
 pluginUrl: 'https://weitungchen.com/plugins'
 backendUrl: 'https://api.weitungchen.com'
 
