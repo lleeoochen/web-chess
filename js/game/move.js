@@ -79,11 +79,11 @@ function moveEatPiece(oldGrid, newGrid) {
 			new_img.setAttribute("class", "eaten-piece");
 			old_img.style.zIndex = "";
 
-			if (newGridTeam == TEAM.B) {
-				$('#blacksEaten').append(new_img);
+			if (newGridTeam == my_team) {
+				$('#enemy-eaten').append(new_img);
 			}
 			else {
-				$('#whitesEaten').append(new_img);
+				$('#me-eaten').append(new_img);
 			}
 		}, 300); //TODO: delay depends on the pieces' distance
 	}
@@ -118,11 +118,11 @@ function movePassantPawn(oldGrid, newGrid) {
 		piecesLayer.removeChild(pawn_img);
 		pawn_img.setAttribute("class", "eaten-piece");
 
-		if (pawn_team == TEAM.B) {
-			$('#blacksEaten').append(pawn_img);
+		if (pawn_team == my_team) {
+			$('#enemy-eaten').append(pawn_img);
 		}
 		else {
-			$('#whitesEaten').append(pawn_img);
+			$('#me-eaten').append(pawn_img);
 		}
 
 		passant_pawn.piece = -1;

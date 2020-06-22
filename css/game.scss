@@ -141,11 +141,11 @@ body {
 	line-height: var(--eaten-panel-line-height);
 }
 
-#blacksEaten {
+#me-eaten {
 	margin-left: calc(var(--margin-size) / 4) !important;
 }
 
-#whitesEaten {
+#enemy-eaten {
 	margin-left: calc(var(--margin-size) / -4) !important;
 }
 
@@ -159,15 +159,11 @@ body {
 	background-color: black;
 	border: calc(var(--margin-size) * 0.7);
 	border-style: solid;
+
+	&.B { border-color: black; }
+	&.W { border-color: white; }
 }
 
-#B-player-image {
-	border-color: black;
-}
-
-#W-player-image {
-	border-color: white;
-}
 
 .player-pic.pull-left  { margin-left: 0; }
 .player-pic.pull-right { margin-right: 0; }
@@ -274,7 +270,8 @@ body {
 }
 
 #chat-section {
-	height: 70%;
+	flex-grow: 100;
+    overflow: hidden;
 	background-color: #000000db;
 	border-radius: var(--border-radius);
 	margin-bottom: var(--margin-size);

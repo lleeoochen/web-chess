@@ -9,5 +9,5 @@ database.login(() => {
 	if (url)
 		window.location = url;
 	else
-		window.location = `{{ baseUrl }}/index${ SCREEN_PORTRAIT ? '_mobile' : '' }`;
+		window.location = `{{ baseUrl }}/${ SCREEN_PORTRAIT ? 'index_mobile' : '' }`;
 });

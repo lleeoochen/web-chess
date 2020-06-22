@@ -30,18 +30,18 @@ js:
 	<!-- <img id="chat-notification" src="assets/notification.png" hidden/> -->
 	<div id="action-layer">
 		<div id="toolbar-wrap" class="row">
-			<img id="B-player-image" class="player-pic pull-left" src="assets/WRook.svg"/>
+			<img id="me-image" class="player-pic pull-left" src="assets/WRook.svg"/>
 			<div class="pull-left white text-left">
-				<div id="B-player-name" class="player-name">&nbsp;</div>
-				<div id="whitesEaten" class="row eaten-panel"></div>
+				<div id="me-name" class="player-name">&nbsp;</div>
+				<div id="enemy-eaten" class="row eaten-panel"></div>
 			</div>
-			<div class="home-btn in-game btn btn-primary">
+			<a class="home-btn in-game btn btn-primary">
 				<img id="home-icon" src="assets/home.png"/>
-			</div>
-			<img id="W-player-image" class="player-pic pull-right" src="assets/WRook.svg"/>
+			</a>
+			<img id="enemy-image" class="player-pic pull-right" src="assets/WRook.svg"/>
 			<div class="pull-right white text-right">
-				<div id="W-player-name" class="player-name">Opponent</div>
-				<div id="blacksEaten" class="row eaten-panel"></div>
+				<div id="enemy-name" class="player-name">Opponent</div>
+				<div id="me-eaten" class="row eaten-panel"></div>
 			</div>
 		</div>
 		<div id="canvas-wrap">
@@ -55,24 +55,24 @@ js:
 	</div>
 	<div id="side-layer" >
 		<div id="utility-section">
-			<!-- <div id="B-player-utility-name" class="player-utility-name">&nbsp;</div> -->
-			<div id="B-player-utility" class="player-utility">
+			<!-- <div id="me-utility-name" class="player-utility-name">&nbsp;</div> -->
+			<div id="me-utility" class="player-utility">
 				<div class="player-utility-profile">
-					<img id="B-player-utility-image" class="player-utility-pic" src="assets/WRook.svg"/>
+					<img id="me-utility-image" class="player-utility-pic" src="assets/WRook.svg"/>
 				</div>
-				<div id="black-stat" class="player-utility-stat"></div>
+				<div id="me-stat" class="player-utility-stat"></div>
 				<div class="player-utility-timer">
-					<div id="black-timer" class="timer"> 00:00 </div>
+					<div id="me-timer" class="timer"> 00:00 </div>
 				</div>
 			</div>
-			<!-- <div id="W-player-utility-name" class="player-utility-name">Opponent</div> -->
-			<div id="W-player-utility" class="player-utility">
+			<!-- <div id="enemy-utility-name" class="player-utility-name">Opponent</div> -->
+			<div id="enemy-utility" class="player-utility">
 				<div class="player-utility-profile">
-					<img id="W-player-utility-image" class="player-utility-pic" src="assets/WRook.svg"/>
+					<img id="enemy-utility-image" class="player-utility-pic" src="assets/WRook.svg"/>
 				</div>
-				<div id="white-stat" class="player-utility-stat"></div>
+				<div id="enemy-stat" class="player-utility-stat"></div>
 				<div class="player-utility-timer">
-					<div id="white-timer" class="timer">00:00</div>
+					<div id="enemy-timer" class="timer">00:00</div>
 				</div>
 			</div>
 			<!-- <div id="game-utility-title" class="utility-divider hidden"> Utility </div> -->

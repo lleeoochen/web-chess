@@ -12,9 +12,11 @@
 	}
 }
 
-.firebaseui-container, .firebaseui-idp-button, .firebaseui-tenant-button {
+.firebaseui-container, .firebaseui-idp-button, .firebaseui-tenant-button, .firebaseui-callback-indicator-container {
 	max-width: unset !important;
 	width: unset !important;
+	min-height: unset !important;
+	height: unset !important;
 }
 
 .firebaseui-idp-button {

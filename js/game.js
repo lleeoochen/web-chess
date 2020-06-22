@@ -25,6 +25,7 @@ var king_moved = false;
 var other_king_moved = false;
 var lastMove = {};
 var first_move = true;
+var first_load = true;
 var black_title_set = false;
 var white_title_set = false;
 
@@ -32,7 +33,6 @@ var interval = null;
 var white_timer = MAX_TIME;
 var black_timer = MAX_TIME;
 
-var theme = null;
 
 var id = 0;
 var stats = {
@@ -56,6 +56,11 @@ var timer_enable = false;
 var user_id;
 var hidden = true;
 
+var theme = Util.unpackTheme(get_cache(match_id + '-theme'));
+if (theme) {
+	$('#background-image').css('background-image', `url(${theme.BACKGROUND_IMAGE})`);
+}
+
 database.getProfile().then(res => {
 	user_id = res.id;
 	database.user_id = user_id;
@@ -72,15 +77,16 @@ database.getProfile().then(res => {
 		if (game_reset) {
 			initGame();
 			if (timer_enable) {
-				$('#white-timer').text(Util.formatTimer(match.white_timer));
-				$('#black-timer').text(Util.formatTimer(match.black_timer));
+				$('#enemy-timer').text(Util.formatTimer(enemy_team == TEAM.B ? match.black_timer : match.white_timer));
+				$('#me-timer').text(Util.formatTimer(my_team == TEAM.B ? match.black_timer : match.white_timer));
 			}
 			else {
-				$('#white-timer').text('∞:∞');
-				$('#black-timer').text('∞:∞');
+				$('#enemy-timer').text('∞:∞');
+				$('#me-timer').text('∞:∞');
 			}
 		}
 
+		set_cache(match_id + '-theme', match.theme);
 		updateTheme(Util.unpackTheme(match.theme));
 
 		if (hidden) {
@@ -104,6 +110,13 @@ database.getProfile().then(res => {
 			updateReviewButtons();
 			showEnding();
 			return false;
+		}
+
+		if (first_load) {
+			await new Promise((resolve, reject) => {
+				setTimeout(() => { resolve() }, 500);
+			});
+			first_load = false;
 		}
 
 		await updateMatchMoves();
@@ -171,7 +184,7 @@ async function updateMatchMoves() {
 			moveChess(chessboard[move.old_x][move.old_y], chessboard[move.new_x][move.new_y]);
 			resolve();
 		  }, 50);
-		})
+		});
 		turn = move.turn == TEAM.W ? TEAM.B : TEAM.W;
 	}
 
@@ -341,11 +354,14 @@ function initGame() {
 }
 
 function showTimer() {
-	$('#white-timer').text(Util.formatTimer(white_timer));
-	$('#black-timer').text(Util.formatTimer(black_timer));
+	let enemy_timer = enemy_team == TEAM.B ? black_timer : white_timer;
+	let my_timer = my_team == TEAM.B ? black_timer : white_timer;
 
-	$('#white-timer').toggleClass('ticking', turn == TEAM.W && white_timer >= 0);
-	$('#black-timer').toggleClass('ticking', turn == TEAM.B && black_timer >= 0);
+	$('#enemy-timer').text(Util.formatTimer(enemy_timer));
+	$('#me-timer').text(Util.formatTimer(my_timer));
+
+	$('#enemy-timer').toggleClass('ticking', turn == enemy_team && enemy_timer >= 0);
+	$('#me-timer').toggleClass('ticking', turn == my_team && my_timer >= 0);
 }
 
 function countDown() {
@@ -374,11 +390,9 @@ function countDown() {
 
 
 function initToolbar() {
-
 	$('.home-btn').on('click', (e) => {
-		window.location = `{{ site.baseUrl }}/index${ SCREEN_PORTRAIT ? '_mobile' : '' }`;
+		window.location = `{{ site.baseUrl }}/${ SCREEN_PORTRAIT ? 'index_mobile' : '' }`;
 	});
-
 
 	// Signout button
 	$('#signout-btn').on('click', (e) => {
@@ -410,14 +424,32 @@ async function updatePlayerData() {
 function setPlayerHTML(team) {
 	let player = players[team];
 	let regex = team == TEAM.B ? /\[B\]/g : /\[W\]/g;
+	let prefix = team == my_team ? 'me' : 'enemy';
+	let other_team = team == TEAM.W ? TEAM.B : TEAM.W;
+	let other_prefix = team != my_team ? 'me' : 'enemy';
 
-	$(`#${team}-player-image`).attr('src', player.photo + '=c');
-	$(`#${team}-player-name`).text(player.name);
-	$(`#${team}-player-utility-image`).attr('src', player.photo + '=c');
-	$(`#${team}-player-utility-name`).text(player.name);
+	$(`#${ prefix }-image`).attr('src', player.photo + '=c');
+	$(`#${ prefix }-name`).text(player.name);
 
-	$('#chat-messages-content').replaceWith($.parseHTML($('#chat-messages-content').prop('outerHTML').replace(regex, player.name)));
-	$("#chat-messages-content").scrollTop($("#chat-messages-content")[0].scrollHeight);
+	$(`#${ prefix }-utility-image`).attr('src', player.photo + '=c');
+	$(`#${ prefix }-utility-name`).text(player.name);
+
+
+	// Add teams to class
+	$(`#${ prefix }-image`).addClass(team);
+	$(`#${ other_prefix }-image`).addClass(other_team);
+
+	$(`#${ prefix }-utility-image`).addClass(team);
+	$(`#${ other_prefix }-utility-image`).addClass(other_team);
+
+	$(`#${ prefix }-timer`).addClass(team);
+	$(`#${ other_prefix }-timer`).addClass(other_team);
+
+	$(`#${ prefix }-utility`).addClass(team);
+	$(`#${ other_prefix }-utility`).addClass(other_team);
+
+	// $('#chat-messages-content').replaceWith($.parseHTML($('#chat-messages-content').prop('outerHTML').replace(regex, player.name)));
+	// $("#chat-messages-content").scrollTop($("#chat-messages-content")[0].scrollHeight);
 }
 
 //Intialize chessboard background
@@ -699,13 +731,13 @@ function updateStats() {
 		$(".canvas-border.bg-black").css('border-radius', 'var(--border-radius) var(--border-radius) var(--border-radius) var(--border-radius)');
 	}
 
-	if (stats.W > stats.B) {
-		$("#white-stat").text("+" + (stats.W - stats.B));
-		$("#black-stat").text("+0");
+	if (stats[enemy_team] > stats[my_team]) {
+		$("#enemy-stat").text("+" + (stats[enemy_team] - stats[my_team]));
+		$("#me-stat").text("+0");
 	}
 	else {
-		$("#white-stat").text("+0");
-		$("#black-stat").text("+" + (stats.B - stats.W));
+		$("#enemy-stat").text("+0");
+		$("#me-stat").text("+" + (stats[my_team] - stats[enemy_team]));
 	}
 }
 
@@ -878,11 +910,11 @@ function updateTheme(newTheme) {
 	}
 
 	// $('.background-image')				.attr('src', `${theme.BACKGROUND_IMAGE}`);
-	$('#background-image')					.css('background-image', `url(${theme.BACKGROUND_IMAGE})`);
+	$('#background-image')				.css('background-image', `url(${theme.BACKGROUND_IMAGE})`);
 	$('.player-name')					.css('color',            theme.NAME_TITLE_COLOR);
 	$('#canvas-background')				.css('background-color', theme.COLOR_BOARD_LIGHT);
-	// $('.utility-btn-wrap .utility-btn')	.css('background-color', theme.COLOR_BOARD_DARK);
-	$('.utility-btn-wrap .utility-btn')	.css('background-color', '#494949');
+	$('.utility-btn-wrap .utility-btn')	.css('background-color', theme.COLOR_BOARD_DARK);
+	// $('.utility-btn-wrap .utility-btn')	.css('background-color', '#494949');
 	$('#chat-send-button')				.css('background-color', theme.COLOR_BOARD_DARK);
 	$('.player-pic')					.css('background-color', theme.COLOR_BOARD_DARK);
 	$('.player-utility-pic')			.css('background-color', theme.COLOR_BOARD_DARK);
@@ -924,18 +956,18 @@ function addMoveHistory(oldGrid, newGrid) {
 	let old_color_id = old_color == theme.COLOR_BOARD_DARK ? 'dark' : 'light';
 	let new_color_id = new_color == theme.COLOR_BOARD_DARK ? 'dark' : 'light';
 
-	$('#move-history-panel').append(`
-		<div class="move-history-item utility-btn-wrap">
-			<div class="utility-btn">
-				<img class="utility-icon utility-piece-icon ${old_color_id}" src="${old_img}" style="background-color: ${old_color}"/>
-				(${ old_numbering.y }, ${ old_numbering.x })
-				<img class="utility-icon" src="assets/arrow-right.png"/>
-				(${ new_numbering.y }, ${ new_numbering.x })
-				<img class="utility-icon utility-piece-icon ${new_color_id}" src="${new_img}" style="background-color: ${new_color}"/>
-			</div>
-		</div>
-	`);
-	$("#move-history-panel").scrollTop($("#move-history-panel")[0].scrollHeight);
+	// $('#move-history-panel').append(`
+	// 	<div class="move-history-item utility-btn-wrap">
+	// 		<div class="utility-btn">
+	// 			<img class="utility-icon utility-piece-icon ${old_color_id}" src="${old_img}" style="background-color: ${old_color}"/>
+	// 			(${ old_numbering.y }, ${ old_numbering.x })
+	// 			<img class="utility-icon" src="assets/arrow-right.png"/>
+	// 			(${ new_numbering.y }, ${ new_numbering.x })
+	// 			<img class="utility-icon utility-piece-icon ${new_color_id}" src="${new_img}" style="background-color: ${new_color}"/>
+	// 		</div>
+	// 	</div>
+	// `);
+	// $("#move-history-panel").scrollTop($("#move-history-panel")[0].scrollHeight);
 }
 
 function revertMoveHistory() {
@@ -1051,6 +1083,8 @@ function onAddTimeClick() {
 }
 
 function onThemeClick() {
+	// window.location = '';
+	// return;
 	$('#theme-modal').modal('show');
 
 	$('#theme-modal .btn').removeClass('outline');
@@ -1096,4 +1130,13 @@ function selectText(containerid) {
         window.getSelection().removeAllRanges();
         window.getSelection().addRange(range);
     }
+}
+
+
+function set_cache(key, val) {
+	localStorage.setItem(key, val);
+}
+
+function get_cache(key) {
+	return localStorage.getItem(key);
 }

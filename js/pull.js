@@ -1,7 +1,7 @@
 $(function() {
 	// if (SCREEN_PORTRAIT) {
 	// 	const ptr = PullToRefresh.init({
-	// 		mainElement: '#matches-display',
+	// 		mainElement: 'body',
 	// 		refreshTimeout: 100,
 	// 		instructionsPullToRefresh: 'Refresh?',
 	// 		instructionsReleaseToRefresh: 'Refresh?',

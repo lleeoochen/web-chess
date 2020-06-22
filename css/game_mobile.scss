@@ -2,11 +2,11 @@
 ---
 :root {
 	--margin-size:		1vw;
-	--eaten-piece-size: 3vw;
-	--picture-size: 	15vw;
+	--eaten-piece-size: 5vw;
+	--picture-size: 	30vw;
 	--icon-size: 		5vw;
-	--title-size: 		3vw;
-	--font-size:		3vw;
+	--title-size: 		5vw;
+	--font-size:		5vw;
 	--btn-size: 		3vw;
 	--border-radius: 	0.75vw;
 
@@ -56,6 +56,7 @@ body {
     .title {
     	color: white;
     	font-size: var(--toolbar-title);
+    	margin: auto;
     }
 
 	.toolbar-btn {
@@ -67,14 +68,18 @@ body {
 }
 
 #game-content {
-	padding-top: var(--toolbar-height);
+	height: 100vh;
+	padding: var(--toolbar-height) 0;
+	overflow-x: hide;
+	backdrop-filter: blur(2vw);
+	-webkit-backdrop-filter: blur(2vw);
 
-	#action-layer {
-		&:nth-child(1) { animation: 0.2s ease 0s normal forwards 1 fadein; }
-	}
-	#side-layer {
-		&:nth-child(2) { animation: 0.4s ease 0s normal forwards 1 fadein; }
-	}
+	align-items: center;
+    display: grid !important;
+
+	&:nth-child(1) { animation: 0.2s ease 0s normal forwards 1 fadein; -webkit-animation-fill-mode: forwards; }
+	&:nth-child(2) { animation: 0.4s ease 0s normal forwards 1 fadein; -webkit-animation-fill-mode: forwards; }
+	&:nth-child(3) { animation: 0.6s ease 0s normal forwards 1 fadein; -webkit-animation-fill-mode: forwards; }
 }
 
 .x0 { left: calc(var(--margin-size) + (0 * var(--cell-size))); }
@@ -111,8 +116,8 @@ body {
 
 .lettering {
 	text-align: right;
-	margin-top: calc(var(--cell-size) - var(--margin-size) * 2.8);
-	margin-right: calc(var(--margin-size) * 0.5);
+	margin-top: calc(var(--cell-size) - var(--margin-size) * 4.2);
+	margin-right: calc(var(--margin-size) * 0.2);
 	font-weight: bold;
 	font-size: calc(var(--font-size) * 0.75);
 }
@@ -146,12 +151,12 @@ body {
 	height: var(--eaten-piece-size);
 }
 
-.eaten-panel {
-	height: calc(var(--eaten-piece-size) * 2);
-	width: calc(var(--eaten-piece-size) * 8);
-	margin-right: unset !important;
-	line-height: var(--eaten-panel-line-height);
-}
+// .eaten-panel {
+// 	height: calc(var(--eaten-piece-size) * 2);
+// 	width: calc(var(--eaten-piece-size) * 6);
+// 	margin-right: unset !important;
+// 	line-height: var(--eaten-panel-line-height);
+// }
 
 #blacksEaten {
 	margin-left: calc(var(--margin-size) / 4) !important;
@@ -190,7 +195,7 @@ body {
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
-	width: calc(var(--eaten-piece-size) * 8);
+	width: 50%;
 }
 
 #game-content {
@@ -214,22 +219,23 @@ body {
 #canvas-wrap {
 	position: relative;
 	height: var(--canvas-size);
+	margin-left: var(--margin-size);
 	/*margin-top: var(--margin-size);*/
 }
 
-#toolbar-wrap {
+.toolbar-wrap {
 	margin: 0 !important;
 }
 
-#action-layer {
-	background-color: rgba(255, 255, 255, 0.2);
-	padding-left: var(--margin-size);
-	padding-right: var(--margin-size);
-	padding-bottom: var(--margin-size);
-	margin-left: auto;
-	margin-right: var(--layer-margin-side);
-	width: var(--layer-size);
-}
+// #action-layer {
+// 	background-color: rgba(255, 255, 255, 0.2);
+// 	padding-left: var(--margin-size);
+// 	padding-right: var(--margin-size);
+// 	padding-bottom: var(--margin-size);
+// 	margin-left: auto;
+// 	margin-right: var(--layer-margin-side);
+// 	width: var(--layer-size);
+// }
 
 .home-btn.in-game {
 	font-size: var(--font-size);
@@ -247,22 +253,23 @@ body {
 	}
 }
 
-#side-layer {
-	background-image: linear-gradient(rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.2));
-	padding-left: var(--side-layer-padding-left);
-	padding-right: var(--margin-size);
-	padding-top: var(--side-layer-padding-top);
-	margin-left: var(--layer-margin-side);
-	margin-right: auto;
-	width: var(--layer-size);
-	color: white;
-	text-align: left;
-	height: calc(var(--layer-size) + var(--picture-size) + var(--margin-size));
-	display: flex;
-	flex-direction: column;
-}
 
-#utility-section {
+// #side-layer {
+// 	background-image: linear-gradient(rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.2));
+// 	padding-left: var(--side-layer-padding-left);
+// 	padding-right: var(--margin-size);
+// 	padding-top: var(--side-layer-padding-top);
+// 	margin-left: var(--layer-margin-side);
+// 	margin-right: auto;
+// 	width: var(--layer-size);
+// 	color: white;
+// 	text-align: left;
+// 	height: calc(var(--layer-size) + var(--picture-size) + var(--margin-size));
+// 	display: flex;
+// 	flex-direction: column;
+// }
+
+.utility-section {
 	background-color: #000000db;
 	border-radius: var(--border-radius);
 	padding: calc(var(--margin-size));

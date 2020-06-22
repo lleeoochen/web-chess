@@ -24,12 +24,6 @@
 	--home-spacing: 2vw;
 }
 
-.title {
-	color: var(--text-color);
-	margin: var(--home-margin);
-	font-size: var(--home-title-size);
-}
-
 #chess-toolbar {
 	position: fixed;
 	height: var(--toolbar-height);
@@ -42,6 +36,13 @@
     width: -webkit-fill-available;
 	@media screen and (orientation: landscape) {
 		margin: var(--home-margin);
+	}
+	
+	.title {
+		color: var(--text-color);
+		margin: var(--home-margin);
+		font-size: var(--home-title-size);
+		margin: auto;
 	}
 
 	.toolbar-btn {
@@ -66,6 +67,7 @@
 		max-width: 100%;
 
 		margin: var(--home-match-margin);
+		margin-top: 0;
 		padding: calc(var(--home-margin) * 3) !important;
 		border-radius: var(--home-margin) !important;
 

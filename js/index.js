@@ -2,7 +2,7 @@
 ---
 // Redirect based on screen orientation
 if (SCREEN_PORTRAIT && !window.location.href.includes('mobile')) window.location = '{{ site.baseUrl }}/index_mobile';
-if (!SCREEN_PORTRAIT && window.location.href.includes('mobile')) window.location = '{{ site.baseUrl }}/index';
+if (!SCREEN_PORTRAIT && window.location.href.includes('mobile')) window.location = '{{ site.baseUrl }}/';
 
 var user = null;
 var user_id = null;
@@ -44,7 +44,6 @@ database.getProfile().then(res => {
 	}
 
 	Promise.all(matches_promises).then(async results => {
-
 		// Sort matches by dates for each opponent
 		for (let i in results) {
 			results[i].matches.sort((a, b) => {
@@ -123,7 +122,7 @@ database.getProfile().then(res => {
 				`;
 			});
 
-			$('#matches-display').append(`
+			let $opponent_container = `
 				<div class="opponent-container">
 					<div class="player-title-bar">
 						<div class="player-name">${ enemy.name || 'New Matches' }</div>
@@ -132,7 +131,12 @@ database.getProfile().then(res => {
 						${ $matches }
 					</div>
 				</div>
-			`);
+			`;
+
+			if (enemy.name)
+				$('#matches-display').append($opponent_container);
+			else
+				$('#matches-display').prepend($opponent_container);
 		}
 
 		// Update stats
