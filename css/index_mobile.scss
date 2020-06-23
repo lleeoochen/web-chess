@@ -17,6 +17,7 @@
 	--toolbar-height: 15vw;
 	--toolbar-shadow: 0 1vw 2vw 0 rgba(0, 0, 0, 0.2), 0 1.5vw 2.5vw 0 rgba(0, 0, 0, 0.19);
 	--toolbar-margin: 1vw;
+	--toolbar-title: 8vw;
 
 	--btn-size: 3vw;
 	--picture-size: 17vw;
@@ -37,11 +38,11 @@
 	@media screen and (orientation: landscape) {
 		margin: var(--home-margin);
 	}
-	
+
 	.title {
 		color: var(--text-color);
 		margin: var(--home-margin);
-		font-size: var(--home-title-size);
+		font-size: var(--toolbar-title);
 		margin: auto;
 	}
 

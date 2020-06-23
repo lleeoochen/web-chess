@@ -1140,3 +1140,19 @@ function set_cache(key, val) {
 function get_cache(key) {
 	return localStorage.getItem(key);
 }
+
+
+// var prev_scroll = 0;
+// var scroll_thresh = 40;
+
+// $('#canvas-wrap').on('touchmove', function(e) {
+//     let current_scroll = e.originalEvent.touches[0].clientY;
+//     if(current_scroll - prev_scroll > scroll_thresh) {
+// 		$("#chess-toolbar").css('top', 0);
+// 	    prev_scroll = current_scroll;
+//     }
+//     if(prev_scroll - current_scroll > scroll_thresh) {
+// 		$("#chess-toolbar").css('top', 'calc(-1 * var(--toolbar-height))');
+// 	    prev_scroll = current_scroll;
+//     }
+// });

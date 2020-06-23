@@ -132,20 +132,14 @@
 }
 
 
-#panel-section {
-	bottom: 0;
-	position: absolute;
-	background-color: rgba(0, 0, 0, 0.69);
-
-	/* Game utility panels */
-	.utility-panel {
-		width: calc(100%);
-		padding: var(--util-margin-size) !important;
-		border-radius: calc(var(--util-btn-size) / 4);
-		text-align: left;
-		display: table;
-		table-layout: fixed;
-	}
+/* Game utility panels */
+.utility-panel {
+	width: calc(100%);
+	padding: var(--util-margin-size) !important;
+	border-radius: calc(var(--util-btn-size) / 4);
+	text-align: left;
+	display: table;
+	table-layout: fixed;
 }
 
 .utility-title {

@@ -97,7 +97,7 @@ class Firebase {
 		});
 	}
 
-	static signOut() {
-		firebase.auth().signOut();
+	static async signOut() {
+		await firebase.auth().signOut();
 	}
 }
