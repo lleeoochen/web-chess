@@ -722,14 +722,14 @@ function updateStats() {
 	$(".canvas-border.bg-white").css("height", `calc(${w_stat} * var(--canvas-size))`);
 	$(".canvas-border.bg-white").css(w_pos, '0');
 
-	if (my_team == TEAM.W) {
-		$(".canvas-border.bg-white").css('border-radius', '0 0 var(--border-radius) var(--border-radius)');
-		$(".canvas-border.bg-black").css('border-radius', 'var(--border-radius) var(--border-radius) var(--border-radius) var(--border-radius)');
-	}
-	else {
-		$(".canvas-border.bg-white").css('border-radius', 'var(--border-radius) var(--border-radius) 0 0');
-		$(".canvas-border.bg-black").css('border-radius', 'var(--border-radius) var(--border-radius) var(--border-radius) var(--border-radius)');
-	}
+	// if (my_team == TEAM.W) {
+	// 	$(".canvas-border.bg-white").css('border-radius', '0 0 var(--border-radius) var(--border-radius)');
+	// 	$(".canvas-border.bg-black").css('border-radius', 'var(--border-radius) var(--border-radius) var(--border-radius) var(--border-radius)');
+	// }
+	// else {
+	// 	$(".canvas-border.bg-white").css('border-radius', 'var(--border-radius) var(--border-radius) 0 0');
+	// 	$(".canvas-border.bg-black").css('border-radius', 'var(--border-radius) var(--border-radius) var(--border-radius) var(--border-radius)');
+	// }
 
 	if (stats[enemy_team] > stats[my_team]) {
 		$("#enemy-stat").text("+" + (stats[enemy_team] - stats[my_team]));
@@ -912,6 +912,7 @@ function updateTheme(newTheme) {
 	// $('.background-image')				.attr('src', `${theme.BACKGROUND_IMAGE}`);
 	$('#background-image')				.css('background-image', `url(${theme.BACKGROUND_IMAGE})`);
 	$('.player-name')					.css('color',            theme.NAME_TITLE_COLOR);
+	$('.player-utility')                .css('background-color', theme.COLOR_UTILITY);
 	$('#canvas-background')				.css('background-color', theme.COLOR_BOARD_LIGHT);
 	$('.utility-btn-wrap .utility-btn')	.css('background-color', theme.COLOR_BOARD_DARK);
 	// $('.utility-btn-wrap .utility-btn')	.css('background-color', '#494949');

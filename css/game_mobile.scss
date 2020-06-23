@@ -79,7 +79,7 @@ body {
 		width: 100vw;
 		height: 100vh;
 		align-items: center;
-		padding-top: var(--toolbar-height);
+		padding-top: calc(var(--toolbar-height) + var(--margin-size) * 2);
 		padding-bottom: var(--panel-height);
 
 		backdrop-filter: blur(2vw);

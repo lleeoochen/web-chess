@@ -22,6 +22,7 @@ const THEME_CLASSIC = {
 	COLOR_HIGHLIGHT_DARK: 	"#7B68EE",
 	COLOR_LAST_MOVE_LIGHT: 	"#FDFD84",
 	COLOR_LAST_MOVE_DARK: 	"#EFEF6E",
+	COLOR_UTILITY:          "#89898980",
 	BACKGROUND_IMAGE: 		"./assets/background.jpg",
 	NAME_TITLE_COLOR: 		"white"
 };
@@ -33,8 +34,9 @@ const THEME_WINTER = {
 	COLOR_HIGHLIGHT_DARK: 	"#D63460",
 	COLOR_LAST_MOVE_LIGHT: 	"#FDFD84",
 	COLOR_LAST_MOVE_DARK: 	"#EFEF6E",
+	COLOR_UTILITY:          "#FFFFFF33",
 	BACKGROUND_IMAGE: 		"./assets/background_winter.jpg",
-	NAME_TITLE_COLOR: 		"white"
+	NAME_TITLE_COLOR: 		"white",
 };
 
 const THEME_METAL = {
@@ -44,6 +46,7 @@ const THEME_METAL = {
 	COLOR_HIGHLIGHT_DARK: 	"#7B68EE",
 	COLOR_LAST_MOVE_LIGHT: 	"#FDFD84",
 	COLOR_LAST_MOVE_DARK: 	"#EFEF6E",
+	COLOR_UTILITY:          "#89898980",
 	BACKGROUND_IMAGE: 		"./assets/background_metal.jpg",
 	NAME_TITLE_COLOR: 		"white"
 };
@@ -55,6 +58,7 @@ const THEME_NATURE = {
 	COLOR_HIGHLIGHT_DARK: 	"#7B68EE",
 	COLOR_LAST_MOVE_LIGHT: 	"#BB92AB",
 	COLOR_LAST_MOVE_DARK: 	"#905E7C",
+	COLOR_UTILITY:          "#00000080",
 	BACKGROUND_IMAGE: 		"./assets/background_nature.jpg",
 	NAME_TITLE_COLOR: 		"black"
 };

@@ -16,10 +16,11 @@
 /* Player utility panels */
 .player-utility {
 	position: relative;
-	margin: calc(1 * var(--util-margin-size));
+	margin: 0 var(--util-margin-size);
 	background-color: rgba(0, 0, 0, 0.5);
-	border-radius: calc(var(--util-btn-size) / 4);
 	display: flex;
+	// height: 30vw;
+
 	&.B { border: var(--util-margin-size) solid black; }
 	&.W { border: var(--util-margin-size) solid white; }
 
@@ -29,9 +30,10 @@
 	    overflow: hidden;
 	    display: block;
 	    text-align: left;
+    	width: calc(var(--util-picture-size) + var(--margin-size));
 
 	    .player-utility-pic {
-	    	width: var(--util-picture-size);
+	    	width: calc(var(--util-picture-size) + var(--margin-size));
 	    	height: var(--util-picture-size);
 	    	background-color: black;
 
@@ -46,9 +48,8 @@
 		.eaten-panel {
 		    text-align: left;
 		    font-size: var(--util-title-size);
-
-			&#enemy-eaten { margin-bottom: auto; }
-			&#me-eaten { margin-top: auto; }
+			// &#enemy-eaten { margin-bottom: auto; }
+			// &#me-eaten { margin-top: auto; }
 		}
 
 		.player-utility-name {
@@ -57,8 +58,8 @@
 			margin: 0 var(--margin-size);
 			text-align: left;
 
-			&#enemy-utility-name { margin-top: auto; }
-			&#me-utility-name { margin-bottom: auto; }
+			// &#enemy-utility-name { margin-top: auto; }
+			// &#me-utility-name { margin-bottom: auto; }
 		}
 	}
 
@@ -90,32 +91,39 @@
 
 	&#enemy-utility {
 	    border-bottom: 0;
+		border-top-left-radius: calc(var(--util-btn-size) / 4);
+		border-top-right-radius: calc(var(--util-btn-size) / 4);
 
 	    .player-utility-pic {
 	    	border-left: 0;
 	    	border-top: 0;
-	    	border-bottom-right-radius: calc(var(--util-btn-size) / 4);
+	    	border-bottom: 0;
+	    	// border-bottom-right-radius: calc(var(--util-btn-size) / 4);
 	    }
 
 		.player-utility-timer {
-		    right: 0; bottom: 0;
+		    right: 0; top: 0;
 			margin-bottom: unset;
 
 			.timer {
 				border-right: 0;
-				border-top-left-radius: calc(var(--util-btn-size) / 4);
+				// border-bottom-left-radius: calc(var(--util-btn-size) / 4);
 				border-bottom-left-radius: calc(var(--util-btn-size) / 4);
+				border-top: 0;
 			}
 		}
 	}
 
 	&#me-utility {
 	    border-top: 0;
+		border-bottom-left-radius: calc(var(--util-btn-size) / 4);
+		border-bottom-right-radius: calc(var(--util-btn-size) / 4);
 
 	    .player-utility-pic {
 	    	border-left: 0;
+	    	border-top: 0;
 	    	border-bottom: 0;
-	    	border-top-right-radius: calc(var(--util-btn-size) / 4);
+	    	// border-top-right-radius: calc(var(--util-btn-size) / 4);
 	    }
 
 		.player-utility-timer {
@@ -124,8 +132,9 @@
 
 			.timer {
 				border-right: 0;
-				border-top-left-radius: calc(var(--util-btn-size) / 4);
+				// border-top-left-radius: calc(var(--util-btn-size) / 4);
 				border-bottom-left-radius: calc(var(--util-btn-size) / 4);
+				border-top: 0;
 			}
 		}
 	}
