@@ -912,7 +912,7 @@ function updateTheme(newTheme) {
 	// $('.background-image')				.attr('src', `${theme.BACKGROUND_IMAGE}`);
 	$('#background-image')				.css('background-image', `url(${theme.BACKGROUND_IMAGE})`);
 	$('.player-name')					.css('color',            theme.NAME_TITLE_COLOR);
-	$('.player-utility')                .css('background-color', theme.COLOR_UTILITY);
+	// $('.player-utility')                .css('background-color', theme.COLOR_UTILITY);
 	$('#canvas-background')				.css('background-color', theme.COLOR_BOARD_LIGHT);
 	$('.utility-btn-wrap .utility-btn')	.css('background-color', theme.COLOR_BOARD_DARK);
 	// $('.utility-btn-wrap .utility-btn')	.css('background-color', '#494949');
