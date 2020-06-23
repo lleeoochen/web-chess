@@ -2,8 +2,12 @@
 
 <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0">
 <meta charset="utf-8">
-<meta property="og:title" content="Web Chess" />
+<meta property="og:title" content="ChessVibe" />
 <meta property="og:image" content="{ site.url }{ site.baseUrl }/assets/BRook.svg" />
+{% for meta in page.meta %}
+	{{ meta }}
+{% endfor %}
+
 
 <!-- Tab Title -->
 <title>{{ page.title }}</title>
