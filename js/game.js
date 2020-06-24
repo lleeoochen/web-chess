@@ -4,6 +4,8 @@
 if (SCREEN_PORTRAIT && !window.location.href.includes('mobile')) window.location = window.location.href.replace(/\/game/, '/game_mobile');
 if (!SCREEN_PORTRAIT && window.location.href.includes('mobile')) window.location = window.location.href.replace(/\/game_mobile/, '/game');
 
+var vh = window.innerHeight * 0.01;
+document.documentElement.style.setProperty('--vh', `${vh}px`);
 
 //Intialize global variables
 var canvasLayer = document.getElementById("canvas-layer");
@@ -391,6 +393,8 @@ function countDown() {
 
 function initToolbar() {
 	$('.home-btn').on('click', (e) => {
+		// window.location = '';
+		// return;
 		window.location = `{{ site.baseUrl }}/${ SCREEN_PORTRAIT ? 'mobile' : '' }`;
 	});
 
@@ -1081,8 +1085,6 @@ function onAddTimeClick() {
 }
 
 function onThemeClick() {
-	// window.location = '';
-	// return;
 	$('#theme-modal').modal('show');
 
 	$('#theme-modal .btn').removeClass('outline');

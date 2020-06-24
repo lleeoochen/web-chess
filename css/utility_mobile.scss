@@ -6,15 +6,25 @@
 	--util-icon-size: 		5vw;
 	--util-title-size: 		5vw;
 	--util-btn-size: 		3vw;
+	--util-btn-margin:      2vw;
 	--util-divider-width:	0.1vw;
 	--util-border-size: 	0.4vw;
 	--util-move-history-height: 35vw;
+}
+
+// Fat screens
+@media (min-aspect-ratio: 460/720) {
+	:root {
+		--util-icon-size: 4vw;
+		--util-btn-margin: 1vw;
+	}
 }
 
 
 
 /* Player utility panels */
 .player-utility {
+	width: calc(8 * var(--cell-size) + 2 * var(--margin-size));
 	position: relative;
 	margin: 0 var(--util-margin-size);
 	background-color: rgba(0, 0, 0, 0.5);
@@ -48,6 +58,8 @@
 		.eaten-panel {
 		    text-align: left;
 		    font-size: var(--util-title-size);
+		    overflow-x: auto;
+		    white-space: nowrap;
 			// &#enemy-eaten { margin-bottom: auto; }
 			// &#me-eaten { margin-top: auto; }
 		}
@@ -192,6 +204,8 @@
 	border-radius: calc(var(--util-btn-size) / 4) !important;
 	color: white !important;
 	// background-color: #57bf69 !important;
+	line-height: 1 !important;
+	padding: var(--util-btn-margin) !important;
 }
 
 .utility-btn-wrap {
