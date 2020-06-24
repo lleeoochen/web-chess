@@ -909,25 +909,22 @@ function updateTheme(newTheme) {
 		}
 	}
 
-	// $('.background-image')				.attr('src', `${theme.BACKGROUND_IMAGE}`);
-	$('#background-image')				.css('background-image', `url(${theme.BACKGROUND_IMAGE})`);
-	$('.player-name')					.css('color',            theme.NAME_TITLE_COLOR);
-	// $('.player-utility')                .css('background-color', theme.COLOR_UTILITY);
-	$('#canvas-background')				.css('background-color', theme.COLOR_BOARD_LIGHT);
-	$('.utility-btn-wrap .utility-btn')	.css('background-color', theme.COLOR_BOARD_DARK);
-	// $('.utility-btn-wrap .utility-btn')	.css('background-color', '#494949');
-	$('#chat-send-button')				.css('background-color', theme.COLOR_BOARD_DARK);
-	$('.player-pic')					.css('background-color', theme.COLOR_BOARD_DARK);
-	$('.player-utility-pic')			.css('background-color', theme.COLOR_BOARD_DARK);
-	$(':root')							.css('--dark-color',     theme.COLOR_BOARD_DARK);
-	$(':root')							.css('--light-color',    theme.COLOR_BOARD_LIGHT);
-	
-	$('.chat-message.dark').css('background-color', theme.COLOR_BOARD_DARK);
-	$('.chat-message.dark').css('color', 'white');
-	$('.chat-message.light').css('background-color', theme.COLOR_BOARD_LIGHT);
-	$('.chat-message.light').css('color', 'black');
-	// $('.utility-piece-icon.dark')		.css('background-color', theme.COLOR_BOARD_DARK);
-	// $('.utility-piece-icon.light')		.css('background-color', theme.COLOR_BOARD_LIGHT);
+	$('#background-image')              .css('background-image', `url(${theme.BACKGROUND_IMAGE})`);
+	$('.player-name')                   .css('color',            theme.NAME_TITLE_COLOR);
+	$('.player-utility')                .css('background-color', theme.COLOR_UTILITY[SCREEN_MODE]);
+	$('#canvas-background')             .css('background-color', theme.COLOR_BOARD_LIGHT);
+	$('.utility-btn-wrap .utility-btn') .css('background-color', theme.COLOR_BOARD_DARK);
+	$('#chat-send-button')              .css('background-color', theme.COLOR_BOARD_DARK);
+	$('.player-pic')                    .css('background-color', theme.COLOR_BOARD_DARK);
+	$('.player-utility-pic')            .css('background-color', theme.COLOR_BOARD_DARK);
+	$(':root')                          .css('--dark-color',     theme.COLOR_BOARD_DARK);
+	$(':root')                          .css('--light-color',    theme.COLOR_BOARD_LIGHT);
+	$('.chat-message.dark')             .css('background-color', theme.COLOR_BOARD_DARK);
+	$('.chat-message.dark')             .css('color',            'white');
+	$('.chat-message.light')            .css('background-color', theme.COLOR_BOARD_LIGHT);
+	$('.chat-message.light')            .css('color',            'black');
+	console.log(theme.ID);
+	$('#invite-link')                   .attr('class', theme.ID);
 }
 
 function getGridColor(x, y) {

@@ -98,7 +98,6 @@ body {
 		z-index: 100;
 		width: 100vw;
 		background-color: rgba(0, 0, 0, 0.69);
-		// height: calc(2.5 * var(--toolbar-height));
 	}
 }
 
@@ -330,9 +329,10 @@ body {
 			color: black;
 			font-size: var(--modal-title-size);
 
-			&::selection {
-				background-color: #57bf69;
-			}
+			&.classic::selection { background-color: #E6BF83; }
+			&.winter::selection  { background-color: #00B3DE; }
+			&.metal::selection   { background-color: #d2d2d2; }
+			&.nature::selection  { background-color: #c7da61; }
 		}
 	}
 }

@@ -14,53 +14,70 @@ const HIGHLIGHT_P = 3;
 
 const MATCHES_TABLE = "chess_matches";
 const USERS_TABLE = "chess_users";
+const SCREEN_MODE = SCREEN_PORTRAIT ? 'MOBILE' : 'DESKTOP';
 
 const THEME_CLASSIC = {
-	COLOR_BOARD_LIGHT: 		"#E6BF83",
-	COLOR_BOARD_DARK: 		"#8B4513",
-	COLOR_HIGHLIGHT_LIGHT: 	"#9E93E1",
-	COLOR_HIGHLIGHT_DARK: 	"#7B68EE",
-	COLOR_LAST_MOVE_LIGHT: 	"#FDFD84",
-	COLOR_LAST_MOVE_DARK: 	"#EFEF6E",
-	COLOR_UTILITY:          "#89898980",
-	BACKGROUND_IMAGE: 		"./assets/background.jpg",
-	NAME_TITLE_COLOR: 		"white"
+	ID:                     "classic",
+	COLOR_BOARD_LIGHT:      "#E6BF83",
+	COLOR_BOARD_DARK:       "#8B4513",
+	COLOR_HIGHLIGHT_LIGHT:  "#9E93E1",
+	COLOR_HIGHLIGHT_DARK:   "#7B68EE",
+	COLOR_LAST_MOVE_LIGHT:  "#FDFD84",
+	COLOR_LAST_MOVE_DARK:   "#EFEF6E",
+	COLOR_UTILITY: {
+		DESKTOP:            "#494949",
+		MOBILE:             "#89898980",
+	},
+	BACKGROUND_IMAGE:       "./assets/background.jpg",
+	NAME_TITLE_COLOR:       "white"
 };
 
 const THEME_WINTER = {
-	COLOR_BOARD_LIGHT: 		"#00B3DE",
-	COLOR_BOARD_DARK: 		"#3D507B",
-	COLOR_HIGHLIGHT_LIGHT: 	"#CC5E7C",
-	COLOR_HIGHLIGHT_DARK: 	"#D63460",
-	COLOR_LAST_MOVE_LIGHT: 	"#FDFD84",
-	COLOR_LAST_MOVE_DARK: 	"#EFEF6E",
-	COLOR_UTILITY:          "#FFFFFF33",
-	BACKGROUND_IMAGE: 		"./assets/background_winter.jpg",
-	NAME_TITLE_COLOR: 		"white",
+	ID:                     "winter",
+	COLOR_BOARD_LIGHT:      "#00B3DE",
+	COLOR_BOARD_DARK:       "#3D507B",
+	COLOR_HIGHLIGHT_LIGHT:  "#CC5E7C",
+	COLOR_HIGHLIGHT_DARK:   "#D63460",
+	COLOR_LAST_MOVE_LIGHT:  "#FDFD84",
+	COLOR_LAST_MOVE_DARK:   "#EFEF6E",
+	COLOR_UTILITY: {
+		DESKTOP:            "#494949",
+		MOBILE:             "#FFFFFF33",
+	},
+	BACKGROUND_IMAGE:       "./assets/background_winter.jpg",
+	NAME_TITLE_COLOR:       "white",
 };
 
 const THEME_METAL = {
-	COLOR_BOARD_LIGHT: 		"#d2d2d2",
-	COLOR_BOARD_DARK: 		"#5a5858",
-	COLOR_HIGHLIGHT_LIGHT: 	"#9e93e1",
-	COLOR_HIGHLIGHT_DARK: 	"#7B68EE",
-	COLOR_LAST_MOVE_LIGHT: 	"#FDFD84",
-	COLOR_LAST_MOVE_DARK: 	"#EFEF6E",
-	COLOR_UTILITY:          "#89898980",
-	BACKGROUND_IMAGE: 		"./assets/background_metal.jpg",
-	NAME_TITLE_COLOR: 		"white"
+	ID:                     "metal",
+	COLOR_BOARD_LIGHT:      "#d2d2d2",
+	COLOR_BOARD_DARK:       "#5a5858",
+	COLOR_HIGHLIGHT_LIGHT:  "#9e93e1",
+	COLOR_HIGHLIGHT_DARK:   "#7B68EE",
+	COLOR_LAST_MOVE_LIGHT:  "#FDFD84",
+	COLOR_LAST_MOVE_DARK:   "#EFEF6E",
+	COLOR_UTILITY: {
+		DESKTOP:            "#494949",
+		MOBILE:             "#89898980",
+	},
+	BACKGROUND_IMAGE:       "./assets/background_metal.jpg",
+	NAME_TITLE_COLOR:       "white"
 };
 
 const THEME_NATURE = {
-	COLOR_BOARD_LIGHT: 		"#c7da61",
-	COLOR_BOARD_DARK: 		"#437149",
-	COLOR_HIGHLIGHT_LIGHT: 	"#9e93e1",
-	COLOR_HIGHLIGHT_DARK: 	"#7B68EE",
-	COLOR_LAST_MOVE_LIGHT: 	"#BB92AB",
-	COLOR_LAST_MOVE_DARK: 	"#905E7C",
-	COLOR_UTILITY:          "#00000080",
-	BACKGROUND_IMAGE: 		"./assets/background_nature.jpg",
-	NAME_TITLE_COLOR: 		"black"
+	ID:                     "nature",
+	COLOR_BOARD_LIGHT:      "#c7da61",
+	COLOR_BOARD_DARK:       "#437149",
+	COLOR_HIGHLIGHT_LIGHT:  "#9e93e1",
+	COLOR_HIGHLIGHT_DARK:   "#7B68EE",
+	COLOR_LAST_MOVE_LIGHT:  "#BB92AB",
+	COLOR_LAST_MOVE_DARK:   "#905E7C",
+	COLOR_UTILITY: {
+		DESKTOP:            "#494949",
+		MOBILE:             "#00000080",
+	},
+	BACKGROUND_IMAGE:       "./assets/background_nature.jpg",
+	NAME_TITLE_COLOR:       "black",
 };
 
 const COLOR_ORIGINAL = 0;
