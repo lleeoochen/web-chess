@@ -127,6 +127,14 @@ body {
 	width: var(--canvas-size);
 	height: var(--canvas-size);
 	z-index: 0;
+
+	&.bg-black { border-radius: var(--border-radius); }
+	&.bg-white {
+		border-radius: var(--border-radius) var(--border-radius) 0 0;
+		&.bottom-radius {
+			border-radius: 0 0 var(--border-radius) var(--border-radius);
+		}
+	}
 }
 
 .eaten-piece {

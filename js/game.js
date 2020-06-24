@@ -725,15 +725,7 @@ function updateStats() {
 	showHtml('.canvas-border', true);
 	$(".canvas-border.bg-white").css("height", `calc(${w_stat} * var(--canvas-size))`);
 	$(".canvas-border.bg-white").css(w_pos, '0');
-
-	// if (my_team == TEAM.W) {
-	// 	$(".canvas-border.bg-white").css('border-radius', '0 0 var(--border-radius) var(--border-radius)');
-	// 	$(".canvas-border.bg-black").css('border-radius', 'var(--border-radius) var(--border-radius) var(--border-radius) var(--border-radius)');
-	// }
-	// else {
-	// 	$(".canvas-border.bg-white").css('border-radius', 'var(--border-radius) var(--border-radius) 0 0');
-	// 	$(".canvas-border.bg-black").css('border-radius', 'var(--border-radius) var(--border-radius) var(--border-radius) var(--border-radius)');
-	// }
+	$(".canvas-border.bg-white").toggleClass('bottom-radius', my_team == TEAM.W);
 
 	if (stats[enemy_team] > stats[my_team]) {
 		$("#enemy-stat").text("+" + (stats[enemy_team] - stats[my_team]));
