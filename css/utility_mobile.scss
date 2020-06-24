@@ -17,9 +17,23 @@
 	:root {
 		--util-icon-size: 4vw;
 		--util-btn-margin: 1vw;
+
+	}
+
+	// iPad screens
+	@media (min-height: 667px) {
+		:root {
+			--util-picture-size: calc(150px - 15vw);
+		}
+	}
+
+	// iPhone screens
+	@media (max-height: 667px) {
+		:root {
+			--util-picture-size: calc(110px - 15vw);
+		}	
 	}
 }
-
 
 
 /* Player utility panels */
@@ -161,6 +175,7 @@
 	text-align: left;
 	display: table;
 	table-layout: fixed;
+	margin-right: calc(-1 * var(--margin-size));
 }
 
 .utility-title {

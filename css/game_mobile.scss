@@ -34,20 +34,22 @@
 	--panel-height: 11vw;
 	--screen-height: calc(var(--vh, 1vh) * 100);
 	--screen-width: 100vw;
-	--game-height: calc(var(--screen-height) - var(--toolbar-height) - var(--panel-height));
+	--game-height: calc(var(--screen-height));
 }
 
 // Fat screens
 @media (min-aspect-ratio: 460/720) {
-	:root {
-		--toolbar-title: 5vw;
-		--toolbar-btn-size: 6vw;
-		--toolbar-height: 7vw;
-		--panel-height: 9vw;
-		--game-height: calc(var(--screen-height) - var(--toolbar-height) - var(--panel-height));
-		--cell-size: calc((var(--game-height) - 2 * var(--util-picture-size) - 6 * var(--margin-size)) / 8);
+	// iPad screens
+	@media (min-height: 667px) {
+		:root {
+			--toolbar-title: 5vw;
+			--toolbar-btn-size: 6vw;
+			--toolbar-height: 7vw;
+			--panel-height: 9vw;
+			--game-height: calc(var(--screen-height));
+			--cell-size: calc((var(--game-height) - var(--panel-height) - var(--toolbar-height) - 2 * var(--util-picture-size) - 6 * var(--margin-size)) / 8);
+		}
 	}
-	
 
 	// iPhone screens
 	@media (max-height: 667px) {
@@ -56,8 +58,8 @@
 			--toolbar-btn-size: 6vw;
 			--toolbar-height: 12vw;
 			--panel-height: 9vw;
-			--game-height: calc(var(--screen-height) - var(--toolbar-height) - var(--panel-height));
-			--cell-size: calc((var(--game-height) - 2 * var(--util-picture-size) - 6 * var(--margin-size)) / 8);
+			--game-height: calc(var(--screen-height));
+			--cell-size: calc((var(--game-height) - var(--panel-height) - var(--toolbar-height) - 2 * var(--util-picture-size) - 6 * var(--margin-size)) / 8);
 		}	
 	}
 }
@@ -107,8 +109,8 @@ body {
 		// width: var(--screen-width);
 		height: var(--game-height);
 		align-items: center;
-		margin-top: calc(var(--toolbar-height) + var(--margin-size) * 0);
-		// padding-bottom: var(--panel-height);
+		padding-top: var(--toolbar-height);
+		padding-bottom: var(--panel-height);
 		// margin-bottom: var(--panel-height);
 		justify-content: center;
 		// margin: auto;
