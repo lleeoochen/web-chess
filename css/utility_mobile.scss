@@ -17,13 +17,14 @@
 	:root {
 		--util-icon-size: 4vw;
 		--util-btn-margin: 1vw;
-
 	}
 
 	// iPad screens
 	@media (min-height: 667px) {
 		:root {
-			--util-picture-size: calc(150px - 15vw);
+			--util-margin-size: 0.5vw;
+			--util-picture-size: calc(200px - 15vw);
+			--util-title-size: 3vw;
 		}
 	}
 
