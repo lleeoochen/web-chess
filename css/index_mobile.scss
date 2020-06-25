@@ -23,6 +23,24 @@
 	--picture-size: 17vw;
 	--home-margin: 1vw;
 	--home-spacing: 2vw;
+	--home-match-link-width: calc(100% / 4 - var(--home-margin));
+}
+
+// Fat screens
+@media (min-aspect-ratio: 460/720) {
+	// iPad screens
+	@media (min-height: 667px) {
+		:root {
+			--toolbar-title: 5vw;
+			--toolbar-btn-size: 6vw;
+			--toolbar-height: 7vw;
+			--home-match-text-size: 4vw;
+			--home-margin-size: 1vw;
+			--home-margin: 0.5vw;
+			--home-match-link-width: calc(100% / 8 - var(--home-margin));
+			--home-match-link-font: calc(var(--home-match-text-size) * 0.3) !important;
+		}
+	}
 }
 
 #chess-toolbar {
@@ -106,7 +124,7 @@
 			margin-top: calc(2 * var(--home-margin));
 
 			.matches-column {
-				width: calc(100% / 4 - var(--home-margin));
+				width: var(--home-match-link-width);
 				margin-right: var(--home-margin);
 
 				.match-link {
@@ -145,14 +163,16 @@
 					}
 
 					.match-link-content {
+						display: grid;
+
 						.player-pic {
 							width: 100%;
 							margin: auto;
 							margin-right: calc(4 * var(--home-margin));
-						}
+						}	
 
 						.match-link-date {
-							font-size: calc(var(--home-match-text-size) * 0.5) !important;
+							font-size: calc(0.5 * var(--home-match-text-size));
 							text-align: center;
 						}
 					}

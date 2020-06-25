@@ -108,17 +108,11 @@ body {
 
 	#game-content {
 		display: grid;
-		// width: var(--screen-width);
 		height: var(--game-height);
 		align-items: center;
 		padding-top: var(--toolbar-height);
 		padding-bottom: var(--panel-height);
-		// margin-bottom: var(--panel-height);
 		justify-content: center;
-		// margin: auto;
-		// background-color: white;
-
-		// * { display: none; }
 
 		backdrop-filter: blur(2vw);
 		-webkit-backdrop-filter: blur(2vw);
@@ -135,7 +129,7 @@ body {
 		z-index: 100;
 		width: var(--screen-width);
 		height: var(--panel-height);
-		background-color: rgba(0, 0, 0, 0.69);
+		background-color: black;
 
 		margin: auto;
 	    left: 0;

@@ -32,7 +32,8 @@
 	@media (max-height: 667px) {
 		:root {
 			--util-picture-size: calc(110px - 15vw);
-		}	
+			--util-title-size: 4vw;
+		}
 	}
 }
 
@@ -170,13 +171,12 @@
 
 /* Game utility panels */
 .utility-panel {
-	width: calc(100%);
+	width: calc(100% + calc(var(--margin-size) / 2));
 	padding: var(--util-margin-size) !important;
 	border-radius: calc(var(--util-btn-size) / 4);
 	text-align: left;
 	display: table;
 	table-layout: fixed;
-	margin-right: calc(-1 * var(--margin-size));
 }
 
 .utility-title {

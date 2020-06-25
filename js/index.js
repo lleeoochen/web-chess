@@ -87,9 +87,7 @@ database.getProfile().then(res => {
 				let match_html = `
 					<a class="btn match-link ${active ? '': 'inactive'} ${ color }" href="{{ site.baseUrl }}/game${ SCREEN_PORTRAIT ? '_mobile' : '' }?match=${ match_name }">
 						<div class="match-link-content">
-							<div>
 								<img class="player-pic" src="${ enemy.photo ? enemy.photo + '=c' : "assets/new_match.png" }"/>
-							</div>
 							<div>
 								<div class="match-link-date"> ${ d_str } </div>
 							</div>

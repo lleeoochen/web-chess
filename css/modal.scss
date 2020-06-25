@@ -12,6 +12,16 @@
 		--modal-button-margin-size: 6vw;
 		--modal-dialog-width:       90%;
 	}
+
+	// Fat screens
+	@media (min-aspect-ratio: 460/720) {
+		// iPad screens
+		@media (min-height: 667px) {
+			:root {
+				--modal-title-size: 3vw;
+			}
+		}
+	}
 }
 
 @media screen and (orientation: landscape) {
@@ -40,6 +50,7 @@
 		.modal-content {
 			border: unset !important;
 			width: 100%;
+			background-color: rgba(0, 0, 0, 0) !important;
 
 			.modal-body {
 				font-family: 'Spectral', serif !important;
@@ -52,8 +63,8 @@
 				width: unset !important;
 
 				border-style: double;
-				animation: fadein 0.5s 0.1s !important;
-				-webkit-animation: fadein 0.5s 0.1s !important;
+				// animation: fadein 0.5s 0.1s !important;
+				// -webkit-animation: fadein 0.5s 0.1s !important;
 
 				.btn-panel {
 					width: calc(100% + var(--modal-margin-size) / 2);

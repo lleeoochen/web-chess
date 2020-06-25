@@ -106,11 +106,21 @@ img {
 
 
 @keyframes fadein {
-    0% { opacity: 0; margin-top: -10px; }
-    100% { opacity:1; }
+    0% {
+    	opacity: 0;
+    	margin-top: -10px;
+    }
+    100% {
+    	opacity:1;
+    }
 }
 
 @-webkit-keyframes fadein {
-    0% { -webkit-opacity: 0; margin-top: -10px; }
-    100% { -webkit-opacity: 1; }
+    0% {
+    	-webkit-opacity: 0;
+    	margin-top: -10px;
+    }
+    100% {
+    	-webkit-opacity: 1;
+    }
 }

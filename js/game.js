@@ -88,8 +88,14 @@ database.getProfile().then(res => {
 				$('#me-timer').text(Util.formatTimer(my_team == TEAM.B ? match.black_timer : match.white_timer));
 			}
 			else {
-				$('#enemy-timer').text('∞:∞');
-				$('#me-timer').text('∞:∞');
+				if (SCREEN_MODE == 'DESKTOP') {
+					$('#enemy-timer').text('∞:∞');
+					$('#me-timer').text('∞:∞');
+				}
+				else {
+					$('#enemy-timer').addClass('hidden');
+					$('#me-timer').addClass('hidden');
+				}
 			}
 		}
 
