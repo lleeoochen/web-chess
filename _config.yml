@@ -5,7 +5,7 @@ description: This is a beautiful chess platform for chess lovers and friends.
 url:       'www.chessvibe.net'
 baseUrl:   ''
 pluginUrl: 'https://weitungchen.com/plugins'
-backendUrl: 'https://api.weitungchen.com'
+backendUrl: 'https://api.chessvibe.net'
 
 # Build settings
 markdown: kramdown
