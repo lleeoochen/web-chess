@@ -52,8 +52,8 @@
 				width: unset !important;
 
 				border-style: double;
-				// animation: fadein 0.5s !important;
-				// -webkit-animation: fadein 0.5s !important;
+				animation: fadein 0.5s 0.1s !important;
+				-webkit-animation: fadein 0.5s 0.1s !important;
 
 				.btn-panel {
 					width: calc(100% + var(--modal-margin-size) / 2);
