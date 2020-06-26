@@ -6,17 +6,19 @@ class Util {
 
 		return new Promise(async (resolve, reject) => {
 			let time_start = new Date().getTime();
+			console.log(localStorage.getItem(SESSION_TOKEN));
 
 			const response = await fetch('{{ site.backendUrl }}' + url, {
 				method: method, // *GET, POST, PUT, DELETE, etc.
-				mode: 'cors', // no-cors, *cors, same-origin
-				cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-				credentials: 'include', // include, *same-origin, omit
+				// mode: 'no-cors', // no-cors, *cors, same-origin
+				// cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+				// credentials: 'omit', // include, *same-origin, omit
 				headers: {
-					'Content-Type': 'application/json'
+					'Content-Type': 'application/json',
+					'Authorization': localStorage.getItem(SESSION_TOKEN)
 				},
-				redirect: 'follow', // manual, *follow, error
-				referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+				// redirect: 'follow', // manual, *follow, error
+				// referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
 				body: JSON.stringify(body) // body data type must match "Content-Type" header
 			});
 
@@ -27,20 +29,26 @@ class Util {
 			// Session expired
 			if (response.status >= 400) {
 				console.error('ERROR ' + short_url + ': ' + await response.json());
+
 				if (response.status == 401) {
 					localStorage.setItem(LAST_VISITED_KEY, window.location.href);
-					await Firebase.signOut();
 					window.location = '{{ site.baseUrl }}/login';
 					return;
 				}
 				reject(response);
 			}
 			else {
-				const contentType = response.headers.get("content-type");
-				if (contentType && contentType.indexOf("application/json") !== -1)
-					resolve(response.json());
-				else
+				try {
+					let result = await response.json();
+					if (result.session_token) {
+						localStorage.setItem(SESSION_TOKEN, result.session_token);
+					}
+
+					resolve(result);
+				}
+				catch (err) {
 					resolve(response);
+				}
 			}
 		});
 	}

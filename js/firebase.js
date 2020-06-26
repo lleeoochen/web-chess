@@ -5,7 +5,9 @@
 class Firebase {
 
 	constructor() {
-		this.socket = io.connect('{{ site.backendUrl }}');
+		this.socket = io.connect('{{ site.backendUrl }}', {
+			query: "token=" + localStorage.getItem('session_token')
+		});
 
 		// General Init
 		let firebaseConfig = {

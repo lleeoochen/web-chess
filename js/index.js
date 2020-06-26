@@ -155,8 +155,9 @@ database.getProfile().then(res => {
 function initToolbar() {
 	// Signout button
 	$('#signout-btn').on('click', (e) => {
-		database.logout().then(() => {
-			firebase.auth().signOut();
+		database.logout().then(async () => {
+			await Firebase.signOut();
+			localStorage.removeItem(SESSION_TOKEN)
 			location.reload();
 		});
 	});
