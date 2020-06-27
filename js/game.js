@@ -5,8 +5,23 @@ if (SCREEN_PORTRAIT && !window.location.href.includes('mobile')) window.location
 if (!SCREEN_PORTRAIT && window.location.href.includes('mobile')) window.location = window.location.href.replace(/\/game_mobile/, '/game');
 
 function setInnerHeight() {
-	var vh = window.innerHeight * 0.01;
+	let vw = window.innerWidth * 0.01;
+	let vh = window.innerHeight * 0.01;
 	document.documentElement.style.setProperty('--vh', `${vh}px`);
+
+	let margin_size = vw;
+	let cell_size = (100 * vw - 4 * margin_size) / 8;
+
+	// // Fat phone screen
+	// if (margin_size * 2 + cell_size * 8 > 100 * vw) {
+	// 	document.documentElement.style.setProperty('--toolbar-title', '5vw');
+	// 	document.documentElement.style.setProperty('--toolbar-btn-size', '6vw');
+	// 	document.documentElement.style.setProperty('--toolbar-height', '12vw');
+	// 	document.documentElement.style.setProperty('--panel-height', '15vw');
+	// 	document.documentElement.style.setProperty('--cell-size', 'calc((var(--game-height) - var(--panel-height) - var(--toolbar-height) - 2 * var(--util-picture-size) - 6 * var(--margin-size)) / 8)');
+	// 	document.documentElement.style.setProperty('--util-icon-size', '7vw');
+
+	// }
 }
 
 setInnerHeight();
@@ -417,7 +432,12 @@ function initToolbar() {
 		});
 	});
 
-	$('#chess-toolbar').removeClass('hidden');
+	if (Util.getParam("no_action_bar") != 1) {
+		$('#chess-toolbar').removeClass('hidden');
+	}
+	else {
+		document.documentElement.style.setProperty('--toolbar-height', '0px');
+	}
 }
 
 async function updatePlayerData() {

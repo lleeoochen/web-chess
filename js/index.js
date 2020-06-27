@@ -85,14 +85,14 @@ database.getProfile().then(res => {
 				let active = Math.floor(match_data.moves[match_data.moves.length - 1] / 10) != 0;
 
 				let match_html = `
-					<a class="btn match-link ${active ? '': 'inactive'} ${ color }" href="{{ site.baseUrl }}/game${ SCREEN_PORTRAIT ? '_mobile' : '' }?match=${ match_name }">
+					<div class="btn match-link ${active ? '': 'inactive'} ${ color }" onclick="onMatchClick('${ match_name }')">
 						<div class="match-link-content">
 								<img class="player-pic" src="${ enemy.photo ? enemy.photo + '=c' : "assets/new_match.png" }"/>
 							<div>
 								<div class="match-link-date"> ${ d_str } </div>
 							</div>
 						</div>
-					</a>`;
+					</div>`;
 
 				if (active) {
 					$matches.push(match_html);
@@ -181,7 +181,12 @@ function initToolbar() {
 		$('#new-match-modal').modal('hide');
 	});
 
-	$('#chess-toolbar').removeClass('hidden');
+	if (Util.getParam("no_action_bar") != '1') {
+		$('#chess-toolbar').removeClass('hidden');
+	}
+	else {
+		document.documentElement.style.setProperty('--toolbar-height', '0px');
+	}
 }
 
 
@@ -206,4 +211,14 @@ function groupList(data, n) {
 		group[j].push(data[i])
 	}
 	return group;
+}
+
+function onMatchClick(match) {
+	if (window.ReactNativeWebView)
+		window.ReactNativeWebView.postMessage(JSON.stringify({
+			type: 'match_click',
+			match: match
+		}));
+	else
+		window.location = `{{ site.baseUrl }}/game${ SCREEN_PORTRAIT ? '_mobile' : '' }?match=${ match }`;
 }

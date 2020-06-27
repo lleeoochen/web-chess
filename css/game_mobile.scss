@@ -54,16 +54,16 @@
 		}
 	}
 
-	// iPhone screens
-	@media (max-height: 667px) {
-		:root {
-			--toolbar-title: 5vw;
-			--toolbar-btn-size: 6vw;
-			--toolbar-height: 12vw;
-			--panel-height: 9vw;
-			--cell-size: calc((var(--game-height) - var(--panel-height) - var(--toolbar-height) - 2 * var(--util-picture-size) - 6 * var(--margin-size)) / 8);
-		}	
-	}
+	// // iPhone screens
+	// @media (max-height: 667px) {
+	// 	:root {
+	// 		--toolbar-title: 5vw;
+	// 		--toolbar-btn-size: 6vw;
+	// 		--toolbar-height: 12vw;
+	// 		--panel-height: 9vw;
+	// 		--cell-size: calc((var(--game-height) - var(--panel-height) - var(--toolbar-height) - 2 * var(--util-picture-size) - 6 * var(--margin-size)) / 8);
+	// 	}
+	// }
 }
 
 #theme-panel { display: none !important; }

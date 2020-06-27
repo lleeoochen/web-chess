@@ -26,10 +26,10 @@ class Util {
 			let duration = new Date().getTime() - time_start;
 			console.log('Request Time ' + short_url + ': ' + duration);
 
-			// Session expired
 			if (response.status >= 400) {
 				console.error('ERROR ' + short_url + ': ' + await response.json());
 
+				// Session expired
 				if (response.status == 401) {
 					localStorage.setItem(LAST_VISITED_KEY, window.location.href);
 					window.location = '{{ site.baseUrl }}/login';
