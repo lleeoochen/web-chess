@@ -204,16 +204,18 @@ async function updateMatchMoves() {
 		unmoveChess();
 	}
 
+	let breakloop = false;
 	while (moves_applied < match.moves.length) {
 		let move = Util.unpack(match.moves[moves_applied], turn != my_team);
 
 		await new Promise((resolve, reject) => {
 		  setTimeout(() => {
-			let success = moveChess(chessboard[move.old_x][move.old_y], chessboard[move.new_x][move.new_y]);
-			if (!success) break;
+			breakloop = !moveChess(chessboard[move.old_x][move.old_y], chessboard[move.new_x][move.new_y]);
 			resolve();
 		  }, 50);
 		});
+
+		if (breakloop) break;
 		turn = move.turn == TEAM.W ? TEAM.B : TEAM.W;
 	}
 
