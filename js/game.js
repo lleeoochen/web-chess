@@ -209,7 +209,8 @@ async function updateMatchMoves() {
 
 		await new Promise((resolve, reject) => {
 		  setTimeout(() => {
-			moveChess(chessboard[move.old_x][move.old_y], chessboard[move.new_x][move.new_y]);
+			let success = moveChess(chessboard[move.old_x][move.old_y], chessboard[move.new_x][move.new_y]);
+			if (!success) break;
 			resolve();
 		  }, 50);
 		});

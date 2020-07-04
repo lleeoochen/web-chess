@@ -1,6 +1,6 @@
 //Move chess from oldGrid to newGrid
 function moveChess(oldGrid, newGrid) {
-	if (oldGrid.get_piece() == null) return;
+	if (oldGrid.get_piece() == null) return false;
 
 	addMoveHistory(oldGrid, newGrid);
 
@@ -47,6 +47,8 @@ function moveChess(oldGrid, newGrid) {
 
 	//Show resulting stats
 	updateStats();
+
+	return true;
 }
 
 function moveSound(newGrid) {
