@@ -95,7 +95,7 @@ function movePassantPawn(oldGrid, newGrid) {
 	let kill_passant_pawn = false;
 
 	// Check passant pawn can be killed
-	if (passant_pawn) {
+	if (passant_pawn && oldGrid.get_piece().type == CHESS.Pawn) {
 		if (oldGrid.get_piece().team == my_team && passant_pawn.get_piece().team != my_team) {
 			if (newGrid.x == passant_pawn.x && newGrid.y == passant_pawn.y - 1) {
 				kill_passant_pawn = true;
