@@ -92,10 +92,11 @@ class Firebase {
 		});
 	}
 
-	createMatch(theme, time) {
+	createMatch(theme, time, AI=false) {
 		return Util.request('POST', '/chess/create_match', {
 			theme: Util.packTheme(theme),
-			time: time || MAX_TIME
+			time: time || MAX_TIME,
+			AI: AI,
 		});
 	}
 
