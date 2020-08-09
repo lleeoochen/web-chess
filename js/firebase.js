@@ -78,6 +78,10 @@ class Firebase {
 		return Util.request('GET', '/chess/get_user?id=' + id);
 	}
 
+	getInbox() {
+		return Util.request('GET', '/chess/get_inbox');
+	}
+
 	listenMatch(id, resolve) {
 		this.socket.emit('listen_match', id);
 		this.socket.on('listen_match_' + id, data => {
